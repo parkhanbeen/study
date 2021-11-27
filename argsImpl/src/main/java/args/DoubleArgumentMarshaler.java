@@ -12,11 +12,11 @@ public class DoubleArgumentMarshaler implements ArgumentMarshaler {
         String parameter = null;
         try {
             parameter = currentArgument.next();
-            doubleValue = Integer.parseInt(parameter);
+            doubleValue = Double.parseDouble(parameter);
         } catch (NoSuchElementException e) {
-            throw new ArgsException(ErrorCode.MISSING_INTEGER);
+            throw new ArgsException(ErrorCode.MISSING_DOUBLE);
         } catch (NumberFormatException e) {
-            throw new ArgsException(ErrorCode.INVALID_INTEGER, parameter);
+            throw new ArgsException(ErrorCode.INVALID_DOUBLE, parameter);
         }
     }
 
