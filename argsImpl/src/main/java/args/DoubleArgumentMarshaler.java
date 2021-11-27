@@ -21,7 +21,7 @@ public class DoubleArgumentMarshaler implements ArgumentMarshaler {
     }
 
     public static double getValue(ArgumentMarshaler argumentMarshaler) {
-        if (argumentMarshaler != null && argumentMarshaler instanceof DoubleArgumentMarshaler) {
+        if (argumentMarshaler instanceof DoubleArgumentMarshaler) {
             return ((DoubleArgumentMarshaler) argumentMarshaler).doubleValue;
         } else {
             return 0;

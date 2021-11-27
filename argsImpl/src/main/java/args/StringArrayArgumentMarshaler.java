@@ -22,7 +22,7 @@ public class StringArrayArgumentMarshaler implements ArgumentMarshaler {
     }
 
     public static String[] getValue(ArgumentMarshaler argumentMarshaler) {
-        if (argumentMarshaler != null && argumentMarshaler instanceof StringArrayArgumentMarshaler) {
+        if (argumentMarshaler instanceof StringArrayArgumentMarshaler) {
             return ((StringArrayArgumentMarshaler) argumentMarshaler).stringArrayValue;
         } else {
             return null;

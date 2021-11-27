@@ -21,7 +21,7 @@ public class IntegerArgumentMarshaler implements ArgumentMarshaler {
     }
 
     public static int getValue(ArgumentMarshaler argumentMarshaler) {
-        if (argumentMarshaler != null && argumentMarshaler instanceof IntegerArgumentMarshaler) {
+        if (argumentMarshaler instanceof IntegerArgumentMarshaler) {
             return ((IntegerArgumentMarshaler) argumentMarshaler).intValue;
         } else {
             return 0;

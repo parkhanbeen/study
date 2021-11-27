@@ -19,7 +19,7 @@ public class StringArgumentMarshaler implements ArgumentMarshaler {
     }
 
     public static String getValue(ArgumentMarshaler argumentMarshaler) {
-        if (argumentMarshaler != null && argumentMarshaler instanceof StringArgumentMarshaler) {
+        if (argumentMarshaler instanceof StringArgumentMarshaler) {
             return ((StringArgumentMarshaler) argumentMarshaler).stringValue;
         } else {
             return "";

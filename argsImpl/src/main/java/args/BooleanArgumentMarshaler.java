@@ -12,7 +12,7 @@ public class BooleanArgumentMarshaler implements ArgumentMarshaler {
     }
 
     public static boolean getValue(ArgumentMarshaler argumentMarshaler) {
-        if (argumentMarshaler != null && argumentMarshaler instanceof BooleanArgumentMarshaler) {
+        if (argumentMarshaler instanceof BooleanArgumentMarshaler) {
             return ((BooleanArgumentMarshaler) argumentMarshaler).booleanValue;
         } else {
             return false;
