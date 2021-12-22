@@ -9,8 +9,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class MemberApp {
 
     public static void main(String[] args) {
-//        AppConfig appConfig = new AppConfig();
-//        MemberService memberService = appConfig.memberService();
 
         // 스프링 컨테이너 생성.
         // 어노테이션 기반으로 생성됨.
