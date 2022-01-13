@@ -21,7 +21,7 @@ public class RequestParamServlet extends HttpServlet {
         );
 
     // key에 여러가지 값이 있을 경우
-    String[] names = request.getParameterValues("name");
+    String[] names = request.getParameterValues("username");
     for (String name : names) {
       System.out.println("name = " + name);
     }
