@@ -2,6 +2,7 @@ package example.demoservice.web.product;
 
 import example.demoservice.product.Product;
 import example.demoservice.product.ProductRepository;
+import example.demoservice.product.UpdateProductDto;
 import example.demoservice.web.product.request.CreateProductCommand;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -86,6 +87,21 @@ public class ProductController {
     productRepository.save(product);
     return "basic/product";
   }
+
+  @GetMapping("/{productId}/edit")
+  public String editForm(@PathVariable Long productId, Model model) {
+    Product findProduct = productRepository.findById(productId);
+    model.addAttribute("product", findProduct);
+
+    return "basic/editForm";
+  }
+
+  @PostMapping("/{productId}/edit")
+  public String edit(@PathVariable Long productId, UpdateProductDto updateProductDto) {
+    productRepository.update(productId, updateProductDto);
+    return "redirect:/products/{productId}";
+  }
+
 
   @PostConstruct
   public void init() {
