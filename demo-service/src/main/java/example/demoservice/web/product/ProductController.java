@@ -82,10 +82,16 @@ public class ProductController {
     return "basic/product";
   }
 
-  @PostMapping("/add")
+//  @PostMapping("/add")
   public String saveV4(Product product) {
     productRepository.save(product);
     return "basic/product";
+  }
+
+  @PostMapping("/add")
+  public String saveV5(Product product) {
+    productRepository.save(product);
+    return "redirect:/products/" + product.getId();
   }
 
   @GetMapping("/{productId}/edit")
