@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -88,10 +89,18 @@ public class ProductController {
     return "basic/product";
   }
 
-  @PostMapping("/add")
+//  @PostMapping("/add")
   public String saveV5(Product product) {
     productRepository.save(product);
     return "redirect:/products/" + product.getId();
+  }
+
+  @PostMapping("/add")
+  public String saveV6(Product product, RedirectAttributes redirectAttributes) {
+    Product savedProduct = productRepository.save(product);
+    redirectAttributes.addAttribute("productId", savedProduct.getId());
+    redirectAttributes.addAttribute("status", true);
+    return "redirect:/products/{productId}";
   }
 
   @GetMapping("/{productId}/edit")
