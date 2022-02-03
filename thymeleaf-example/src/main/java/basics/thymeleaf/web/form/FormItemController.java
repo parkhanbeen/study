@@ -4,6 +4,7 @@ import basics.thymeleaf.domain.item.Item;
 import basics.thymeleaf.domain.item.ItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Slf4j
 @Controller
 @RequestMapping("/form/items")
 @RequiredArgsConstructor
@@ -35,12 +37,14 @@ public class FormItemController {
     }
 
     @GetMapping("/add")
-    public String addForm() {
+    public String addForm(Model model) {
+        model.addAttribute("item", new Item());
         return "form/addForm";
     }
 
     @PostMapping("/add")
     public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttributes) {
+        log.info("item.open = {}", item.getOpen());
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
