@@ -13,3 +13,4 @@
 * [item 7 : 다 쓴 객체 참조를 해제하라](https://github.com/parkhanbeen/study/blob/150e8ecda5fc3dcabfd854e10f0c32729fdcf01a/effective-java/2%EC%9E%A5/7.%EB%8B%A4%20%EC%93%B4%20%EA%B0%9D%EC%B2%B4%20%EC%B0%B8%EC%A1%B0%EB%A5%BC%20%ED%95%B4%EC%A0%9C%ED%95%98%EB%9D%BC.md)
 * [item 8 : finalizer 와 cleaner 사용을 피하라](https://github.com/parkhanbeen/study/blob/master/effective-java/2%EC%9E%A5/8.finalizer%EC%99%80%20cleaner%20%EC%82%AC%EC%9A%A9%EC%9D%84%20%ED%94%BC%ED%95%98%EB%9D%BC.md)
 * [item 9 : try-finally 보다는 try-with-resources 를 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/2%EC%9E%A5/9.try-finally%20%EB%B3%B4%EB%8B%A4%EB%8A%94%20try-with-resources%20%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 10 : equals는 일반 규약을 지켜 재정의하라](https://github.com/parkhanbeen/study/blob/master/effective-java/3%EC%9E%A5/10.equals%EB%8A%94%20%EC%9D%BC%EB%B0%98%20%EA%B7%9C%EC%95%BD%EC%9D%84%20%EC%A7%80%EC%BC%9C%20%EC%9E%AC%EC%A0%95%EC%9D%98%ED%95%98%EB%9D%BC.md)
