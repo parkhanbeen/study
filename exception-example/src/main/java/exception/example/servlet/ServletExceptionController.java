@@ -2,7 +2,6 @@ package exception.example.servlet;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
