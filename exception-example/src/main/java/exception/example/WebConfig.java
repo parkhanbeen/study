@@ -1,20 +1,33 @@
 package exception.example;
 
+import javax.servlet.DispatcherType;
+import java.util.List;
+
+import exception.example.converter.IntegerToStringConverter;
+import exception.example.converter.IpPortToStringConverter;
+import exception.example.converter.StringToIntegerConverter;
+import exception.example.converter.StringToIpPortConverter;
 import exception.example.filter.LogFilter;
 import exception.example.interceptor.LogInterceptor;
 import exception.example.resolver.MyHandlerExceptionResolver;
 import exception.example.resolver.UserHandlerExceptionResolver;
-import java.util.List;
-import javax.servlet.DispatcherType;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+  @Override
+  public void addFormatters(FormatterRegistry registry) {
+    registry.addConverter(new StringToIntegerConverter());
+    registry.addConverter(new IntegerToStringConverter());
+    registry.addConverter(new StringToIpPortConverter());
+    registry.addConverter(new IpPortToStringConverter());
+  }
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
