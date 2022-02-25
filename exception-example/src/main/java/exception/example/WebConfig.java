@@ -1,5 +1,6 @@
 package exception.example;
 
+import exception.example.formatter.MyNumberFormatter;
 import javax.servlet.DispatcherType;
 import java.util.List;
 
@@ -23,10 +24,12 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void addFormatters(FormatterRegistry registry) {
-    registry.addConverter(new StringToIntegerConverter());
-    registry.addConverter(new IntegerToStringConverter());
+//    registry.addConverter(new StringToIntegerConverter());
+//    registry.addConverter(new IntegerToStringConverter());
     registry.addConverter(new StringToIpPortConverter());
     registry.addConverter(new IpPortToStringConverter());
+
+    registry.addFormatter(new MyNumberFormatter());
   }
 
   @Override
