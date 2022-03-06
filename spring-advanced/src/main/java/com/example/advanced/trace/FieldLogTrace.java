@@ -4,14 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class FieldLogTrace implements LogTrace {
 
   private static final String START_PREFIX = "-->";
   private static final String COMPLETE_PREFIX = "<--";
   private static final String EX_PREFIX = "<X-";
 
-  private TraceId traceIdHolder;  // 동시성 이슈 발생
+  private TraceId traceIdHolder;  // 동시성 이슈 발생R
 
   @Override
   public TraceStatus begin(String message) {
