@@ -1,8 +1,7 @@
-package com.example.advanced.app.v3;
+package com.example.advanced.app.v4;
 
 import com.example.advanced.trace.LogTrace;
 import com.example.advanced.trace.TraceStatus;
-import com.example.advanced.trace.TraceV2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
