@@ -1,6 +1,5 @@
 package com.example.advanced.proxy.jdkdynamic;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
