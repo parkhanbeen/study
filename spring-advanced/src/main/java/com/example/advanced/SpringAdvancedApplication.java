@@ -2,6 +2,7 @@ package com.example.advanced;
 
 import com.example.advanced.proxy.config.AppV1Config;
 import com.example.advanced.proxy.config.AppV2Config;
+import com.example.advanced.proxy.config.BeanPostProcessorConfig;
 import com.example.advanced.proxy.config.v1proxy.ConcreteProxyConfig;
 import com.example.advanced.proxy.config.v1proxy.InterfaceProxyConfig;
 import com.example.advanced.proxy.config.v2dynamicproxy.DynamicProxyBasicConfig;
@@ -21,7 +22,8 @@ import org.springframework.context.annotation.Import;
 //@Import(DynamicProxyBasicConfig.class)
 //@Import(DynamicProxyFilterConfig.class)
 //@Import(ProxyFactoryConfigV1.class)
-@Import(ProxyFactoryConfigV2.class)
+//@Import(ProxyFactoryConfigV2.class)
+@Import(BeanPostProcessorConfig.class)
 @SpringBootApplication(scanBasePackages = "com.example.advanced.proxy.app")
 public class SpringAdvancedApplication {
 
