@@ -51,3 +51,5 @@
 
 * [item 34 : int 상수 대신 열거 타입을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/6%EC%9E%A5/34.int%20%EC%83%81%EC%88%98%20%EB%8C%80%EC%8B%A0%20%EC%97%B4%EA%B1%B0%20%ED%83%80%EC%9E%85%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 35 : ordinal 메서드 대신 인스턴스 필드를 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/6%EC%9E%A5/35.ordinal%20%EB%A9%94%EC%84%9C%EB%93%9C%20%EB%8C%80%EC%8B%A0%20%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%20%ED%95%84%EB%93%9C%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 36 : 비트 필드 대신 EnumSet을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/6%EC%9E%A5/36.%EB%B9%84%ED%8A%B8%20%ED%95%84%EB%93%9C%20%EB%8C%80%EC%8B%A0%20EnumSet%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 37 : ordinal 인덱싱 대신 EnumMap을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/6%EC%9E%A5/37.ordinal%20%EC%9D%B8%EB%8D%B1%EC%8B%B1%20%EB%8C%80%EC%8B%A0%20EnumMap%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
