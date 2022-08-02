@@ -12,6 +12,24 @@
 
 ### Class Loader
 
+* 클래스 로더는 런타임 중 java 클래스를 JVM에 동적으로 로드하는 역할을 한다.
+* 클래스 로더에는 로딩, 링크, 초기화 단계로 나누어져 있다.
+* 로딩
+    * 자바 바이트 코드(.class)를 메소드 영역에 저장
+    * 바이트코드(.class)는 JVM에 의해 메소드 영역에 다음 정보들을 저장
+        * 로드된 클래스를 비롯한 상위 클래스 정보
+        * 클래스 파일과 Class, Interface, Enum의 관련 여부
+        * 변수나 메소드 등의 정보
+    * Bootstrap, Extension, Application - 해당 컴포넌트에 의해 클래스들이 로드된다. 이 세가지 클래스 로더들은 모두 상속관계로 정의되어 있으며 delegate(위임) 방식으로 작업을 진행
+        * Bootstrap ClassLoader - jre의 lib폴더에 있는 rt.jar 파일을 탐색 기본 자바 API 라이브러리를 로드. 가장 최우선으로 로드됨
+        * Extension ClassLoader - jre의 lib 폴더에 있는 ext 폴더에 있는 모든 확장 코어 클래스 파일을 로드. 최근에는 Platform classLoader라고 한다. 
+        Bootstrap ClassLoader의 자식이며 Extension 클래스 로더는 jdk 확장 디렉토리(JAVA_HOME/lib/ext 혹은 java.ext.dirs에 저장된 경로)에서 로드.
+        * Application ClassLoader - Extension ClassLoader의 자식이며 시스템 클래스로더(System ClassLoader)라고도 불린다. 어플리케이션 레벨에 있는 클래스들을 로드한다. 즉, 사용자가 직접 저으이한 클래스 파일들을 로드한다. Classpath 환경변수에 있는 클래스 파일이나 -classpath 또는 -cp 명령어 옵션이 있는 파일들을 로드
+* 링크
+    * 검증 - 읽어 들인 클래스가 자바 언어 명세 및 JVM 명세에 명시된 대로 잘 구성되어 있는지 검사
+    * 준비 - 클래스가 필요로 하는 메모리를 할당하고, 클래스에서 정의된 필드, 메소드, 인터페이스를 나타내는 데이터 구조를 준비
+    * 분석 - 심볼릭 메모리 레퍼런스를 메소드 영역에 있는 실제 레퍼런스로 교체
+
 ### Execution Engine
 
 ### Runtime Data Area
@@ -30,7 +48,7 @@
   * New generation(Young generation) - eden, survival0, survival1 영역
     * eden - 새로운 객체가 할당, 메모리가 다 사용되면 가비지 컬렉터가 발생(minor GC) minor GC에서 살아남을 때마다 age 1씩 증가.
         * minor GC mark and sweep 과정이 일어남 여기서 살아남은 객체는  survival0로 옮겨진다.
-        * eden 영역의 unreachable 객체는 메모리에해제
+        * eden 영역의 unreachable 객체는 메모리에 해제
     * survival0 - eden 영역에서 살아남은 객체가 옮겨짐 
         * 여기서 survival0 메모리가 다사용되면 mark and sweep 과정이 일어남 여기서 살아남은 객체는 survival1으로 이동
     * survival1 - survival0의 메모리가 가득차 mark and sweep 과정       살아남은 객체가 이동, 이때 객체의 age 값이 증가
@@ -85,7 +103,7 @@
     * Compaction 단계를 제공하지 않는다.
 
 4. G1(Garbage First) GC (java 9 부터 default)
-    * region이라는 영역으로 메모리를 잘게 쪼개서 관리
+    * region이라는 영역으로 메모리를 잘게 쪼개서 관리
     * G1(Garbage First) GC는 바둑판의 각 영역에 객체를 할당하고 GC를 실행한다. 그러다가, 해당 영역이 꽉 차면 다른 빈 영역에, 객체를 할당하고 GC를 실행한다.
     * STOP THE WORLD 시간이 짧다.
     * Compaction를 사용한다.
