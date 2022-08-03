@@ -32,6 +32,21 @@
 
 ### Execution Engine
 
+* Execution Engine은 class Loader에 의해 JVM으로 로드된 바이트코드들은 Runtime Data Area의 Method Area에 배치되는데, JVM은 Method Area의 바이트 코드를 Execution Engine에 제공하여,
+  Class에 정의된 내용대로 바이트 코드를 실행시킨다. 이때 로드된 바이트코드를 실행하는 Runtime Module이 Execution Engine이다.
+
+* **실행 방식**
+    * Execution Engine은 바이트코드를 명령어 단위로 읽어서 실행하는데 두가지 방식을 혼합하여 사용
+
+    1. interpreter 방식
+        * 바이트 코드를 한 줄씩 해석하여 순차적으로 실행하는 방식이다.
+        * 초기 방식으로, 속도가 느리다는 단점이 있다.
+    2. JIT(Just In Time) 컴파일 방식 또는 동적 변역(Dynamic Translation)
+        * 인터프리터 방식의 단점을 극복하기위해 나온 방식이 JIT 컴파일 방식이다.
+        * 바이트 코드를 JIT 컴파일러를 통해 프로그램을 실제 실행하는 시점(바이트 코드를 실행하는 시점)에 각 OS에 맞는 Native Code로 변환하여 실행 속도를 개선하였다. 하지만
+        , 바이트 코드를 Native Code로 변환하는데에도 비용이 소요되어, JVM은 모든 코드를 JIT 컴파일러 방식으로 실행하지 않고, 인터프리터 방식을 사용하다 일정 기준이 넘어가면 JIT 컴파일 방식으로 명령어를 실행한다.
+        * JIT 컴파일러는 같은 코드를 매번 해석하지 않고, 실행할 때 컴파일을 하면서 해당 코드를 캐싱한 후 바뀐 부분만 컴파일하고, 나머지는 캐싱된 코드를 사용한다.
+
 ### Runtime Data Area
 
 #### Mthed Area
