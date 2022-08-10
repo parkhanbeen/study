@@ -57,3 +57,7 @@
 * [item 39 : 명명 패턴보다 애너테이션을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/6%EC%9E%A5/39.%EB%AA%85%EB%AA%85%20%ED%8C%A8%ED%84%B4%EB%B3%B4%EB%8B%A4%20%EC%95%A0%EB%84%88%ED%85%8C%EC%9D%B4%EC%85%98%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 40 : @Override 애너테이션을 일관되게 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/6%EC%9E%A5/40.%40Override%20%EC%95%A0%EB%84%88%ED%85%8C%EC%9D%B4%EC%85%98%EC%9D%84%20%EC%9D%BC%EA%B4%80%EB%90%98%EA%B2%8C%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 41 : 정의하려는 것이 타입이라면 마커 인터페이스를 사용하라](https://github.com/parkhanbeen/study/blob/b98ef6a2fe0f7009a76d4cb2275c6ea8f9d826a7/effective-java/6%EC%9E%A5/41.%EC%A0%95%EC%9D%98%ED%95%98%EB%A0%A4%EB%8A%94%20%EA%B2%83%EC%9D%B4%20%ED%83%80%EC%9E%85%EC%9D%B4%EB%9D%BC%EB%A9%B4%20%EB%A7%88%EC%BB%A4%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+
+## 7장. 람다와 스트림
+
+* [item 42 : 익명 클래스보다는 람다를 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/7%EC%9E%A5/42.%EC%9D%B5%EB%AA%85%20%ED%81%B4%EB%9E%98%EC%8A%A4%EB%B3%B4%EB%8B%A4%EB%8A%94%20%EB%9E%8C%EB%8B%A4%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
