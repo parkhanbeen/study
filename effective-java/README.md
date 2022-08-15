@@ -61,3 +61,4 @@
 ## 7장. 람다와 스트림
 
 * [item 42 : 익명 클래스보다는 람다를 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/7%EC%9E%A5/42.%EC%9D%B5%EB%AA%85%20%ED%81%B4%EB%9E%98%EC%8A%A4%EB%B3%B4%EB%8B%A4%EB%8A%94%20%EB%9E%8C%EB%8B%A4%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 43 : 람다보다는 메서드 참조를 사용하라](https://github.com/parkhanbeen/study/blob/15264a2e95ccf7707f70a629d89de44eee0867e0/effective-java/7%EC%9E%A5/43.%EB%9E%8C%EB%8B%A4%EB%B3%B4%EB%8B%A4%EB%8A%94%20%EB%A9%94%EC%84%9C%EB%93%9C%20%EC%B0%B8%EC%A1%B0%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
