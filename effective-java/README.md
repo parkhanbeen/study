@@ -71,3 +71,4 @@
 ## 8장. 메서드
 
 * [item 49 : 매개변수가 유효한지 검사하라](https://github.com/parkhanbeen/study/blob/master/effective-java/8%EC%9E%A5/49.%EB%A7%A4%EA%B0%9C%EB%B3%80%EC%88%98%EA%B0%80%20%EC%9C%A0%ED%9A%A8%ED%95%9C%EC%A7%80%20%EA%B2%80%EC%82%AC%ED%95%98%EB%9D%BC.md)
+* [item 50 : 적시에 방어적 복사본을 만들라](https://github.com/parkhanbeen/study/blob/master/effective-java/8%EC%9E%A5/50.%EC%A0%81%EC%8B%9C%EC%97%90%20%EB%B0%A9%EC%96%B4%EC%A0%81%20%EB%B3%B5%EC%82%AC%EB%B3%B8%EC%9D%84%20%EB%A7%8C%EB%93%A4%EB%9D%BC.md)
