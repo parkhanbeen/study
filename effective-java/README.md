@@ -82,4 +82,6 @@
 ## 9장. 일반적인 프로그래밍 원칙
 
 * [item 57 : 지역변수의 범위를 최소화하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/57.%EC%A7%80%EC%97%AD%EB%B3%80%EC%88%98%EC%9D%98%20%EB%B2%94%EC%9C%84%EB%A5%BC%20%EC%B5%9C%EC%86%8C%ED%99%94%ED%95%98%EB%9D%BC.md)
+* [item 58 : 전통적인 for 문보다는 for-each 문을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/58.%EC%A0%84%ED%86%B5%EC%A0%81%EC%9D%B8%20for%20%EB%AC%B8%EB%B3%B4%EB%8B%A4%EB%8A%94%20for-each%20%EB%AC%B8%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+
 
