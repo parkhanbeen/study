@@ -85,5 +85,6 @@
 * [item 58 : 전통적인 for 문보다는 for-each 문을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/58.%EC%A0%84%ED%86%B5%EC%A0%81%EC%9D%B8%20for%20%EB%AC%B8%EB%B3%B4%EB%8B%A4%EB%8A%94%20for-each%20%EB%AC%B8%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 59 : 라이브러리를 익히고 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/59.%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EB%A5%BC%20%EC%9D%B5%ED%9E%88%EA%B3%A0%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 60 : 정확한 답이 필요하다면 float와 double은 피하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/60.%EC%A0%95%ED%99%95%ED%95%9C%20%EB%8B%B5%EC%9D%B4%20%ED%95%84%EC%9A%94%ED%95%98%EB%8B%A4%EB%A9%B4%20float%EC%99%80%20double%EC%9D%80%20%ED%94%BC%ED%95%98%EB%9D%BC.md)
+* [item 61 : 박싱된 기본 타입보다는 기본타입을 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/61.%EB%B0%95%EC%8B%B1%EB%90%9C%20%EA%B8%B0%EB%B3%B8%20%ED%83%80%EC%9E%85%EB%B3%B4%EB%8B%A4%EB%8A%94%20%EA%B8%B0%EB%B3%B8%20%ED%83%80%EC%9E%85%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 
 
