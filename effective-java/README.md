@@ -90,4 +90,5 @@
 * [item 63 : 문자열 연결은 느리니 주의하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/63.%EB%AC%B8%EC%9E%90%EC%97%B4%20%EC%97%B0%EA%B2%B0%EC%9D%80%20%EB%8A%90%EB%A6%AC%EB%8B%88%20%EC%A3%BC%EC%9D%98%ED%95%98%EB%9D%BC.md)
 * [item 64 : 객체는 인터페이스를 사용해 참조하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/64.%EA%B0%9D%EC%B2%B4%EB%8A%94%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%B4%20%EC%B0%B8%EC%A1%B0%ED%95%98%EB%9D%BC.md)
 * [item 65 : 리플렉션보다는 인터페이스를 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/65.%EB%A6%AC%ED%94%8C%EB%A0%89%EC%85%98%EB%B3%B4%EB%8B%A4%EB%8A%94%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 66 : 네이티브 메서드는 신중히 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/66.%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EC%84%9C%EB%93%9C%EB%8A%94%20%EC%8B%A0%EC%A4%91%ED%9E%88%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 
