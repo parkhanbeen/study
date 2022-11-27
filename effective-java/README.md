@@ -93,3 +93,7 @@
 * [item 66 : 네이티브 메서드는 신중히 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/66.%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EC%84%9C%EB%93%9C%EB%8A%94%20%EC%8B%A0%EC%A4%91%ED%9E%88%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 67 : 최적화는 신증히 하라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/67.%EC%B5%9C%EC%A0%81%ED%99%94%EB%8A%94%20%EC%8B%A0%EC%A4%91%ED%9E%88%20%ED%95%98%EB%9D%BC.md)
 * [item 68 : 일반적으로 통용되는 명명 규칙을 따르라](https://github.com/parkhanbeen/study/blob/master/effective-java/9%EC%9E%A5/68.%EC%9D%BC%EB%B0%98%EC%A0%81%EC%9C%BC%EB%A1%9C%20%ED%86%B5%EC%9A%A9%EB%90%98%EB%8A%94%20%EB%AA%85%EB%AA%85%20%EA%B7%9C%EC%B9%99%EC%9D%84%20%EB%94%B0%EB%A5%B4%EB%9D%BC.md)
+
+## 10장. 예외
+
+* [item 69 : 일반적으로 통용되는 명명 규칙을 따르라](https://github.com/parkhanbeen/study/blob/master/effective-java/10%EC%9E%A5/69.%EC%98%88%EC%99%B8%EB%8A%94%20%EC%A7%84%EC%A7%9C%20%EC%98%88%EC%99%B8%20%EC%83%81%ED%99%A9%EC%97%90%EB%A7%8C%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
