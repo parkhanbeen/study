@@ -97,3 +97,4 @@
 ## 10장. 예외
 
 * [item 69 : 일반적으로 통용되는 명명 규칙을 따르라](https://github.com/parkhanbeen/study/blob/master/effective-java/10%EC%9E%A5/69.%EC%98%88%EC%99%B8%EB%8A%94%20%EC%A7%84%EC%A7%9C%20%EC%98%88%EC%99%B8%20%EC%83%81%ED%99%A9%EC%97%90%EB%A7%8C%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 70 : 복구할 수 있는 상황에는 검사 예외를, 프로그래밍 오류에는 런타임 예외를 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/10%EC%9E%A5/70.%EB%B3%B5%EA%B5%AC%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%20%EC%83%81%ED%99%A9%EC%97%90%EB%8A%94%20%EA%B2%80%EC%82%AC%20%EC%98%88%EC%99%B8%EB%A5%BC%2C%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20%EC%98%A4%EB%A5%98%EC%97%90%EB%8A%94%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%98%88%EC%99%B8%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
