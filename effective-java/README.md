@@ -109,3 +109,4 @@
 ## 11장. 동시성
 
 * [item 78 : 공유 중인 가변 데이터는 동기화해 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/11%EC%9E%A5/78.%EA%B3%B5%EC%9C%A0%20%EC%A4%91%EC%9D%B8%20%EA%B0%80%EB%B3%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8A%94%20%EB%8F%99%EA%B8%B0%ED%99%94%ED%95%B4%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
+* [item 79 : 과도한 동기화는 피하라](https://github.com/parkhanbeen/study/blob/master/effective-java/11%EC%9E%A5/79.%EA%B3%BC%EB%8F%84%ED%95%9C%20%EB%8F%99%EA%B8%B0%ED%99%94%EB%8A%94%20%ED%94%BC%ED%95%98%EB%9D%BC.md)
