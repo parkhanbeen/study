@@ -115,3 +115,7 @@
 * [item 82 : 스레드 안전성 수준을 문서화하라](https://github.com/parkhanbeen/study/blob/master/effective-java/11%EC%9E%A5/82.%EC%8A%A4%EB%A0%88%EB%93%9C%20%EC%95%88%EC%A0%84%EC%84%B1%20%EC%88%98%EC%A4%80%EC%9D%84%20%EB%AC%B8%EC%84%9C%ED%99%94%ED%95%98%EB%9D%BC.md)
 * [item 83 : 지연 초기화는 신중히 사용하라](https://github.com/parkhanbeen/study/blob/master/effective-java/11%EC%9E%A5/83.%EC%A7%80%EC%97%B0%20%EC%B4%88%EA%B8%B0%ED%99%94%EB%8A%94%20%EC%8B%A0%EC%A4%91%ED%9E%88%20%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC.md)
 * [item 84 : 프로그램의 동작을 스레드 스케줄러에 기대지 말라](https://github.com/parkhanbeen/study/blob/master/effective-java/11%EC%9E%A5/84.%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EC%9D%98%20%EB%8F%99%EC%9E%91%EC%9D%84%20%EC%8A%A4%EB%A0%88%EB%93%9C%20%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC%EC%97%90%20%EA%B8%B0%EB%8C%80%EC%A7%80%20%EB%A7%90%EB%9D%BC.md)
+
+## 12장. 직렬화
+
+* [item 85 : 자바 직렬화의 대안을 찾으라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/85.%EC%9E%90%EB%B0%94%20%EC%A7%81%EB%A0%AC%ED%99%94%EC%9D%98%20%EB%8C%80%EC%95%88%EC%9D%84%20%EC%B0%BE%EC%9C%BC%EB%9D%BC.md)
