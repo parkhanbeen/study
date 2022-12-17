@@ -119,3 +119,5 @@
 ## 12장. 직렬화
 
 * [item 85 : 자바 직렬화의 대안을 찾으라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/85.%EC%9E%90%EB%B0%94%20%EC%A7%81%EB%A0%AC%ED%99%94%EC%9D%98%20%EB%8C%80%EC%95%88%EC%9D%84%20%EC%B0%BE%EC%9C%BC%EB%9D%BC.md)
+* [item 86 : Serializable을 구현할지는 신중히 결정하라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/86.Serializable%EC%9D%84%20%EA%B5%AC%ED%98%84%ED%95%A0%EC%A7%80%EB%8A%94%20%EC%8B%A0%EC%A4%91%ED%9E%88%20%EA%B2%B0%EC%A0%95%ED%95%98%EB%9D%BC.md)
+
