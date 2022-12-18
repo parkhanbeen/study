@@ -121,4 +121,5 @@
 * [item 85 : 자바 직렬화의 대안을 찾으라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/85.%EC%9E%90%EB%B0%94%20%EC%A7%81%EB%A0%AC%ED%99%94%EC%9D%98%20%EB%8C%80%EC%95%88%EC%9D%84%20%EC%B0%BE%EC%9C%BC%EB%9D%BC.md)
 * [item 86 : Serializable을 구현할지는 신중히 결정하라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/86.Serializable%EC%9D%84%20%EA%B5%AC%ED%98%84%ED%95%A0%EC%A7%80%EB%8A%94%20%EC%8B%A0%EC%A4%91%ED%9E%88%20%EA%B2%B0%EC%A0%95%ED%95%98%EB%9D%BC.md)
 * [item 87 : 커스텀 직렬화 형태를 고려해보라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/87.%EC%BB%A4%EC%8A%A4%ED%85%80%20%EC%A7%81%EB%A0%AC%ED%99%94%20%ED%98%95%ED%83%9C%EB%A5%BC%20%EA%B3%A0%EB%A0%A4%ED%95%B4%EB%B3%B4%EB%9D%BC.md)
+* [item 88 : readObject 메서드는 방어적으로 작성하라](https://github.com/parkhanbeen/study/blob/master/effective-java/12%EC%9E%A5/88.readObject%20%EB%A9%94%EC%84%9C%EB%93%9C%EB%8A%94%20%EB%B0%A9%EC%96%B4%EC%A0%81%EC%9C%BC%EB%A1%9C%20%EC%9E%91%EC%84%B1%ED%95%98%EB%9D%BC.md)
 
