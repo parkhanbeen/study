@@ -16,6 +16,8 @@ public class Theater {
                         new PeriodCondition(DayOfWeek.MONDAY, LocalTime.of(10, 0), LocalTime.of(11, 59)),
                         new PeriodCondition(DayOfWeek.THURSDAY, LocalTime.of(10, 0), LocalTime.of(20, 59))));
 
+        avatar.changeDiscountPolicy(new PercentDefaultDiscountPolicy(0.1));
+
         Movie titanic = new Movie("타이타닉",
                 Duration.ofMinutes(180),
                 Money.wons(11000),
