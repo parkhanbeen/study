@@ -1,2 +1,4 @@
-package com.parkhanbeen.object.chapter02;public class Customer {
+package com.parkhanbeen.object.chapter02;
+
+public class Customer {
 }
