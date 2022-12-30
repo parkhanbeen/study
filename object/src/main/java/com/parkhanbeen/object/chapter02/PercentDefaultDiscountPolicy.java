@@ -3,14 +3,14 @@ package com.parkhanbeen.object.chapter02;
 /**
  * 비율 할인 정책.
  */
-public class PercentDiscountPolicy extends DiscountPolicy {
+public class PercentDefaultDiscountPolicy extends DefaultDiscountPolicy {
 
     /**
      * 할인 비율.
      */
     private double percent;
 
-    public PercentDiscountPolicy(double percent, DiscountCondition... conditions) {
+    public PercentDefaultDiscountPolicy(double percent, DiscountCondition... conditions) {
         super(conditions);
         this.percent = percent;
     }

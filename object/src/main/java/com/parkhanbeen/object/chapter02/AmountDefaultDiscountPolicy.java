@@ -3,14 +3,14 @@ package com.parkhanbeen.object.chapter02;
 /**
  * 금액 할인 정책.
  */
-public class AmountDiscountPolicy extends DiscountPolicy {
+public class AmountDefaultDiscountPolicy extends DefaultDiscountPolicy {
 
     /**
      * 할인 요금.
      */
     private Money discountAmount;
 
-    public AmountDiscountPolicy(Money discountAmount, DiscountCondition... conditions) {
+    public AmountDefaultDiscountPolicy(Money discountAmount, DiscountCondition... conditions) {
         super(conditions);
         this.discountAmount = discountAmount;
     }

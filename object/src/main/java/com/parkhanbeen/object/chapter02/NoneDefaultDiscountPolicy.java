@@ -3,9 +3,10 @@ package com.parkhanbeen.object.chapter02;
 /**
  * 할인 요금이 없는 정책.
  */
-public class NoneDiscountPolicy extends DiscountPolicy {
+public class NoneDefaultDiscountPolicy implements DiscountPolicy {
+
     @Override
-    protected Money getDiscountAmount(Screening screening) {
+    public Money calculateDiscountAmount(Screening screening) {
         return Money.ZERO;
     }
 }
