@@ -7,3 +7,4 @@
 
 * [CHAPTER 01. 객체, 설계](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter01/%EC%A0%95%EB%A6%AC/01.%20%EA%B0%9D%EC%B2%B4%26%EC%84%A4%EA%B3%84.md)
 * [CHAPTER 02. 객체지향 프로그래밍](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter02/%EC%A0%95%EB%A6%AC/02.%20%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D.md)
+* [CHAPTER 03. 역할, 책임, 협력](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter03/%EC%A0%95%EB%A6%AC/03.%20%EC%97%AD%ED%95%A0%2C%20%EC%B1%85%EC%9E%84%2C%20%ED%98%91%EB%A0%A5.md)
