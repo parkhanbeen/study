@@ -2,6 +2,8 @@ FROM node
 
 WORKDIR /app
 
+COPY package.json /app
+
 # 첫번째 .은 현재 디렉토리 및 하위 파일을 모두 복사
 # 두번쩨 .은 그 파일을 저장해야 하는 이미지 내부 경로
 # /app 은 루트 디렉토리가 아닌 서브 디렉토리를 사용 (app이라는 디렉토리)
