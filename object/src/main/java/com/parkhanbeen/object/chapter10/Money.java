@@ -1,4 +1,4 @@
-package com.parkhanbeen.object.chapter05;
+package com.parkhanbeen.object.chapter10;
 
 import java.math.BigDecimal;
 
