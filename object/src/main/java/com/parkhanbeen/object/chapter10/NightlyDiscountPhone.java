@@ -11,12 +11,16 @@ public class NightlyDiscountPhone {
   private Money regularAmount;
   private Duration seconds;
   private List<Call> calls = new ArrayList<>();
+  private double taxRate;
 
   public NightlyDiscountPhone(Money nightlyAmount,
-                              Money regularAmount, Duration seconds) {
+                              Money regularAmount,
+                              Duration seconds,
+                              double taxRate) {
     this.nightlyAmount = nightlyAmount;
     this.regularAmount = regularAmount;
     this.seconds = seconds;
+    this.taxRate = taxRate;
   }
 
   public void call(Call call) {
@@ -44,6 +48,6 @@ public class NightlyDiscountPhone {
       }
     }
 
-    return result;
+    return result.minus(result.times(taxRate));  // 중복된 코드를 수정하다 발생하는 이슈 minus -> plus
   }
 }
