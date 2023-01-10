@@ -4,50 +4,31 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NightlyDiscountPhone {
+public class NightlyDiscountPhone extends Phone {
   private static final int LATE_NIGHT_HOUR = 22;
 
   private Money nightlyAmount;
-  private Money regularAmount;
-  private Duration seconds;
-  private List<Call> calls = new ArrayList<>();
-  private double taxRate;
 
-  public NightlyDiscountPhone(Money nightlyAmount,
-                              Money regularAmount,
-                              Duration seconds,
-                              double taxRate) {
+  public NightlyDiscountPhone(Money amount, Duration seconds,
+                              Money nightlyAmount) {
+    super(amount, seconds);
     this.nightlyAmount = nightlyAmount;
-    this.regularAmount = regularAmount;
-    this.seconds = seconds;
-    this.taxRate = taxRate;
   }
 
-  public void call(Call call) {
-    calls.add(call);
-  }
-
-  public List<Call> getCalls() {
-    return calls;
-  }
-
-  public Duration getSeconds() {
-    return seconds;
-  }
-
+  @Override
   public Money calculateFee() {
-    Money result = Money.ZERO;
+    // 부모 클래스의 calculateFee 호출
+    Money result = super.calculateFee();
 
-    for (Call call : calls) {
+    Money nightlyFee = Money.ZERO;
+    for (Call call : getCalls()) {
       if (call.getFrom().getHour() >= LATE_NIGHT_HOUR) {
-        result = result.plus(
-            nightlyAmount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
-      } else {
-        result = result.plus(
-            regularAmount.times(call.getDuration().getSeconds() / seconds.getSeconds()));
+        nightlyFee = nightlyFee.plus(
+            getAmount().minus(nightlyAmount).times(
+                call.getDuration().getSeconds() / getSeconds().getSeconds()));
       }
     }
 
-    return result.minus(result.times(taxRate));  // 중복된 코드를 수정하다 발생하는 이슈 minus -> plus
+    return result.minus(nightlyFee);  // 중복된 코드를 수정하다 발생하는 이슈 minus -> plus
   }
 }
