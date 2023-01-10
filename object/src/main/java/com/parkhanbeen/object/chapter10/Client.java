@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Client {
 
   public void enter() {
-    Phone phone = new Phone(Money.wons(5), Duration.ofSeconds(10));
+    Phone phone = new Phone(Money.wons(5), Duration.ofSeconds(10), 10);
 
     phone.call(new Call(
         LocalDateTime.of(2018, 1, 1, 12, 10, 0),
