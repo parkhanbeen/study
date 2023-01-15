@@ -3,7 +3,6 @@ package com.parkhanbeen.object.chapter11;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-
 public class Call {
   private LocalDateTime from;
   private LocalDateTime to;
