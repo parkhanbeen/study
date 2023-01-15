@@ -15,3 +15,4 @@
 * [CHAPTER 08. 의존성 관리하기](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter08/%EC%A0%95%EB%A6%AC/08.%20%EC%9D%98%EC%A1%B4%EC%84%B1%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0.md)
 * [CHAPTER 09. 유연한 설계](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter09/%EC%A0%95%EB%A6%AC/09.%20%EC%9C%A0%EC%97%B0%ED%95%9C%20%EC%84%A4%EA%B3%84.md)
 * [CHAPTER 10. 상속과 코드 재사용](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter10/%EC%A0%95%EB%A6%AC/10.%20%EC%83%81%EC%86%8D%EA%B3%BC%20%EC%BD%94%EB%93%9C%20%EC%9E%AC%EC%82%AC%EC%9A%A9.md)
+* [CHAPTER 11. 합성과 유연한 설계](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter11/%EC%A0%95%EB%A6%AC/11.%20%ED%95%A9%EC%84%B1%EA%B3%BC%20%EC%9C%A0%EC%97%B0%ED%95%9C%20%EC%84%A4%EA%B3%84.md)
