@@ -1,12 +1,13 @@
 package com.parkhanbeen.object.chapter11;
 
-import java.time.Duration;
-
-public class RateDiscountableRegularPhone extends RegularPhone {
+/**
+ * 기본 요금 할인 정책.
+ */
+public class RateDiscountablePolicy extends AdditionalRatePolicy {
     private Money discountAmount;
 
-    public RateDiscountableRegularPhone(Money amount, Duration seconds, Money discountAmount) {
-        super(amount, seconds);
+    public RateDiscountablePolicy(RatePolicy next, Money discountAmount) {
+        super(next);
         this.discountAmount = discountAmount;
     }
 
