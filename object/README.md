@@ -17,3 +17,4 @@
 * [CHAPTER 10. 상속과 코드 재사용](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter10/%EC%A0%95%EB%A6%AC/10.%20%EC%83%81%EC%86%8D%EA%B3%BC%20%EC%BD%94%EB%93%9C%20%EC%9E%AC%EC%82%AC%EC%9A%A9.md)
 * [CHAPTER 11. 합성과 유연한 설계](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter11/%EC%A0%95%EB%A6%AC/11.%20%ED%95%A9%EC%84%B1%EA%B3%BC%20%EC%9C%A0%EC%97%B0%ED%95%9C%20%EC%84%A4%EA%B3%84.md)
 * [CHAPTER 12. 다형성](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter12/%EC%A0%95%EB%A6%AC/12.%20%EB%8B%A4%ED%98%95%EC%84%B1.md)
+* [CHAPTER 13. 서브클래싱과 서브타이핑](https://github.com/parkhanbeen/study/blob/master/object/src/main/java/com/parkhanbeen/object/chapter13/%EC%A0%95%EB%A6%AC/13.%20%EC%84%9C%EB%B8%8C%ED%81%B4%EB%9E%98%EC%8B%B1%EA%B3%BC%20%EC%84%9C%EB%B8%8C%ED%83%80%EC%9D%B4%ED%95%91.md)
