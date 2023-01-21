@@ -38,7 +38,21 @@
 * docker run {이미지 명} : pull 말고 run을 하면 로컬 pc 이미지를 찾지 못하면 hub에서 이미지 확인 후 있으면 자동으로 pull 한 후 run 함
     * 이전에 로컬에 이미지를 받았을 경우 최신 이미지를 hub에서 받을려면 pull 명령을 해야함
 
+
+## 볼륨
+
 * docker volume ls : 도커가 현재 관리 중인 모든 볼륨을 리스팅
+* docker volume rm {VOL_NAME} or docker volume prune : 볼륨 삭제
 
 * docker run -p 3000:80 -d --rm --name feedback-app -v feeback:/app/feedback feedback-node:volumes
     * -v feeback:/app/feedback : -v {볼륨명}:{경로}
+
+
+## 환경 설정
+
+* --env PORT=8000 : env 환경 설정 포트 8000 키 값으로 지정(-e PORT=8000)
+    * docker run -d -p 3000:8000 --env PORT=8000
+
+* Dockerfile에 환경 설정이 되어 있을 경우 도커 이미지 별로 설정 하고 싶을떼
+    * ARG DEFAULT_PORT=80 
+* docker build -t feedback-node:dev --build-arg DEFAULT_PORT=8000 :  feedback-node:dev 이미지에 별도의 포트 지정(8000)
