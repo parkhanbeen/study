@@ -48,11 +48,21 @@
     * -v feeback:/app/feedback : -v {볼륨명}:{경로}
 
 
-## 환경 설정
+## 인수와 환경 변수 설정
 
 * --env PORT=8000 : env 환경 설정 포트 8000 키 값으로 지정(-e PORT=8000)
     * docker run -d -p 3000:8000 --env PORT=8000
 
 * Dockerfile에 환경 설정이 되어 있을 경우 도커 이미지 별로 설정 하고 싶을떼
     * ARG DEFAULT_PORT=80 
-* docker build -t feedback-node:dev --build-arg DEFAULT_PORT=8000 :  feedback-node:dev 이미지에 별도의 포트 지정(8000)
+* docker build -t feedback-node:dev --build-arg DEFAULT_PORT=8000 :  feedback-node:dev 이미지에 별도의 디폴트 포트 지정(8000)
+
+
+## 컨테이너 정보
+
+* docker container inspect mongodb : mongodb 컨테이너 정보
+
+## 네트워크
+
+* docker network create {이름} : 네트워크 생성
+* docker run --network {이름} : 생성된 네트워크 사용 
