@@ -66,3 +66,8 @@
 
 * docker network create {이름} : 네트워크 생성
 * docker run --network {이름} : 생성된 네트워크 사용 
+
+## 도커 컴포즈
+
+* docker-compose up -d : 도커 컴포즈 실행
+* docker-compose down -v : 모든 컨테이너 삭제 및 생성된 디폴트 네트워크와 모든 것이 종료됨.(-v 플래그로 볼륨도 삭제)
