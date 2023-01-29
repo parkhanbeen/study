@@ -39,6 +39,10 @@
     * 이전에 로컬에 이미지를 받았을 경우 최신 이미지를 hub에서 받을려면 pull 명령을 해야함
 
 
+* docker exec : 해당 컨테이너가 실행하는 기본 명령 외에 실행 중인 컨테이너 내에서 특정 명령을 실행할 수 있음
+    * ex) docker exec {컨테이너 이름}
+
+
 ## 볼륨
 
 * docker volume ls : 도커가 현재 관리 중인 모든 볼륨을 리스팅
@@ -70,4 +74,8 @@
 ## 도커 컴포즈
 
 * docker-compose up -d : 도커 컴포즈 실행
+    * 모든 이미지를 가져온 다음 컨테이너를 시작
 * docker-compose down -v : 모든 컨테이너 삭제 및 생성된 디폴트 네트워크와 모든 것이 종료됨.(-v 플래그로 볼륨도 삭제)
+
+* docker-compose run : 여러 서비스중 단일로 지정해 명령을 전달
+    * ex) docker-compose run --rm npm init
