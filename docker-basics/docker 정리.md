@@ -86,3 +86,40 @@
 
 * **서드파티 플러그인** : 모든 종류의 동작과 기능을 추가할 수 있는 타사 플러그인을 설치할 수 있다.
 
+
+## 도커 컴포즈(Docker-Compose)
+
+* 다중 컨테이너 설정을 더 쉽게 관리할 수 있는 도구
+* 설정 프로세스를 자동화할 수 있음
+* 도커 컴포즈는 커스텀 이미지를 위한 Dockerfile을 대체하지 않음
+* 도커 컴포즈는 이미지나 컨테이너를 대체하지 않음
+* 도커 컴포즈는 다수의 호스트에서 다중 컨테이너를 관리하는데는 적합하지 않음
+* 하나의 동일한 호스트에서 다중 컨테이너를 관리하는데 좋음.
+
+### 도커 컴포즈 파일
+
+* 컴포즈 파일에 멀티 컨테이너 애플리케이션을 구성하는 핵심 구성 요소를 정의
+* 도커 컴포즈를 이용하면 도커가 이 컴포즈 파일에 특정된 모든 서비스에 대해 새 환경을 자동으로 생성하고 모든 서비스를 즉시 그 네트워크에 추가함
+* 즉, 하나의 동일한 컴포즈 파일에 정의된 모든 서비스는 이미 도커에 의해 생성된 동일한 네트워크의 일부가 됨
+* 만약 네트워크를 등록하면 디폴트 네트워크 외에 지정된 네트워크에도 추가됨
+
+
+* build : 빌드해야하는 Dockerfile을 찾을 곳을 지정
+    * context : build 옵션 안에 중첩으로 사용 context 내에 Dockerfile을 보유하는 폴더의 경로를 특정함
+        * context: ./backend
+    * dockerfile : build 옵션 안에 중첩으로 사용 Dockerfile명이 다를 경우 지정
+        * dockerfile: Dockerfile-dev
+
+### 리눅스에 Docker Compose 설치하기
+
+* 리눅스 시스템이서는 별도로 도커 컴포즈를 설치해야함
+
+1. sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+2. sudo chmod +x /usr/local/bin/docker-compose
+
+3. sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+4. to verify: docker-compose --version
+
+* 참조: https://docs.docker.com/compose/install/
