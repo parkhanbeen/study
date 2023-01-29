@@ -110,6 +110,10 @@
     * dockerfile : build 옵션 안에 중첩으로 사용 Dockerfile명이 다를 경우 지정
         * dockerfile: Dockerfile-dev
 
+
+* depends_on : 의존성이 있는 컨테이너에 우선순위를 정하는 옵션
+    * depends_on: - 서비스명
+
 ### 리눅스에 Docker Compose 설치하기
 
 * 리눅스 시스템이서는 별도로 도커 컴포즈를 설치해야함
@@ -123,3 +127,9 @@
 4. to verify: docker-compose --version
 
 * 참조: https://docs.docker.com/compose/install/
+
+
+## 유틸리티 컨테이너
+
+* 특정 환경만 포함하는 컨테이너
+    * ex) nodeJS 환경, PHP 환경 등등
