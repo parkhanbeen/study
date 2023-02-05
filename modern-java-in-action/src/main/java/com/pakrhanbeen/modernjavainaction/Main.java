@@ -1,4 +1,4 @@
-package org.example;
+package com.pakrhanbeen.modernjavainaction;
 
 public class Main {
 
