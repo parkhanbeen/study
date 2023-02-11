@@ -266,3 +266,5 @@
 
 * Deployment는 쿠버네티스에서 널리 사용되는 오브젝트이다.
 * ReplicaSet을 이용해 pod를 업데이트하고 관리하며 롤백(Rollback)을 하거나 특정 버전(revision)으로 돌아갈 수 있음.
+
+
