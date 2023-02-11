@@ -4,7 +4,7 @@ metadata:
   name: tasks-deployment
 spec:
   replicas: 1
-  selector:
+  selector: 
     matchLabels:
       app: tasks
   template:
@@ -15,9 +15,10 @@ spec:
       containers:
         - name: tasks
           image: msshanbeenpark/kub-demo-tasks:latest
-          env: 
+          env:
             - name: AUTH_ADDRESS
-              # value: "10.107.3.83"
+              # value: "10.99.104.252"
               value: "auth-service.default"
             - name: TASKS_FOLDER
               value: tasks
+              
