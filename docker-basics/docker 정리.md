@@ -267,4 +267,14 @@
 * Deployment는 쿠버네티스에서 널리 사용되는 오브젝트이다.
 * ReplicaSet을 이용해 pod를 업데이트하고 관리하며 롤백(Rollback)을 하거나 특정 버전(revision)으로 돌아갈 수 있음.
 
+### EKS vs ECS
 
+* EKS(Elastic Kubernetes Service)
+    * 쿠버네티스 배포를 위한 서비스
+    * 쿠버네티스 구성을 사용하고 적용할 수 있도록 모든 것을 설정함.
+
+
+* ECS(Elastic Container Service)
+    * 컨테이너 배포를 위한 일반적인 서비스
+    * 쿠버네티스와 관련 없음
+    * 쿠버네티스와 사용하려면 모든 것을 직접 설정해야함
