@@ -11,5 +11,5 @@ services:
     ports:
       - '8080:3000'
     environment:
-      MONGODB_CONNECTION_URI: 'mongodb+srv://hanbeen:wmf224693@cluster0.3nw4lyv.mongodb.net/?retryWrites=true&w=majority'
+      MONGODB_CONNECTION_URI:
       AUTH_API_ADDRESSS: 'auth:3000'
