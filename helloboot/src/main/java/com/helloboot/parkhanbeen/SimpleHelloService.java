@@ -1,6 +1,5 @@
 package com.helloboot.parkhanbeen;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
