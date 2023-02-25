@@ -5,10 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Conditional;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Import(MyAutoConfigImportSelector.class)
-public @interface EnableMyAutoconfiguration {
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Conditional(MyOnClassCondition.class)
+public @interface ConditionalMyOnClass {
+    String value();
 }

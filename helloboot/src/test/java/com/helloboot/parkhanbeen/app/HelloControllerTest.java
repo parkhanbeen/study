@@ -1,4 +1,4 @@
-package com.helloboot.parkhanbeen;
+package com.helloboot.parkhanbeen.app;
 
 import com.helloboot.parkhanbeen.app.HelloController;
 import org.assertj.core.api.Assertions;

@@ -1,4 +1,4 @@
-package com.helloboot.parkhanbeen;
+package com.helloboot.parkhanbeen.app;
 
 import com.helloboot.parkhanbeen.app.HelloDecorator;
 import com.helloboot.parkhanbeen.app.SimpleHelloService;

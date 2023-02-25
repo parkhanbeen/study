@@ -1,10 +1,10 @@
 package com.helloboot.parkhanbeen.config.autoconfig;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
+import com.helloboot.parkhanbeen.config.MyAutoConfiguration;
 
-@Configuration
+@MyAutoConfiguration
 public class DispatcherServletConfig {
 
     @Bean
