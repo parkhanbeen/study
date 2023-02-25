@@ -1,4 +1,4 @@
-package com.helloboot.parkhanbeen;
+package com.helloboot.parkhanbeen.app;
 
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;

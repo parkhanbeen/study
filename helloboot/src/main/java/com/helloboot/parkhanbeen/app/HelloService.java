@@ -1,4 +1,4 @@
-package com.helloboot.parkhanbeen;
+package com.helloboot.parkhanbeen.app;
 
 public interface HelloService {
 
