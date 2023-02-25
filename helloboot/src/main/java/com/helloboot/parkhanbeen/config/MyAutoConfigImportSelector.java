@@ -20,5 +20,4 @@ public class MyAutoConfigImportSelector implements DeferredImportSelector {
             .stream(candidates.spliterator(), false)
             .toArray(String[]::new);
     }
-
 }
