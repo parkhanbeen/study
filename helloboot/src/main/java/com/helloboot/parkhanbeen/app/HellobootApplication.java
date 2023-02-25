@@ -1,8 +1,9 @@
-package com.helloboot.parkhanbeen;
+package com.helloboot.parkhanbeen.app;
 
 import org.springframework.boot.SpringApplication;
+import com.helloboot.parkhanbeen.config.MySpringBootApplication;
 
-@MySpringBootAnnotation
+@MySpringBootApplication
 public class HellobootApplication {
 
     public static void main(String[] args) {

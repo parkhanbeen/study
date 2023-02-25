@@ -1,5 +1,6 @@
 package com.helloboot.parkhanbeen;
 
+import com.helloboot.parkhanbeen.app.HelloController;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
