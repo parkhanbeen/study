@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Configuration
+@Configuration(proxyBeanMethods = false)  // proxyBeanMethods = false 옵션일 경우 프록시로 bean을 생성하지 않음
 public @interface MyAutoConfiguration {
 
 }
