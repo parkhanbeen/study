@@ -269,3 +269,141 @@ int sum = numbers.stream().reduce(0, Integer::sum);
 * 하지만 스트림의 요소를 정렬하거나 중복을 제거하려면 과거의 이력을 알고 있어야 한다.
   * 예를 들어 어떤 요소를 출력 스트림으로 추가하려면 **모든 요소가 버퍼에 추가되어 있어야 한다.**
 * 따라서 데이터 스트림의 크기가 크거나 무한이라면 문제가 생길 수 있다. 이러한 연산을 **내부 상태를 갖는 연산**이라 한다.
+
+## 숫자형 스트림
+
+```java
+int calories = menu.stream()
+        .map(Dish::getCalories)
+        .reduce(0, Integer::sum);
+```
+
+* 위 코드에는 박싱 비용이 숨어있다. 내부적으로 합계를 계산하기 전에 `Integer`를 기본형을 언박싱해야 한다.
+* 스트림 API 숫자 스트림을 효율적으로 처리할 수 있도록 **기본형 특화 스트림**을 제공한다.
+
+### 기본형 특화 스트림
+
+* 자바 8에서는 세 가지 기본형 특화 스트림을 제공한다. (박싱 비용을 피할 수 있다)
+  * `IntStream, DoubleStream, LongStream`
+* 각각의 인터페이스는 숫자 스트림의 합계를 계산하는 `sum`, 최댓값 요소를 검색하는 `max` 같이 자주 사용하는 숫자 관련 리듀싱 연산
+ 수행 메서드를 제공한다.
+* 또한 필요할 때 다시 객체 스트림으로 복원하는 기능도 제공한다.
+* 특화 스트림은 오직 박싱 과정에서 일어나는 효율성과 관련 있으며 스트림에 추가 기능을 제공하지는 않는다는 사실을 기억하자.
+
+#### 숫자 스트림으로 매핑
+
+* 스트림을 특화 스트림으로 변환할 때는 `mapToInt, mapToDouble, mapToLong` 세 가지 메서드를 가장 많이 사용한다.
+
+```java
+int calories = menu.stream()
+                  .mapToInt(Dish::getCalories)   // IntStream 변환
+                  .sum();
+```
+
+* 스트림이 비어있으면 `sum`은 기본값 0을 반환한다.
+* `IntStream`은 `max, min, average`등 다양한 유틸리티 메서드도 지원한다.
+
+#### 객체 스트림으로 복원
+
+```java
+IntStream intStream = menu.stream().mapToInt(Dish::getCalories);  // 숫자 스트림 변환
+Stream<Integer> stream = inStream.boxed();  // 숫자 스트림을 스트림으로 변환
+```
+
+#### 기본값 : OptionalInt
+
+* 합계에서는 0이라는 기본값이 있었으므로 별 문제가 없지만 최댓값을 찾을 때는 0이라는 기본값 때문에 잘못된 결과가 도출될 수 있다.
+* 스트림에 요소가 없는 상황과 실제 최댓값이 0인 상황을 어떻게 구별할 수 있을끼?
+* `Optional`을 `Integer, String`등의 참조 형식으로 파라미터화할 수 있다.
+  * 또한 `OptionalInt, OptionalDouble, OptionalLong` 세 가지 기본형 특화 스트림 버전도 제공한다.
+
+```java
+OptionalInt maxCalories = menu.stream()
+                        .mapToInt(Dish::getCalories)
+                        .max();
+int max = maxCalories.orElse(1);   // 기본 최댓값을 명시적으로 설정
+```
+
+#### 숫자 범위
+
+* 특정 범위의 숫자를 이용해야 하는 상황이 자주 발생한다.
+  * 1에서 100 사이의 숫자를 생성하려 한다고 가정
+  * 자바 8의 `IntStream, LongStream`에서는 `range, rangeClosed`라는 두 가지 정적 메서드를 제공
+  * 두 메서드 모두 첫 번째 인수로 시작값, 두 번째 인수로 종료값을 갖는다.
+  * `range` 메서드는 시작값과 종료값이 결과에 포함되지 않는 반면 `rangeClosed`는 시작값과 종료값이 결과에 포함된다는 점이 다르다.
+
+```java
+IntStream evenNumbers = IntStream.rangeClosed(1, 100)   // 1, 100 의 범위를 나타낸다.
+        .filter(n -> n % 2 == 0);                       // 1 ~ 100까지의 짝수 스트림
+System.out.printLn(evenNumbers.count());          
+```
+
+* 이 때 `IntStream.range(1, 100)`을 사용하면 1과 100을 포함하지 않으므로 짝수 49개를 반환한다.
+
+## 스트림 만들기
+
+### 값으로 스트림 만들기
+
+* `Stream.of`를 이용해서 스트림을 만들 수 있다.
+```java
+Stream<String> stream = Stream.of("Modern", "Java", "In ", "Action");
+stream.map(String::toupperCase).forEach(System.out::println);
+
+// empty 메서드를 이용해 스트림을 비울 수 있다.
+Stream<String> emptyStream = Stream.empty();
+```
+
+### null이 될 수 있는 객체로 스트림 만들기
+
+* 자바 9에서는 `null`이 될 수 있는 객체를 스트림으로 만들 수 있는 새로운 메서드가 추가되었다.
+```java
+Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
+
+Stream.of("config", "home", "user")
+        .flatMap(key -> Stream.ofNullable(System.getProperty(key)));
+```
+
+### 배열로 스트림 만들기
+* 배열을 인수로 받는 정적 메서드 `Arrays.stream`을 이용해서 스트림을 만들 수 있다.
+```java
+int[] numbers = {2, 3, 5, 7, 11, 13};
+int sum = Arrays.stream(numbers).sum();
+```
+
+### 파일로 스트림 만들기
+
+* 파일을 처리하는 등의 I/O 연산에 사용하는 자바의 NIO API(비블록 I/O)도 스트림 API를 활용할 수 있도록 업데이트되었다.
+* `java.nio.file.Files`의 많은 정적 메서드가 스트림을 반환한다.
+* 예를 ㄷ르어 `Files.lines`는 주어진 파일의 행 스트림을 문자열로 반환한다.
+```java
+long uniqueWords = 0;
+try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {
+    uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))  // 고유 단어 수 계산
+        .distinct()     // 중복 제거
+        .count();       // 단어 스트림 생성
+} catch(IOException e) { 
+}
+```
+
+### 함수로 무한 스트림 만들기
+
+* 스트림 API는 함수에서 스트림을 만들 수 있는 두 정적 메서드 `Stream.iterate, Stream.generate`를 제공한다.
+* 두 연산을 이용해서 **무한 스트림**, 즉 고정된 컬렉션에서 고정된 크기로 스트림을 만들었던 것과는 달리 크기가 고정되지 않은 스트림을 만들 수 있다.
+
+#### iterate
+
+```java
+Stream.iterate(0, n -> n + 2)
+        .limit(10)
+        .forEach(System.out::println);
+```
+
+#### generate
+
+* `iterate`와 비슷하게 `generate`도 요구할 때 값을 계산하는 무한 스트림을 만들 수 있다.
+  * 하지만 `iterate`와 달리 `generate`는 생산된 각 값을 연속적으로 계산하지 않는다.
+```java
+Stream.generate(Math::random)
+        .limit(5)
+        .forEach(System.out::println)
+```
