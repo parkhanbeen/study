@@ -1,3 +1,4 @@
+com.helloboot.parkhanbeen.config.autoconfig.PropertyPlaceholderConfig
 com.helloboot.parkhanbeen.config.autoconfig.TomcatWebserverConfig
 com.helloboot.parkhanbeen.config.autoconfig.JettyWebserverConfig
 com.helloboot.parkhanbeen.config.autoconfig.DispatcherServletConfig
