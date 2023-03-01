@@ -1,409 +1,252 @@
-# 스트림 활용
+# 스트림으로 데이터 수집
 
-## 필터링
+## 컬렉터
 
-* `filter` 메서드는 **프레디케이트**를 인수로 받아서 프레디케이트와 일치하는 모든 요소를 포함하는 스트림을 반환한다.
+* `Collector`인터페이스 구현은 스트림의 요소를 어떤 식으로 도출할지 지정한다.
+  * `toList`를 이용해 각 요소를 리스트로 만들어라. 
+    * `collect(Collectors.toList());`
+  * `groupingBy`를 이용해 각 키 버킷 그리고 각 키 버킷에 대응하는 요소 리스트를 값으로 포함하는 맵을 만들어라.
+    * `collect(groupingBy(Transaction::getCurrency));`
+* 훌륭하게 설계된 함수형 API의 또 다른 장점으로 높은 수준의 조합성과 재사용성을 꼽을 수 있다.
+* `collect`로 결과를 수집하는 과정을 간단하면서도 유연한 방식으로 정의할 수 있다는 점이 컬렉터의 최대 강점이다.
+* 스트림에 `collect`를 호출하면 스트림의 요소에 (컬렉터로 파라미터화된) 리듀싱 연산이 수행된다.
+* `Collector`인터페이스의 메서드를 어덯게 구현하느냐에 따라 스트림에 어떤 리듀싱 연산을 수행할지 결정된다.
+* `Collectors`유틸리티 클래스는 자주 사용하는 컬렉터 인스턴스를 손쉽게 생성할 수 있는 정적 팩토리 메서드를 제공한다.
+* `Collectors`에서 제공하는 메서드의 기능은 크게 세 가지로 구분할 수 있다.
+  1. 스트림 요소를 하나의 값으로 리듀스하고 요약
+  2. 요소 그룹화
+  3. 요소 분할
 
-```java
-List<Dish> vegetarianMenu = menu.stream()
-    .filter(Dish::isVegetarian)
-    .collect(toList());
-```
+## 리듀싱과 요약
 
-* 스트림은 고유 요소로 이루어진 스트림을 반환하는 `distinct` 메서드도 지원한다.
-  * 고유 여부는 스트림에서 만든 객체의 `hashCode, equals`로 결정
-
-```java
-List<Integer> numbers = Arrays.asList(1, 2, 1, 3, 3, 2, 4);
-numbers.stream()
-    .filter(i -> i % 2 == 0)
-    .distinct()
-    .forEach(System.out::println);
-```
-
-## 스트림 슬라이싱
-
-### 프레디케이트를 이용한 방법
-
-* **takeWhile** 
-  * 리스트가 정렬되어 있을 경우 특정 값보다 크거나 같을 때 반복 작업을 중단하고 싶을 경우 사용한다.
-    ```java
-    List<Dish> slicedMenu1 = specialMenu.stream()
-                                .takeWhile(dish -> dish.getCalories() < 320)
-                                .collect(toList());
-    ```
-  * `takeWhile`을 이용하면 무한 스트림을 포함한 모든 스트림에 프레디케이트를 적용해 스트림을 슬라이스할 수 있다.
-
-* **dropWhile**
-  * 프로디케이트가 처음으로 거짓이 되는 지점까지 발견된 요소를 버린다.
-    ```java
-    List<Dish> slicedMenu1 = specialMenu.stream()
-                                .dropWhile(dish -> dish.getCalories() < 320)
-                                .collect(toList());
-    ```
-  * `dropWhile`은 `takeWhile`과 정반대의 작업을 수행한다.
-  * 프레디케이트가 거짓이 되면 그 지점에서 작업을 중단하고 남은 모든 요소를 반환한다.
-
-### 스트림 축소
-
-* 스트림은 주어진 값 이하의 크기를 갖는 새로운 스트림을 반환하는 `limit(n)` 메서드를 지원한다.
-
-    ```java
-    List<Dish> slicedMenu1 = specialMenu.stream()
-                                    .filter(dish -> dish.getCalories() > 300)
-                                    .limit(3)
-                                    .collect(toList());
-    ```
-
-* 프레디케이트와 일치하는 처음 세 요소를 선택한 다음에 즉시 결과를 반환한다.
-
-### 요소 건너뛰기
-
-* 처음 n개 요소를 제외한 스트림을 반환하는 `skip(n)` 메서드를 지원한다.
-
-    ```java
-    List<Dish> dishes = menu.stream()
-                            .filter(d -> d.getCalories() > 300)
-                            .collect(toList());
-    ```
-
-## 매핑
-
-* 스트림 API의 `map, flatMap` 메서드는 특정 데이터를 선택하는 기능을 제공한다.
-
-### 스트림의 각 요소에 함수 적용하기
-
-#### map
-
-* `map` 메서드는 인수로 제공된 함수 각 요소에 적용되며 함수를 적용한 결과가 새로운 요소로 매핑된다.
-  * 이 과정은 기존 값을 고친다는 개념보다 '새로운 버전을 만든다'라는 개념에 가까우므로 **변환**에 가까운 **매핑**이라는 단어를 사용한다.
-  
-```java
-List<String> dishNames = menu.stream()
-                            .map(Dish::getName)
-                            .collect(toList());
-```
-
-### 스트림 평면화
-
-* 문자열 리스트에서 **고유 문자**로 이루어진 리스트를 반환해보자.
-  * `["Hello", "World"]` -> `["H", "e", "l", "o", "W", "r", "d"]` 로 변환
-
-      ```java
-      word.stream()
-          .map(word -> word.split(""))
-          .distinct()
-          .collect(toList());
-      
-      ```
-  * 위 코드는 문자열 배열을 반환하는 문제가 있다. `map` 메서드가 반환하는 스트림 형식은 `Stream<String[]>` 이다.
-    * 우리가 원하는 것은 `Stream<String>`이다.
-  * 이러한 문제는 `flatMap`이라는 메서드를 이용해 해결할 수 있다.
-
+* **counting** : 개수를 계산한다.
   ```java
-  // Arrays.stream()을 이용한 시도
-  word.stream()
-      .map(word -> word.split(""))
-      .map(Arrays::stream)
-      .distinct()
-      .collect(toList());
-  // 실패 : List<Stream<String>이 만들어짐
-  
-  // flatMap 이용
-  List<String> uniqueCharacters = words.stream()
-                                       .map(word -> word.split(""))  // 각 단어를 개별 문자를 포함하는 배열로 변환
-                                       .flatMap(Arrays::stream)      // 생성된 스트림을 하나의 스트림으로 평면화
-                                       .distinct()
-                                       .collect(toList()); 
+  menu.stream().collect(Collectors.counting());
+  // 불필요한 과정 생략
+  menu.stream().count();
   ```
+  
+* **maxBy, minBy** : 최댓값, 최솟값을 계산한다. 
+  ```java
+  // 스트림 요소를 비교하는데 사용할 Comparator를 생성
+  Comparator<Dish> dishCaloriesComparator = Comparator.comparingInt(Dish::getCalories);
+  Optional<Dish> mostCalorieDish = menu.stream().collect(maxBy(dishCaloriesComparator));
+  ```
+  
+* **summingInt** : 인수로 전달된 함수 객체를 `int`로 매핑한 컬렉터를 반환한다. 
+ 그리고 `summingInt`가 `collect` 메서드로 전달되면 요약 작업을 수행한다.
+  ```java
+  // 메뉴 리스트의 총 칼로리를 계산
+  int totalCalories = menu.stream().collect(summingInt(Dish::getCalories));
+  ```
+  * 그 외 `Collectors.summingLong, Collectors.summingDouble` 메서드는 같은 방식으로 동작하며 각각 `long, double` 
+    형식의 데이터로 요약한다는 점만 다르다. <br><br>
 
-#### flatMap
+* **averagingInt** : 평균값을 계산한다. 
+  ```java
+  menu.stream().collect(averagingInt(Dish::getCalories));
+  ```
+  * 그 외 `averagingLong, averagingDouble` 등 다양한 형식으로 평균을 계산할 수 있다. <br><br>
 
-* `flatMap`은 각 배열을 스트림이 아니라 스트림의 콘텐츠로 매핑한다.
-  * 즉, `map(Arrays::stream)`과 달리 `flatMap`은 하나의 평면화된 스트림을 반환한다.
-  * `flatMap`메서드는 스트림의 각 값을 다른 스트림으로 만든 다음에 모든 스트림을 하나의 스트림으로 연결하는 기능을 수행한다.
+* **summarizingInt** : 요소 수, 최댓값과 최솟값, 합계와 평균 등 두 개 이상의 연산을 한 번에 수행해야 할 경우 사용
+  ```java
+  // IntSummmaryStatistics 클래스로 요소 수, 최댓값과 최솟값, 합계와 평균 정보가 수집
+  IntSummmaryStatistics menuStatistics = menu.stream().collect(summarizingInt(Dish::getCalories));
+  
+  // 출력
+  IntSummmaryStatistics{count=9, sum=4300, min=120, average=477.77778, max=800}
+  ```
+  * 그 외 `summarizingLong, summarizingDouble` 메서드와 관련된 `LongSummmaryStatistics, DoubleSummmaryStatistics`
+   클래스도 있다. <br><br>
 
-## 검색과 매칭
+* **joining** : 스트림의 각 개체에 `toString` 메서드를 호출해서 추출한 모든 문자열을 하나의 문자열로 연결해서 반환한다.
+  ```java
+  String shortMenu = menu.stream().map(Dish::getName).collect(joining());
+  ```
+  * `joining` 내부적으로 `StringBuilder`를 이용해서 문자열을 하나로 만든다.
+  * 결과 문자열을 해석하기 힘들다면 두 요소 사이에 구분 문자열을 넣을 수 있도록 오버로드된 `joining` 팩토리 메서드가 있다.
+  ```java
+  String shortMenu = menu.stream().map(Dish::getName).collect(joining(", "));
+  ```
+  
+### 범용 리듀싱 요약 연산
 
-* 스트림 API는 `allMatch, anyMatch, noneMatch, findFirst, findAny` 등 다양한 유틸리티 메서드를 제공한다.
-
-### anyMatch
-
-* 프레디케이트가 주어진 스트림에서 적어도 한 요소와 일치하는지 확인할 때 이용한다.
+* 지금까지 살펴본 모든 컬렉터는 `reducing` 팩터리 메서드로 정의할 수 있다.
+  * 즉, 범용 `Collectors.reducing`으로도 구현할 수 있다.
+  * 그럼에도 범용 팩터리 메서드 대신 특화된 컬렉터를 사용하는 이유는 편의성 때문이다.
 
 ```java
-if (menu.stream().anyMatch(Dish::isVegetarian)) {
-        ...
+int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) -> i + j));
+```
+
+* `reducing`은 세 개의 인수를 받는다.
+  * 첫 번째 인수는 리듀싱 연산의 시작값이거나 스트림에 인수가 없을 경우 반환값이다.
+  * 두 번째 인수는 변환 함수다.
+  * 세 번째 인수는 같은 종류의 두 항목을 하나의 값으로 더하는 `BinaryOperator`이다.
+
+```java
+// 한 개의 인수를 가진 reducing 버전
+Optional<Dish> mostCaloriesDish = menu.stream()
+        .collect(reducing(d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
+```
+
+## 그룹화
+
+* 자바 8의 함수형을 이용하면 가독성 있는 한 줄의 코드로 그룹화를 구현할 수 있다.
+```java
+Map<Dish.Type, List<Dish>>> dishesByType = menu.stream().collect(groupingBy(Dish::getType));
+```
+
+* 함수를 기준으로 스트림이 그룹화되므로 이를 **분류 함수**라고 부른다.
+
+### 다수준 그룹화
+
+* 두 인수를 받는 팩토리 메서드 `Collectors.groupingBy`를 이용해서 항목을 다수준으로 그룹화할 수 있다.
+* `Collectors.groupingBy`는 일반적으로 분류 함수와 컬렉터를 인수로 받는다.
+  * 즉, 바깥쪽 `groupingBy`메서드에 스트림의 항목을 분류할 두 번째 기준을 정의하는 내부 `groupingBy`를 전달해서 두 수준으로 스트림의 항목을
+   그룹화할 수 있다.
+
+```java
+Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel = 
+menu.stream().collect(
+    groupingBy(Dish::getType, 
+        groupingBy(dish -> {
+            if (dish.getCalories() <= 400) {
+                return CaloricLevel.DIEF;
+             } else if (dish.getCalories() <= 700) {
+                return CaloricLevel.NORMAL;
+             } else {
+                return CaloricLevel.FAT;
+             }   
+        }))
+)
+
+// 결과
+{MEAT={DIET=[chicken], NORMAL=[beef], FAT=[pork]}, 
+ FISH={DIEF=[prawns], NORMAL=[salmon]},
+ OTHER={DIET=[rice, seasonal fruit], NORMAL=[french fries, pizza]}}
+```
+
+### 서브그룹으로 데이터 수집
+
+```java
+Map<Dish.Type, Long> typesCount = menu.stream()
+        .collect(groupingBy(Dish::getType, counting()));
+
+// 결과
+{MEAT=3, FISH=2, OTHER=4}
+```
+
+* 분류 함수 한 개의 인수를 갖는 `groupingBy(f)`는 사실 `groupingBy(f, toList())`의 축약형이다.
+
+```java
+menu.stream().collect(groupingBy(Dish::getType,        // 분류 함수
+        collectingAndThen(
+            maxBy(comparingInt(Dish::getCalories)),   // 감싸인 컬렉터
+        Optional::get)));  // 변환 함수
+```
+
+* `groupingBy`는 가장 바깥쪽에 위치하면서 요리의 종류에 따라 메뉴 스트림을 세 개의 서브스트림으로 그룹화한다.
+* `groupingBy` 컬렉터는 `collectingAndThen` 컬렉터를 감싼다. 따라서 두 번째 컬렉터는 그룹화된 세 개의 서브스트림에 적용된다.
+* `collectingAndThen` 컬렉터는 세 번째 컬렉터 `maxBy`를 감싼다.
+* 리듀싱 컬렉터가 서브스트림에 연산을 수행한 결과에 `collectingAndThen`의 `Optional::get` 변환 함수가 적용된다.
+* `groupingBy` 컬렉터가 반환하는 맵의 분류 키에 대응하는 세 값이 각각의 요리 형식에서 가장 높은 칼로리다.
+
+
+* 팩터리 메서드 `collectingAndThen`으로 컬렉터가 반환한 결과를 다른 형식으로 활용할 수 있다.
+* 팩터리 메서드 `collectingAndThen`은 적용할 컬렉터와 변환 함수를 인수로 받아 다른 컬렉터를 반환한다.
+* 반환되는 컬렉터는 기존 컬렉터의 래퍼 역할을 하며 `collect`의 마지막 과정에서 변환 함수로 자신이 반환하는 값을 매핑한다.
+
+
+## 분할
+
+* 분할은 **분할 함수**라 불리는 프레디케이트를 분류 함수로 사용하는 특수한 그룹화 기능이다.
+* 분할 함수는 불리언을 반환하므로 맵의 키 형식 `Boolean`이다. 결과적으로 그룹화 맵은 최대(참 아니면 거짓의 값을 갖는) 두 개의 그룹으로 분류된다.
+```java
+Map<Boolean, List<Dish>> partitionedMenu = menu.stream()
+        .collect(partitioningBy(Dish::isVegetarian));
+// 채식 요리
+List<Dish> vegetarianDishes = partitionedMenu.get(true);
+```
+
+### 분할의 장점
+
+* 분할 함수가 반환하는 참, 거짓 두 가지 요소의 스트림 리스트를 모두 유지한다는 것이 분할의 장점이다.
+
+## Collector 인터페이스
+
+* `Collector` 인터페이스는 리듀싱 연산(즉, 컬렉터)을 어떻게 구현할지 제공하는 메서드 집합으로 구성된다.
+```java
+// Collector 인터페이스
+public interface Collector<T, A, R> {
+    Supplier<A> supplier();
+    BiConsumer<A, T> accumulator();
+    BinaryOperator<A> combiner();
+    Function<A, R> finisher();
+    Set<Characteristics> characteristics();
 }
 ```
 
-### allMatch
+* T는 수집될 스트림 항목의 제네릭 형식이다.
+* A는 누적자, 즉 수집 과정에서 중간 결과를 누적하는 객체의 형식이다.
+* R은 수집 연산 결과 객체의 형식(항상 그런 것은 아니지만 대개 컬렉션 형식)이다.
 
-* 스트림의 모든 요소가 주어진 프레디케이트와 일치하는지 검사한다.
+### supplier 메서드 : 새로운 결과 컨테이너 만들기
+
+* `supplier` 메서드는 빈 결과로 이루어진 `supplier`를 반환해야 한다. 즉, `supplier`는 수집 과정에서 빈 누적자 인스턴스를 만드는 파라미터가 없는 함수다.
 ```java
-// 모든 요리가 1000칼로리 이하면 건강식으로 간주
-boolean isHealthy = menu.stream().allMatch(dish -> dish.getCalories() < 1000);
-```
-
-### noneMatch
-
-* `allMatch`와 반대 연산을 수행한다.
-* 즉, 주어진 프레디케이트와 일치하는 요소가 없는지 확인한다.
-```java
-boolean isHealthy = menu.stream()
-        .noneMatch(d -> d.getCalories() >= 1000);
-```
-
-<br>
-
-`anyMath, allMatch, noneMatch` 세 메서드는 스트림 **쇼트서킷 기법**, 즉 자바의 `&&, ||`와 같은 연산을 활용한다.
-
-### findAny
-
-* 현재 스트림에서 임의의 요소를 반환한다.
-* `findAny` 메서드는 다른 스트림연산과 연결해서 사용할 수 있다.
-
-```java
-Optional<Dish> dish = menu.stream()
-        .filter(Dish::isVegetarian)
-        .findAny();
-```
-
-* 쇼트서킷을 이용해서 결과를 찾는 즉시 실행을 종료한다.
-
-> 여기서 `optional` 이란 <br>
-> 자바 8 부터 추가된 클래스로 값이 없는 `null`을 대신해서 사용할 수 있는 컨테이너이다. <br>
-> 값이 없을 때 처리하는 기능을 제공한다.
-> <br>
-> * `isPresent()` : 값을 포함하면 참 포함하지 않으면 거짓을 반환
-> * `ifPresent(Consumer<T> block)` : 값이 있으면 주어진 블록을 실행
-> * `T get()` : 값이 존재하면 값을 반환, 없으면 `NoSuchElementException`을 던진다.
-> * `T orElse(T other)` : 값이 있으면 값을 반환, 없으면 기본값을 반환한다.
-> 
-> ```java
-> menu.stream()
-> .filter(Dish::isVegetarian)
-> .findAny()
-> .ifPresent(dish -> System.out.println(dish.getName()));   // 값이 있으면 출력 없으면 아무일도 일어나지 않는다.
-> ```
-
-### findFirst
-
-* 스트림에서 첫 번째 요소를 찾을 경우 사용된다.
-```java
-List<Integer> someNumbers = Arrays.asList(1, 2, 3, 4, 5);
-Optional<Integer> firstSquareDivisibleByThree = someNumbers.stream()
-        .map(n -> n * n)
-        .filter(n -> n % 3 == 0)
-        .findFirst();   // 9;
-```
-
-### findAny와 findFirst는 언제 사용할까?
-
-* 병렬 실행에서는 첫 번째 요소를 찾기 어렵다.
-* 따라서 요소의 반환 순서가 상관없다면 병렬 스트림에서는 제약이 적은 `findAny`를 사용한다.
-* 반환 순서가 상관 있다면 `findFirst`를 사용한다.
-
-## 리듀싱
-
-* 모든 스트림 요소를 처리해서 값으로 도출하는 것을 **리듀싱 연산**이라고 한다.
-
-```java
-// 일반 for-each 문
-int sum = 0;
-for  (int x : numbers) {
-    sum += x;
-}
-
-// reduce 사용
-int sum = numbers.stream().reduce(0, (a, b) -> a + b);
-
-// 메서드 참조
-int sum = numbers.stream().reduce(0, Integer::sum);
-```
-
-* 위 코드 `reduce` 연산은 두 개의 인수를 갖는다.
-  * `초기값 0`
-  * 두 요소를 조합해서 새로운 값을 만드는 `BinaryOperator<T>`
-    * `(a, b) -> a + b`
-* 스트림이 하나의 값으로 줄어들 때까지 람다는 각 요소를 반복해서 조합한다.
-
-```java
-Optional<Integer> sum = numbers.stream().reduce((a, b) -> (a + b));
-```
-
-* 위 코드는 초기값을 받지 않도록 오버로드된 `reduce`이다.
-* 값이 없음을 가리킬수 있도록 `Optional` 객체로 감싼 결과를 반환한다.
-
-### 최댓값과 최솟값 reduce
-
-* `reduce`는 두 인수를 받는다.
-  * 초깃값
-  * 스트림의 두 요소를 합쳐서 하나의 값으로 만드는 데 사용할 람다
-
-```java
-// 최댓값
-Optional<Integer> max = numbers.stream().reduce(Integer::max);
-// 최솟값
-Optional<Integer> max = numbers.stream().reduce(Integer::min);
-```
-
-### reduce 메서드의 장점과 병렬화
-
-* `reduce`를 이용하면 내부 반복이 추상화되면서 내부 구현에서 병렬로 `reduce`를 실행할 수 있게 된다.
-
-```java
-int sum = numbers.stream().reduce(0, Integer::sum);
-```
-
-### 스트림 연산 : 상태 없음과 상태 있음
-
-* `stream` 메서드를 `parallelStream`로 바꾸는 것만으로도 별다른 노력 없이 병렬성을 얻을 수 있다.
-* `map, filter` 등은 입력 스트림에서 각 요소를 받아 0 또는 결과를 출력 스트림으로 보낸다. 즉 내부 상태를 갖지 않는 연산이다.
-
-* 하지만 `reduce, sum, max` 같은 연산은 결과를 누적할 내부 상태가 필요하다.
-* 스트림에서 처리하는 요소 수와 관계없이 내부 상태의 크기는 **한정**되어 있다.
-
-
-* 반면 `sorted, distinct` 같은 연산은 `filter, map`처럼 스트림을 입력으로 받아 다른 스트림을 출력하는 것처럼 보일 수 있다.
-* 하지만 스트림의 요소를 정렬하거나 중복을 제거하려면 과거의 이력을 알고 있어야 한다.
-  * 예를 들어 어떤 요소를 출력 스트림으로 추가하려면 **모든 요소가 버퍼에 추가되어 있어야 한다.**
-* 따라서 데이터 스트림의 크기가 크거나 무한이라면 문제가 생길 수 있다. 이러한 연산을 **내부 상태를 갖는 연산**이라 한다.
-
-## 숫자형 스트림
-
-```java
-int calories = menu.stream()
-        .map(Dish::getCalories)
-        .reduce(0, Integer::sum);
-```
-
-* 위 코드에는 박싱 비용이 숨어있다. 내부적으로 합계를 계산하기 전에 `Integer`를 기본형을 언박싱해야 한다.
-* 스트림 API 숫자 스트림을 효율적으로 처리할 수 있도록 **기본형 특화 스트림**을 제공한다.
-
-### 기본형 특화 스트림
-
-* 자바 8에서는 세 가지 기본형 특화 스트림을 제공한다. (박싱 비용을 피할 수 있다)
-  * `IntStream, DoubleStream, LongStream`
-* 각각의 인터페이스는 숫자 스트림의 합계를 계산하는 `sum`, 최댓값 요소를 검색하는 `max` 같이 자주 사용하는 숫자 관련 리듀싱 연산
- 수행 메서드를 제공한다.
-* 또한 필요할 때 다시 객체 스트림으로 복원하는 기능도 제공한다.
-* 특화 스트림은 오직 박싱 과정에서 일어나는 효율성과 관련 있으며 스트림에 추가 기능을 제공하지는 않는다는 사실을 기억하자.
-
-#### 숫자 스트림으로 매핑
-
-* 스트림을 특화 스트림으로 변환할 때는 `mapToInt, mapToDouble, mapToLong` 세 가지 메서드를 가장 많이 사용한다.
-
-```java
-int calories = menu.stream()
-                  .mapToInt(Dish::getCalories)   // IntStream 변환
-                  .sum();
-```
-
-* 스트림이 비어있으면 `sum`은 기본값 0을 반환한다.
-* `IntStream`은 `max, min, average`등 다양한 유틸리티 메서드도 지원한다.
-
-#### 객체 스트림으로 복원
-
-```java
-IntStream intStream = menu.stream().mapToInt(Dish::getCalories);  // 숫자 스트림 변환
-Stream<Integer> stream = inStream.boxed();  // 숫자 스트림을 스트림으로 변환
-```
-
-#### 기본값 : OptionalInt
-
-* 합계에서는 0이라는 기본값이 있었으므로 별 문제가 없지만 최댓값을 찾을 때는 0이라는 기본값 때문에 잘못된 결과가 도출될 수 있다.
-* 스트림에 요소가 없는 상황과 실제 최댓값이 0인 상황을 어떻게 구별할 수 있을끼?
-* `Optional`을 `Integer, String`등의 참조 형식으로 파라미터화할 수 있다.
-  * 또한 `OptionalInt, OptionalDouble, OptionalLong` 세 가지 기본형 특화 스트림 버전도 제공한다.
-
-```java
-OptionalInt maxCalories = menu.stream()
-                        .mapToInt(Dish::getCalories)
-                        .max();
-int max = maxCalories.orElse(1);   // 기본 최댓값을 명시적으로 설정
-```
-
-#### 숫자 범위
-
-* 특정 범위의 숫자를 이용해야 하는 상황이 자주 발생한다.
-  * 1에서 100 사이의 숫자를 생성하려 한다고 가정
-  * 자바 8의 `IntStream, LongStream`에서는 `range, rangeClosed`라는 두 가지 정적 메서드를 제공
-  * 두 메서드 모두 첫 번째 인수로 시작값, 두 번째 인수로 종료값을 갖는다.
-  * `range` 메서드는 시작값과 종료값이 결과에 포함되지 않는 반면 `rangeClosed`는 시작값과 종료값이 결과에 포함된다는 점이 다르다.
-
-```java
-IntStream evenNumbers = IntStream.rangeClosed(1, 100)   // 1, 100 의 범위를 나타낸다.
-        .filter(n -> n % 2 == 0);                       // 1 ~ 100까지의 짝수 스트림
-System.out.printLn(evenNumbers.count());          
-```
-
-* 이 때 `IntStream.range(1, 100)`을 사용하면 1과 100을 포함하지 않으므로 짝수 49개를 반환한다.
-
-## 스트림 만들기
-
-### 값으로 스트림 만들기
-
-* `Stream.of`를 이용해서 스트림을 만들 수 있다.
-```java
-Stream<String> stream = Stream.of("Modern", "Java", "In ", "Action");
-stream.map(String::toupperCase).forEach(System.out::println);
-
-// empty 메서드를 이용해 스트림을 비울 수 있다.
-Stream<String> emptyStream = Stream.empty();
-```
-
-### null이 될 수 있는 객체로 스트림 만들기
-
-* 자바 9에서는 `null`이 될 수 있는 객체를 스트림으로 만들 수 있는 새로운 메서드가 추가되었다.
-```java
-Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
-
-Stream.of("config", "home", "user")
-        .flatMap(key -> Stream.ofNullable(System.getProperty(key)));
-```
-
-### 배열로 스트림 만들기
-* 배열을 인수로 받는 정적 메서드 `Arrays.stream`을 이용해서 스트림을 만들 수 있다.
-```java
-int[] numbers = {2, 3, 5, 7, 11, 13};
-int sum = Arrays.stream(numbers).sum();
-```
-
-### 파일로 스트림 만들기
-
-* 파일을 처리하는 등의 I/O 연산에 사용하는 자바의 NIO API(비블록 I/O)도 스트림 API를 활용할 수 있도록 업데이트되었다.
-* `java.nio.file.Files`의 많은 정적 메서드가 스트림을 반환한다.
-* 예를 ㄷ르어 `Files.lines`는 주어진 파일의 행 스트림을 문자열로 반환한다.
-```java
-long uniqueWords = 0;
-try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {
-    uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))  // 고유 단어 수 계산
-        .distinct()     // 중복 제거
-        .count();       // 단어 스트림 생성
-} catch(IOException e) { 
+public Supplier<List<T>> ssupplier() {
+    return () -> new ArrayList<T>();
+//    return ArrayList::new;   // 생성자 참조 전달 방법
 }
 ```
 
-### 함수로 무한 스트림 만들기
+### accumulator 메서드 : 결과 컨테이너에 요소 추가하기
 
-* 스트림 API는 함수에서 스트림을 만들 수 있는 두 정적 메서드 `Stream.iterate, Stream.generate`를 제공한다.
-* 두 연산을 이용해서 **무한 스트림**, 즉 고정된 컬렉션에서 고정된 크기로 스트림을 만들었던 것과는 달리 크기가 고정되지 않은 스트림을 만들 수 있다.
-
-#### iterate
-
+* `accumulator` 메서드는 리듀싱 연산을 수행하는 함수를 반환한다.
+* 스트림에서 n번째 요소를 탐색할 때 두 인수, 즉 누적자(스트림의 첫 n-1개 항목을 수집한 상태) 와 n번째 요소를 함수에 적용한다.
+* 함수 반환값은 `void`, 즉 요소를 탐색하면서 적용하는 함수에 의해 누적자 내부상태가 바뀌므로 누적자가 어떤 값일지 단정할 수 없다.
 ```java
-Stream.iterate(0, n -> n + 2)
-        .limit(10)
-        .forEach(System.out::println);
+public BiConsumer<List<T>, T> accumulator() {
+    return (list, item) -> list.add(item);
+//    return List::add;       // 메서드 참조 방법
+}
 ```
 
-#### generate
+### finisher 메서드 : 최종 변환값을 결과 컨테이너로 적용하기
 
-* `iterate`와 비슷하게 `generate`도 요구할 때 값을 계산하는 무한 스트림을 만들 수 있다.
-  * 하지만 `iterate`와 달리 `generate`는 생산된 각 값을 연속적으로 계산하지 않는다.
+* `finisher` 메서드는 스트림 탐색을 끝내고 누적자 객체를 최종 결과로 변환하면서 누적 과정을 끝낼 때 호출할 함수를 반환해야 한다.
 ```java
-Stream.generate(Math::random)
-        .limit(5)
-        .forEach(System.out::println)
+public Function<List<T>, List<T>> finisher() {
+    return Function.identity();
+}
 ```
+
+### combiner 메서드 : 두 결과 컨테이너 병합
+
+* `combiner`는 스트림의 서로 다른 서브파트를 병렬로 처리할 때 누적자가 이 결과를 어떻게 처리할지 정의한다.
+```java
+public BinaryOperator<List<T>> combiner() {
+    return (list1, list2) -> {
+        list1.addAll(list2);
+        return list1;
+    }
+}
+```
+
+### characteristics 메서드
+
+* `characteristics` 메서드는 컬렉터의 연산을 정의하는 `characteristics` 형식의 불변 집합을 반환한다.
+* `characteristics`는 스트림을 병렬로 리듀스할 것인지 그리고 병렬로 리듀스한다면 어떤 최적화를 선택해야 할지 힌트를 제공한다.
+* `characteristics`는 다음 세 항목을 포함하는 열거형이다.
+
+  * **UNORDERED** 
+    * 리듀싱 결과는 스트림 요소의 방문 순서나 누적 순서에 영향을 받지 않는다.
+  * **CONCURRENT**
+    * 다중 스레드에서 `accumulator` 함수를 동시에 호출할 수 있으며 이 컬렉터는 스트림의 병렬 리듀싱을 수행할 수 있다.
+    * 컬렉터의 플래그에 `UNORDERED`를 함께 설정하지 않았다면 데이터 소스가 정렬되어 있지 않은(즉, 집합처럼 요소의 순서가 무의미한)
+     상황에서만 병렬 리듀싱을 수행할 수 있다.
+  * **IDENTITY_FINISH**
+    * `finisher` 메서드가 반환하는 함수는 단순히 `identity`를 적용할 뿐이므로 이를 생랼할 수 있다.
+    * 따라서 리듀싱 과정의 최종 결과로 누적자 객체를 바로 사용할 수 있다. 또한 누적자 A를 결과 R로 안전하게 형변환할 수 있다.
+
