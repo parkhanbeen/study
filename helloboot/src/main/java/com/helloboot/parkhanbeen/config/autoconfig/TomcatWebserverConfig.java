@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import com.helloboot.parkhanbeen.config.ConditionalMyOnClass;
 import com.helloboot.parkhanbeen.config.MyAutoConfiguration;
+import org.springframework.context.annotation.Import;
 
 @MyAutoConfiguration
 @ConditionalMyOnClass("org.apache.catalina.startup.Tomcat")
