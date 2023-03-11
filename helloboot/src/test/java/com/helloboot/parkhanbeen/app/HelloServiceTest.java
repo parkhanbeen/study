@@ -1,14 +1,21 @@
 package com.helloboot.parkhanbeen.app;
 
-import com.helloboot.parkhanbeen.app.HelloDecorator;
-import com.helloboot.parkhanbeen.app.SimpleHelloService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class HelloServiceTest {
     @Test
     void simpleHelloService() {
-        SimpleHelloService simpleHelloService = new SimpleHelloService();
+        SimpleHelloService simpleHelloService = new SimpleHelloService(new MemberRepository() {
+            @Override
+            public Member findMember(String name) {
+                return null;
+            }
+
+            @Override
+            public void increase(String name) {
+            }
+        });
 
         String result = simpleHelloService.sayHello("Test");
 

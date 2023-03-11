@@ -1,3 +1,4 @@
+com.helloboot.parkhanbeen.config.autoconfig.DataSourceConfig
 com.helloboot.parkhanbeen.config.autoconfig.PropertyPostProcessorConfig
 com.helloboot.parkhanbeen.config.autoconfig.PropertyPlaceholderConfig
 com.helloboot.parkhanbeen.config.autoconfig.TomcatWebserverConfig
