@@ -1,13 +1,12 @@
 package com.helloboot.parkhanbeen.config.autoconfig;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.helloboot.parkhanbeen.config.MyConfigurationProperties;
 
+@MyConfigurationProperties(prefix = "server")
 public class ServerProperties {
 
-    @Value("${contextPath}")
     private String contextPath;
 
-    @Value("${port:8080}")
     private int port;
 
     public String getContextPath() {
