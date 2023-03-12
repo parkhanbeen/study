@@ -16,3 +16,4 @@
 
 * [CHAPTER 04. 스트림 소개](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter04/%EC%A0%95%EB%A6%AC/chapter04.%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%20%EC%86%8C%EA%B0%9C.md#%EC%8A%A4%ED%8A%B8%EB%A6%BC-%EC%86%8C%EA%B0%9C)
 * [CHAPTER 05. 스트림 활용](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter05/%EC%A0%95%EB%A6%AC/chapter05.%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%20%ED%99%9C%EC%9A%A9.md#%EC%8A%A4%ED%8A%B8%EB%A6%BC-%ED%99%9C%EC%9A%A9)
+* [CHAPTER 06. 스트림으로 데이터 수집](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter06/%EC%A0%95%EB%A6%AC/chapter06.%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9C%BC%EB%A1%9C%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%88%98%EC%A7%91.md#%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%88%98%EC%A7%91)
