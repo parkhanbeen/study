@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-@HelloBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Transactional
 class MemberRepositoryTest {
 
     @Autowired
@@ -14,11 +17,6 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
-
-//    @BeforeEach
-//    void init() {
-//        jdbcTemplate.execute("create table if not exists member(name varchar(50) primary key, count int)");
-//    }
 
     @Test
     void findMemberFailed() {

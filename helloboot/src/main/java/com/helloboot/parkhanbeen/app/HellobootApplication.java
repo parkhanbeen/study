@@ -3,10 +3,10 @@ package com.helloboot.parkhanbeen.app;
 import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
-import com.helloboot.parkhanbeen.config.MySpringBootApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@MySpringBootApplication
+@SpringBootApplication
 public class HellobootApplication {
 
     private final JdbcTemplate jdbcTemplate;
