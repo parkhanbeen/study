@@ -18,3 +18,7 @@
 * [CHAPTER 05. 스트림 활용](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter05/%EC%A0%95%EB%A6%AC/chapter05.%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%20%ED%99%9C%EC%9A%A9.md#%EC%8A%A4%ED%8A%B8%EB%A6%BC-%ED%99%9C%EC%9A%A9)
 * [CHAPTER 06. 스트림으로 데이터 수집](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter06/%EC%A0%95%EB%A6%AC/chapter06.%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9C%BC%EB%A1%9C%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%88%98%EC%A7%91.md#%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%88%98%EC%A7%91)
 * [CHAPTER 07. 병렬 데이터 처리와 성능](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter07/%EC%A0%95%EB%A6%AC/chapter07.%20%EB%B3%91%EB%A0%AC%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%B2%98%EB%A6%AC%EC%99%80%20%EC%84%B1%EB%8A%A5.md#%EB%B3%91%EB%A0%AC-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%B2%98%EB%A6%AC%EC%99%80-%EC%84%B1%EB%8A%A5)
+
+### PART 3. 스트림과 람다를 이용한 효과적 프로그래밍
+
+* [CHAPTER 08. 컬렉션 API 개선](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter08/%EC%A0%95%EB%A6%AC/chapter08.%20%EC%BB%AC%EB%A0%89%EC%85%98%20API%20%EA%B0%9C%EC%84%A0.md#%EC%BB%AC%EB%A0%89%EC%85%98-api-%EA%B0%9C%EC%84%A0)
