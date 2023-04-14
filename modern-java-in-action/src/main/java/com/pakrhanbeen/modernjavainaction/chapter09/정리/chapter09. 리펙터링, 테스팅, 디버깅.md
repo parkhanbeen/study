@@ -153,3 +153,123 @@ public interface BufferedReaderProcessor {  // IOException을 던질 수 있는 
 
 ## 람다로 객체지향 디자인 패턴 리팩터링하기
 
+### 디자인 패턴
+
+* 디자인 패턴은 공통적인 소프트웨어 문제를 설계할 때 재사용할 수 있는, 검증된 청사진을 제공한다.
+
+#### 전략(strategy) 패턴
+
+* 전략 패턴은 한 유형의 알고리즘을 보유한 상태에서 런타임에 적절한 알고리즘을 선택하는 기법이다.
+  * 알고리즘을 나타내는 인터페이스
+  * 다양한 알고리즘을 나타내는 한 개 이상의 인터페이스 구현
+  * 전략 객체를 사용하는 한 개 이상의 클라이언트
+```java
+public interface ValidationStrategy {
+    boolean execute(String s);
+}
+
+public class IsAllLowerCase implements ValidationStrategy {
+    public boolean execute(String s) {
+        return s.matches("[a-z]+");
+    }
+}
+
+public class IsNumeric implements ValidationStrategy {
+  public boolean execute(String s) {
+    return s.matches("\\d+");
+  }
+}
+
+public class Validator {
+    private final ValidationStrategy strategy;
+    
+    public Validator(ValidationStrategy v) {
+        this.strategy = v;
+    }
+    public boolean validate(String s) {
+        return strategy.execute(s);
+    }
+}
+
+Validator numericValidator = new Validator((String s) -> s.matches("[a-z]+"));
+boolean b1 = numericValidator.validate("aaaa");
+Validator lowerCaseValidator = new Validator((String s) -> s.matches("\\d+"));
+boolean b2 = numericValidator.validate("bbbb");
+```
+
+* 람다 표현식을 이용하면 전략 패턴에서 발생하는 자잘한 코드를 제거할 수 있다.
+
+#### 템플릿 메서드(template method) 패턴
+
+* 알고리즘의 개요를 제시한 다음에 알고리즘의 일부를 고칠 수 있는 유연함을 제공해야 할 때 템플릿 메서드 디자인 패턴을 사용한다.
+```java
+abstract class OnlineBanking {
+    public void processCustomer(int id) {
+        Customer c = Database.getCustomerWithId(id);
+        makeCustomerHappy(c);
+    }
+    abstract  void makeCustomerHappy(Customer c);
+}
+
+public void processCustomer(int id, Consumer<Customer> makeCustomerHappy) {
+    Customer c = Database.getCustomerWithId(id);
+    makeCustomerHappy.accept(c);
+}
+
+// 람다
+new OnlineBankingLambda().processCustomer(1337, (Customer c) -> 
+        System.out.println("Hello " + c.getName()));
+```
+
+#### 옵저버(observer) 패턴
+
+* 어떤 이벤트가 발생했을 때 한 객체(**주체**)가 다른 객체 리스트(**옵저버**)에 자동으로 알림을 보내야 하는 상황에서 옵저버 패턴을 사용한다.
+```java
+interface Observer {
+    void notify(String tweet);
+}
+
+class NYTimes implements Observer {
+    public void notify(String tweet) {
+        if (tweet != null && tweet.contains("money")) {
+            System.out.println("Breaking news in NY! " + tweet);
+        }
+    }
+}
+
+class Guardian implements Observer {
+    public void notify(String tweet) {
+        if (tweet != null && tweet.contains("queen")) {
+            System.out.println("Yet more news from London..." + tweet);
+        }
+    }
+}
+
+interface Subject {
+    void registerObserver(Observer o);
+    void notifyObservers(Observer o);
+}
+
+class Feed implements Subject {
+    private final List<Observer> observers = new ArrayList<>();
+    public void registerObserver(Observer o) {
+        this.observers.add(o);
+    }
+    public void notifyObservers(String tweet) {
+        observers.forEach(o -> o.notify(tweet));
+    }
+}
+
+Feed f = new Feed();
+f.registerObserver((String tweet) -> {
+    if (tweet != null && tweet.contains("money")) {
+        System.out.println("Breaking news in NY! " + tweet);
+    }
+});
+
+f.registerObserver((String tweet) -> {
+    if (tweet != null && tweet.contains("queen")) {
+        System.out.println("Breaking news in London... " + tweet);
+    }
+})
+```
