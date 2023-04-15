@@ -22,3 +22,4 @@
 ### PART 3. 스트림과 람다를 이용한 효과적 프로그래밍
 
 * [CHAPTER 08. 컬렉션 API 개선](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter08/%EC%A0%95%EB%A6%AC/chapter08.%20%EC%BB%AC%EB%A0%89%EC%85%98%20API%20%EA%B0%9C%EC%84%A0.md#%EC%BB%AC%EB%A0%89%EC%85%98-api-%EA%B0%9C%EC%84%A0)
+* [CHAPTER 09. 리팩터링, 테스팅, 디버깅](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter09/%EC%A0%95%EB%A6%AC/chapter09.%20%EB%A6%AC%ED%8E%99%ED%84%B0%EB%A7%81%2C%20%ED%85%8C%EC%8A%A4%ED%8C%85%2C%20%EB%94%94%EB%B2%84%EA%B9%85.md#%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81-%ED%85%8C%EC%8A%A4%ED%8C%85-%EB%94%94%EB%B2%84%EA%B9%85)
