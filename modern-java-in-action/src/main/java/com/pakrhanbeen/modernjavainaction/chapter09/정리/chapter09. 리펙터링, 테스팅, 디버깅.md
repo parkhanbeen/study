@@ -273,3 +273,146 @@ f.registerObserver((String tweet) -> {
     }
 })
 ```
+
+#### 의무 체인(chain of responsibility)
+
+* 작업 처리 객체의 체인(동작 체인 등)을 만들 때는 의무 체인 패턴을 사용한다.
+* 한 객체가 어떤 작업을 처리한 다음에 다른 객체로 결과를 전달하고, 다른 객체도 해야 할 작업을 처리한 다음에 또 다른 객체로 전달하는 식이다.
+```java
+public abstract class ProcessingObject<T> {
+    protected ProcessingObject<T> successor;
+    public void setSuccessor(ProcessingObject<T> successor) {
+        this.successor = successor;
+    }
+    public T handle(T input) {
+        T r = handleWork(input);
+        if (successor != null) {
+            return successor.handle(r);
+        }
+        return r;
+    }
+    abstract protected T handleWork(T input);
+}
+
+public class HeaderTextProcessing extends ProcessingObject<String> {
+    public String handleWork(String text) {
+        return "From Raoul, Mario and Alan: " + text;
+    }
+}
+
+public class SpellCheckerProcessing extends ProcessingObject<String> {
+    public String handleWork(String text) {
+        return text.replaceAll("labda", "lambda");
+    }
+}
+
+// 람다
+UnaryOperator<String> headerProcessing = (String, text) -> "From Raoul, Mario and Alan: " + text;
+UnaryOperator<String> spellCheckerProcessing = (String, text) -> text.replaceAll("labda", "lambda");
+Function<String, String> pipeline = headerProcessing.andThen(spellCheckerProcessing);   // 동작 체인으로 두 함수를 조합
+String result = pipeline.apply("Aren ' t labdas really sexy?!!");
+```
+
+#### 팩토리(factory)
+
+* 인스턴스화 로직을 클라이언트에 노출하지 않고 객체를 만들 때 팩토리 패턴을 사용한다.
+* 생정자와 설정을 외부로 노출하지 않음으로써 클라이언트가 단순하게 상품을 생산할 수 있다.
+```java
+public class ProductFactory {
+    public static Product createProduct(String name) {
+        switch (name) {
+          case "loan" : return new Loan();
+          case "stock" : return new Stock();
+          case "bond" : return new Bond();
+          default: throw new RuntimeException("No such product " + name);
+        }
+    }
+}
+
+Product p = ProductFactory.createProduct("loan");
+
+// 람다
+final static Map<String, Supplier<Product>> map = new HashMap<>();
+static {
+    map.put("loan", Loan::new);
+    map.put("stock", Stock::new);
+    map.put("bond", Bond::new);
+}
+
+public static Product createProduct(String name) {
+    Supplier<Product> p = map.get(name);
+    if (p != null) {
+        return p.get();
+    }
+    throw new IllegalArgumentException("No such product " + name);
+}
+```
+
+## 람다 테스팅
+
+### 보이는 람다 표현식의 동작 테스팅
+
+* 람다는 익명(결국 익명 함수)이므로 테스트 코드 이름을 호출 할 수 없다.
+* 따라서 필요하면 람다를 필드에 저장해서 재사용할 수 있으며 람다의 로직을 테스트 할 수 있다.
+```java
+public class Point {
+    public final static Comparator<Point> compareByXAndThenY = 
+            comparing(Point::getx).thenComparing(Point::getY);
+}
+@Test
+public void testComparingTwoPoints() throws Exception {
+    Point p1 = new Point(10, 15);
+    Point p2 = new Point(10, 15);
+    int result = Point.compareByXAndThenY.compare(p1, p2);
+    assertTrue(result < 0);
+}
+```
+* 람다 표현식은 함수형 인터페이스의 인스턴스를 생성한다는 사실을 기억하자.
+
+### 람다를 사용하는 메서드의 동작에 집중하라
+
+* 람다의 목표는 정해진 동작을 다른 메서드에서 사용할 수 있도록 하나의 조각으로 캡슐화하는 것이다. 그러려면 세부 구현을 포함하는 람다 표현식을 공개하지 말아야 한다.
+* 람다 표현식을 사용하는 메서드의 동작을 테스트함으로써 람다를 공개하지 않으면서도 람다 표현식을 검증할 수 있다.
+* 람다 표현식 자체를 테스트 하는 것보다는 람다 표현식이 사용되는 메서드 동작을 테스트하는 것이 바람직하다.
+
+### 복잡한 람다를 개별 메서드로 분할하기
+
+* 복잡한 람다를 테스트할 경우 해결책은 람다 표현식을 메서드 참조로 바꾸는 것이다. 그러면 일반 메서드를 테스트하듯이 람다 표현식을 테스트할 수 있다.
+
+### 고차원 함수 테스팅
+
+* 함수를 인수로 받거나 다른 함수를 반환하는 메서드(고차원 함수)는 좀 더 사용하기 어렵다.
+* 메서드가 람다를 인수로 받는다면 다른 람다로 메서드의 동작을 테스트할 수 있다.
+* 코드를 테스트하면서 람다 표현식에 어떤 문제가 있음을 발견하게 되는데 그래서 디버깅이 필요하다.
+
+## 디버깅
+
+* 문제가 발생한 코드를 디버깅할 때 두 가지를 먼저 확인해야 한다.
+  * 스택 트레이스
+  * 로깅
+* 하지만 람다 표현식과 스트림은 기존의 디버깅 기법을 무력화한다.
+
+### 스택 트레이스 확인
+
+* 람다 표현식은 이름이 없기 때문에 조금 복잡한 스택 트레이스가 생성된다.
+* 메서드 참조를 사용해도 스택 트레이스에는 메서드명이 나타나지 않는다.
+* 메서드 참조를 사용하는 클래스와 같은 곳에 선언되어 있는 메서드를 참조할 때는 메서드 참조 이름이 스택 트레이스에 나타난다.
+* 따라서 람다 표현식과 관련한 스택 트레이스는 이해하기 어려울 수 있다는 점을 염두에 두자.
+
+### 정보 로깅
+
+* 스트림의 파이프라인 연산을 디버깅 할 경우 `forEach`로 스트림 결과를 출력하거나 로깅할 수 있다.
+* 하지만 `forEach`를 호출하는 순간 전체 스트림이 소비된다. 중간 연산 과정을 확인하고 싶다면 바로 `peek`이라는 스트림 연산을 활용할 수 있다.
+* `peek`은 스트림의 각 요소를 소비한 것처럼 동작을 실행하지만 `forEach`처럼 실제로 스트림의 요소를 소비하지는 않는다.
+* `peak`은 자신이 확인한 요소를 파이프라인의 다음 연산으로 그대로 전달한다.
+```java
+numbers.stream()
+        .peek(x -> System.out.pringln("from stream: " + x)) // 처음 소비한 요소 출력
+        .map(x -> x + 17)
+        .peek(x -> System.out.pringln("after map: " + x)) // map 동작 실행 결과 출력
+        .filter(x -> x % 2 == 0)
+        .peek(x -> System.out.pringln("after filter: " + x))
+        .limit(3)
+        .peek(x -> System.out.pringln("after limit: " + x))  // limit 동작 후 선택된 숫자를 출력
+        .collect(toList());
+```
