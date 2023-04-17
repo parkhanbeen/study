@@ -145,3 +145,154 @@ persons.sort(comparing(Person::getAge)
 * 살펴본 세가지 DSL 패턴 각자가 장단점을 갖고 있다. 하지만 한 DSL에 한 개의 패턴만 사용하라는 법은 없다.
 * 세 가지 DSL 패턴을 혼용해 가독성 있는 DSL을 만들 수 있지만 이 기법에도 결점이 있다.
 * 결과 DSL이 여러 가지 기법을 혼용하고 있으므로 한 가지 기법을 적용한 DSL에 비해 사용자가 DSL을 배우는데 오랜 시간이 걸린다는 것이다.
+
+### DSL 패턴의 장점과 단점
+
+ 패턴 이름          | 장점                                                                                                                                                   | 단점                                                                                   
+----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| 메서드 체인         | - 메서드 이름이 키워드 인수 역할을 한다. <br/> - 선택형 파라미터와 잘 동작한다. <br/> - DSL 사용자가 정해진 순서로 메서드를 호출하도록 강제할 수 있다.<br/> - 정적 메서드를 최소화하거나 없앨 수 있다.<br/> - 문법적 잡을 최소화한다. | - 구현이 장황하다.<br/> - 빌드를 연결하는 접착 코드가 필요하다.<br/> - 들여쓰기 규칙으로만 도메인 객체 계층을 정의한다.          |
+| 중첩 함수          | - 구현의 장황함을 줄일 수 있다.<br/> - 함수 중첩으로 도메인 객체 계층을 반영한다.                                                                                                  | - 정적 메서드의 사용이 빈번하다.<br/> - 이름이 아닌 위치로 인수를 정의한다.<br/> - 선택형 파라미터를 처리할 메서드 오버로딩이 필요하다. |
+| 람다를 이용한 함수 시퀀싱 | - 선택형 파라미터와 잘 동작한다.<br/> - 정적 메서드를 최소화하거나 없앨 수 있다.<br/> - 람다 중첩으로 도메인 객체 계층을 반영한다.<br/> - 빌더의 접착 코드가 없다.                                             | - 구현이 장황하다.<br/> - 람다 표현식으로 인한 문법적 잡음이 DSL에 존재한다.                                    |
+
+## 자바8 DSL
+
+* SQL 매핑 도구, 동작 주도 개발 프레임워크, 엔터프라이즈 통합 패턴을 구현하는 도구 세 가지 자바 라이브러리를 확인해보자.
+
+### JOOQ
+
+* `JOOQ`는 SQL을 구현하는 내부적 DSL로 자바에 직접 내장된 형식 안전 언어다.
+* 데이터베이스 스키마를 역공학하는 소스코드 생성기 덕분에 자바 컴파일러가 복잡한 `SQL` 구문의 형식을 확인할 수 있다.
+
+```sql
+select * from book
+where published_in = 2016
+order by title;
+```
+
+```java
+// JOOQ DSL
+create.selectFrom(BOOK)
+    .where(BOOK.PUBLISHED_IN.eq(2016))
+    .orderBy(BOOK.TITLE)
+```
+
+* 스트림 API와 조합해 사용할 수 있다는 것이 JOOQ DSL의 또다른 장점이다.
+```java
+Class.forName("org.h2.Driver");
+// sql 데이터베이스 연결 만들기
+try (Connection c = getConnection("jdbc:h2:~/sql-goodies-with-mapping", "sa", "")) {
+    DSL.using(c)
+    .select(BOOK.AUTHOR, BOOK.TITLE)  // 만들어진 데이터베이스 연결을 이용해 jOOQ SQL 문 시작
+    .where(BOOK.PUBLISHED_IN.eq(2016))
+    .orderBy(BOOK.TITLE)
+    .fetch()
+    .stream()
+    .collect(groupingBy(      // 스트림 API로 데이터베이스에서 가져온 데이터 처리 시작
+        r -> r.getValue(BOOK.AUTHOR),
+    LinekdHashMap::new,
+    mapping(r -> r.getValue(BOOK.TITLE), toList())))
+    .forEach((author, titles) -> 
+    System.out.println(author + " is author of " + titles));
+}
+```
+
+### 큐컴버
+
+* 둥작 주도 개발(Behavior-driven development(BDD))은 테스트 주도 개발의 확장으로 다양한 비즈니스 시나리오를 구조적으로 서술하는 간단한 도메인 전용 슼크립팅
+ 언어를 사용한다.
+* 큐컴버는 다른 BDD 프레임워크와 마찬가지로 이들 명령문을 실행할 수 있는 테스트 케이스로 변환한다.
+* 결과적으로 이 개발 기법으로 만든 스크립트 결과물은 실행할 수 있는 테스트임과 동시에 비즈니스 기능의 수용 기준이 된다.
+* BDD는 우선 순위에 따른, 확인할 수 있는 비즈니스 가치를 전달하는 개발 노력에 집중하며 비즈니스 어휘를 공유함으로 도메인 전문가와 프로그래머 사이의 간격을 줄인다.
+* 개발자가 비즈니스 시나리오를 평문 영어로 구현할 수 있도록 도와주는 BDD 도구인 큐컴버를 이용한 실용적인 예제를 통해 이 추상적 개념을 조금 더 명확하게 정리할 수 있다.
+* 큐컴버는 세 가지 구분되는 개념을 사용한다.
+  * 전제 조건 정의(Given)
+  * 시험하려는 도메인 객체의 실질 호출(When)
+  * 테스트 케이스의 결과를 확인하는 어설션(Then)
+
+```java
+import java.util.HashMap;
+
+public class BuyStocksStep {
+    private Map<String, Integer> stockUnitPrices = new HashMap<>();
+    private Order order = new Order();
+    
+    @Given("^the price of a \"(.*?)\" stock is (\\d+)\\$$")  // 시나리오의 전제 조건인 주식 단가 정의
+    public void setunitPrice(String stockName, int unitPrice) {
+        stockUnitValues.put(stockName, unitPrice);  // 주식 단가 저장
+    }
+    
+    @When("^I buy (\\d+) \"(.*?)\"$")
+    public void buyStocks(int quantity, String stockName) {
+        Trade trade = new Trade();
+        trade.setType(Trade.Type.BUY);
+        
+        Stock stock = new Stock();
+        stock.setSymbol(stockName);
+        
+        trade.setStock(stock);
+        trade.setPrice(stockUnitPrices.get(stockName));
+        trade.setQuantity(quantity);
+        order.addTrade(trade);
+    }
+    
+    @Then("^the order value should be (\\d+)\\$$")
+    public void checkOrderValue(int expectedValue) {   // 예상되는 시나리오 결과 정의
+        assertEquals(expectedValue, order.getValue());
+    }
+}
+
+// 람다 표현식 이용
+public class BuyStockSteps implements cucumber.api.java8.En {
+    private Map<String, Integer> stockUnitPrices = new HashMap<>();
+    private Order order = new Order();
+    public BuyStocksSteps() {
+        Given("^the price of a \"(.*?\" stock is (\\d+)\\$$",
+            (String stockName, int unitPrice) -> {
+                stockUnitValues.put(stockName, unitPrice);
+            });
+        // ....
+    }
+}
+```
+
+### 스프링 통합
+
+* **스프링 통합(Spring Integration)** 은 유명한 엔터프라이즈 통합 패턴을 지원할 수 있도록 의존성 주입에 기반한 스프링 프로그래밍 모델을 확장한다.
+* 스프링 통합의 핵심 목표는 복잡한 엔터프라이즈 통합 솔루션을 구현하는 단순한 모델을 제공하고 비동기, 메시지 주도 아키텍처를 쉽게 적용할 수 있게 돕는 것이다.
+* 스프링 통합은 스프링 기반 애플리케이션 내의 경량의 원격, 메시징, 스케쥴링을 지원한다.
+  * 단비같은 풍부하고 유창한 DSL을 통해 기존의 스프링 XML 설정 파일 기반에도 이들 기능을 지원한다.
+* 스프링 통합은 채널, 엔드포인트, 폴러, 채널 인터셉터등 메시지 기반의 애플리케이션에 필요한 가장 공통 패턴을 모두 구현한다.
+
+```java
+import java.beans.BeanProperty;
+
+@Configuration
+@EnableIntegration
+public class MyConfiguration {
+    
+    @Bean
+    public MessageSource<?> integerMessageSource() {
+        MethodInvokingMessageSource source = new MethodInvokingMessageSource(); 
+        source.setObject(new AtomicInteger());
+        source.setMethodName("getAndIncrement");
+        return source;
+    }
+    
+    @Bean
+    public DirectChannel inputChannel() {
+        return new DIrectChannel();
+    }
+    
+    @Bean
+    public IntegrationFlow myFlow() {
+        return IntegrationFlows
+            .from(this.integerMessageSource(),
+                c -> c.poller(Pollers.fixedRate(10)))
+            .channel(this.inputChannel())
+            .filter((Integer p) -> p % 2 == 0)
+            .transform(Object::toString)
+            .channel(MessageChannels.queue("queueChannel"))
+            .get();
+    }
+}
+```
