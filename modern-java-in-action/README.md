@@ -23,3 +23,5 @@
 
 * [CHAPTER 08. 컬렉션 API 개선](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter08/%EC%A0%95%EB%A6%AC/chapter08.%20%EC%BB%AC%EB%A0%89%EC%85%98%20API%20%EA%B0%9C%EC%84%A0.md#%EC%BB%AC%EB%A0%89%EC%85%98-api-%EA%B0%9C%EC%84%A0)
 * [CHAPTER 09. 리팩터링, 테스팅, 디버깅](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter09/%EC%A0%95%EB%A6%AC/chapter09.%20%EB%A6%AC%ED%8E%99%ED%84%B0%EB%A7%81%2C%20%ED%85%8C%EC%8A%A4%ED%8C%85%2C%20%EB%94%94%EB%B2%84%EA%B9%85.md#%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81-%ED%85%8C%EC%8A%A4%ED%8C%85-%EB%94%94%EB%B2%84%EA%B9%85)
+* [CHAPTER 10. 람다를 이용한 도메인 전용 언어](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter10/%EC%A0%95%EB%A6%AC/chapter10.%20%EB%9E%8C%EB%8B%A4%EB%A5%BC%20%EC%9D%B4%EC%9A%A9%ED%95%9C%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%A0%84%EC%9A%A9%20%EC%96%B8%EC%96%B4.md#%EB%9E%8C%EB%8B%A4%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%A0%84%EC%9A%A9-%EC%96%B8%EC%96%B4)
+
