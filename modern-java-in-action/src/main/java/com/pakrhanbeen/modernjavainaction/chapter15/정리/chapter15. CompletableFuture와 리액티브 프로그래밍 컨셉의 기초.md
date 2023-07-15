@@ -135,4 +135,83 @@ void f(int x, Consumer<Integer> dealWithResult, Consumer<Throwable> dealWithExce
 
 * 콜백이 여러 개면 이를 따로 제공하는 것보다는 한 객체로 이 메서드를 감싸는 것이 좋다. 예를 들어 자바 9 플로 API에서는 여러 콜백을 한
  객체(네 개의 콜백을 각각 대표하는 네 메서드를 포함하는 Subscriber<T> 클래스)로 감싼다.
+```java
+void onComplete()
+void onError(Throwable throwable)
+void onNext(T item)
+```
+* 값이 있을 때(onNext), 도중에 에러가 발생했을 때(onError), 값을 다 소진했거나 에러가 발생해서 더 이상 처리할 데이터가 없을 때(onComplete) 각각의
+ 콜백이 호출된다.
+* 보통 이런 종류의 호출을 메시지 또는 **이벤트**라 부른다.
 
+## CompletableFuture와 콤비네이터를 이용한 동시성
+
+* 자바 8에서는 `Future` 인터페이스의 구현인 `CompletableFuture`를 이용해 `Future`를 조합할 수 있는 기능을 추가했다.
+* 일반적으로 `Future`는 실행해서 `get()`으로 결과를 얻을 수 있는 `Callable`로 만들어진다. 하지만
+ `CompletableFuture`는 실행할 코드 없이 `Future`를 만들 수 있도록 허용하며 `complete()` 메서드를 이용해 나중에 어떤 값을 이용해
+ 다른 스레드가 이를 완료할 수 있고 `get()`으로 값을 얻을 수 있도록 허용한다.
+* 하지만 어떤 상황에서는 많은 수의 `Future`를 사용해야 한다. 이런 상황에서는 `CompletableFuture`와 콤비네이터를 이용해 `get()`에서
+ 블록하지 않을 수 있고 그렇게 함으로 병렬 실행의 효율성은 높이고 데드락은 피하는 최상의 해결책을 구현할 수 있다.
+
+## 발행-구독 그리고 리액티브 프로그래밍
+
+* `Future`와 `CompletableFuture`은 독립적 실행과 병렬성이라는 정식적 모델에 기반한다.
+* 연산이 끝나면 `get()`으로 `Future`의 결과를 얻을 수 있다. 따라서 `Future`는 한 번만 실행해 결과를 제공한다.
+* 반면 리액티브 프로그래밍은 시간이 흐르면서 여러 `Future` 같은 객체를 통해 여러 결과를 제공한다.
+* 자바 9에서는 `java.util.concurrent.Flow`의 인터페이스에 발행-구독 모델(줄여서 pub-sub이라 불리는 프로토콜)을 적용해
+ 리액티브 프로그래밍을 제공한다.
+* 자바 9 플로 API는 세 가지로 플로 API를 정리할 수 있다.
+  1. 구독자가 구독할 수 있는 **발행자**
+  2. 이 연결을 **구독(subscription)** 이라 한다.
+  3. 이 연결을 이용해 **메시지(또는 이벤트로 알려짐)** 를 전송한다.
+
+* 데이터가 발행자(생산자)에서 구독자(소비자)로 흐름에 착안해 개발자는 이를 **업스트림** 또는 **다운스트림**이라 부른다.
+* 자바 9 플로 API의 `Subscriber`에서는 실제 `onError`와 `onComplete`를 지원한다. 기존의 옵저버 패턴에 비해 새로운 API 프로토콜이
+ 더 강력해진 이유가 이들 바로 이런 메서드 덕분이다.
+* 간단하지만 플로 인터페이스의 개념을 복자하게 만든 두 가지 기능은 압력과 역압력이다. 자바 9 플로 API에서는 발행자가 무한의 속도로 아이템을
+ 방출하는 대신 요청했을 때만 다음 아이템을 보내도록 하는 `request()` 메서드(Subscription이라는 새 인터페이스에 포함)를 제공한다
+
+### 역압력
+
+```java
+void onSubscribe(Subscription subscription);
+```
+* `Publisher`와 `Subscriber` 사이에 채널이 연결되면 첫 이벤트로 이 메서드가 호출된다. `Subscription` 객체는 다음처럼 `Subscriber`와
+ `Publisher`와 통신할 수 있는 메서드를 포함한다.
+```java
+interface Subscription {
+    void cancel();
+    void request(long n);
+}
+```
+* 콜백을 통한 역방향 소통 효과에 주목하자. `Publisher`는 `Subscription` 객체를 만들어 `Subscriber`로 전달하면 `Subscriber`는 이를
+ 이용해 `Publisher`로 정보를 보낼 수 있다.
+
+### 실제 역압력의 간단한 형태
+
+* 한번에 한 개의 이벤트를 처리하도록 발행-구독 연결을 구성하려면 다음과 작업이 필요하다.
+  * `Subscriber`가 `OnSubscribe`로 전달된 `Subscription` 객체를 `subscription` 같은 필드에 로컬로 저장한다.
+  * `Subscriber`가 수많은 이벤트를 받지 않도록 `onSubscribe, onNext, onError`의 마지막 동작에 `channel.request(1)`을 추가해 
+   오직 한 이벤트만 요청한다.
+  * 요청을 보낸 채널에만 `onNext, onError` 이벤트를 보내도록 `Publisher`의 `notifyAllSubscribers` 코드를 바꾼다(보통 여러
+   `Subscriber`가 자신만의 속도를 유지할 수 있도록 `Publisher`는 새 `Subscription`을 만들어 각 `Subscriber`와 연결한다).
+* 구현은 간다해 보일 수 있지만 역압력을 구현하려면 여러가지 장단점을 생각해야 한다.
+  * 여러 `Subscriber`가 있을 때 이벤트를 가장 느린 속도로 보낼 것인가? 아니면 각 `Subscriber`에게 보내지 않은 데이터를 저장할 별도의 큐를 가질 것인가?
+  * 큐가 너무 커지면 어떻게 해야 할까?
+  * `Subscriber`가 준비가 안 되었다면 큐의 데이터를 폐기할 것인가?
+* 위 질문의 답변은 데이터 성격에 따라 달라진다.
+
+## 리액티브 시스템 vs 리액티브 프로그래밍
+
+### 리액티브 시스템
+
+* 런타임 환경의 변화에 대응하도록 전체 아키텍처가 설계된 프로그램을 가리킨다.
+* 반응성, 회복성, 탄력성으로 세 가지 속성을 요약할 수 있다.
+* 반응성은 리액티브 시스템이 큰 작업을 처리하느라 간단한 질의의 응답을 지연하지 않고 실시간으로 입력에 반응하는 것을 의미한다.
+* 회복성은 한 컴포넌트의 실패로 전체 시스템이 실패하지 않음을 의미한다.
+* 탄력성은 시스템이 자신의 작업 부하에 맞게 적응하며 작업을 효율적으로 처리함을 의미한다.
+
+### 리액티브 프로그래밍
+
+* 리액티브 프로그래밍을 통해 리액티브 시스템을 구현할 수 있다.
+* 자바는 `java.util.concurrent.Flow` 관련된 자바 인터페이스에서 제공하는 리액티브 프로그래밍 형식을 이용하는 것도 주요 방법 중 하나다.
