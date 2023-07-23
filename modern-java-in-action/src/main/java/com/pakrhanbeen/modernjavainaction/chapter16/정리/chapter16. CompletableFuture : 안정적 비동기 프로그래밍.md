@@ -1,4 +1,4 @@
-# CompletableFuture와 리액티브 프로그래밍 컨셉의 기초
+# CompletableFuture : 안정적 비동기 프로그래밍
 
 ## Future의 단순 활용
 
