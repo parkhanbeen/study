@@ -41,3 +41,4 @@
 ### PART 6. 함수형 프로그래밍과 자바 진화의 미래
 
 * [CHAPTER 18. 함수형 관점으로 생각하기](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter18/%EC%A0%95%EB%A6%AC/chapter18.%20%ED%95%A8%EC%88%98%ED%98%95%20%EA%B4%80%EC%A0%90%EC%9C%BC%EB%A1%9C%20%EC%83%9D%EA%B0%81%ED%95%98%EA%B8%B0.md#%ED%95%A8%EC%88%98%ED%98%95-%EA%B4%80%EC%A0%90%EC%9C%BC%EB%A1%9C-%EC%83%9D%EA%B0%81%ED%95%98%EA%B8%B0)
+* [CHAPTER 19. 함수형 프로그래밍 기법](https://github.com/parkhanbeen/study/blob/master/modern-java-in-action/src/main/java/com/pakrhanbeen/modernjavainaction/chapter19/%EC%A0%95%EB%A6%AC/chapter19.%20%ED%95%A8%EC%88%98%ED%98%95%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%20%EA%B8%B0%EB%B2%95.md#%ED%95%A8%EC%88%98%ED%98%95-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-%EA%B8%B0%EB%B2%95)
