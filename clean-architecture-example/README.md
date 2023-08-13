@@ -8,3 +8,5 @@
 <br>
 [CHAPTER 02: 의존성 역전하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter02.md)
 <br>
+[CHAPTER 03: 코드 구성하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter03.md)
+<br>
