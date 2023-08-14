@@ -10,3 +10,5 @@
 <br>
 [CHAPTER 03: 코드 구성하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter03.md)
 <br>
+[CHAPTER 04: 유스케이스 구현하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter04.md)
+<br>
