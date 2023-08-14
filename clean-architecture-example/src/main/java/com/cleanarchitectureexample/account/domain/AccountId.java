@@ -7,4 +7,8 @@ public class AccountId {
     public AccountId(Long accountId) {
         this.accountId = accountId;
     }
+
+    public Long getValue() {
+        return accountId;
+    }
 }

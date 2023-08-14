@@ -11,13 +11,11 @@ public record Account(AccountId id, Money baselineBalance, ActivityWindow activi
         );
     }
 
-    public boolean withdraw(Money money, AccountId targetAccountId) {
-        if (!mayWithdraw(money)) {
-            return false;
-        }
-        Activity withdrawal = new Activity(this.id, this.id, targetAccountId, LocalDateTime.now(), money);
-        this.activityWindow.addActivity(withdrawal);
-        return true;
+    public static Account withId(
+        AccountId accountId,
+        Money baselineBalance,
+        ActivityWindow activityWindow) {
+        return new Account(accountId, baselineBalance, activityWindow);
     }
 
     private boolean mayWithdraw(Money money) {
@@ -27,10 +25,7 @@ public record Account(AccountId id, Money baselineBalance, ActivityWindow activi
             .isPositive();
     }
 
-    public boolean deposit(Money money, AccountId sourceAccountId) {
-        Activity deposit = new Activity(this.id, sourceAccountId, this.id, LocalDateTime.now(), money);
-        this.activityWindow.addActivity(deposit);
-        return true;
+    public ActivityWindow getActivityWindow() {
+        return activityWindow;
     }
-
 }
