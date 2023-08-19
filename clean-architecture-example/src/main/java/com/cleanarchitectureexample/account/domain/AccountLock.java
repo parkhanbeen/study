@@ -1,5 +1,8 @@
 package com.cleanarchitectureexample.account.domain;
 
-public class AccountLock {
+public interface AccountLock {
 
+    void lockAccount(AccountId accountId);
+
+    void releaseAccount(AccountId accountId);
 }
