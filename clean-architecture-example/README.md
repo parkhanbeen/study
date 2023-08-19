@@ -14,3 +14,7 @@
 <br>
 [CHAPTER 05: 웹 어댑터 구현하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter05.md)
 <br>
+[CHAPTER 06: 영속성 어댑터 구현하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter06.md)
+<br>
+[CHAPTER 07: 아키텍처 요소 테스트하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter07.md)
+<br>
