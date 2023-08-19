@@ -1,8 +1,11 @@
 package com.cleanarchitectureexample.account.domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 public class ActivityWindow {
 
@@ -11,6 +14,10 @@ public class ActivityWindow {
 
     public ActivityWindow(List<Activity> activities) {
         this.activities = activities;
+    }
+
+    public ActivityWindow(@NonNull Activity... activities) {
+        this.activities = new ArrayList<>(Arrays.asList(activities));
     }
 
     public Money calculateBalance(AccountId accountId) {
@@ -25,6 +32,10 @@ public class ActivityWindow {
             .reduce(Money.ZERO, Money::add);
 
         return Money.add(depositBalance, withdrawalBalance.negate());
+    }
+
+    public void addActivity(Activity activity) {
+        this.activities.add(activity);
     }
 
 }
