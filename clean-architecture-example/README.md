@@ -26,3 +26,5 @@
 <br>
 [CHAPTER 11: 의식적으로 지름길 사용하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter11.md)
 <br>
+[CHAPTER 12: 아키텍처 스타일 결정하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter12.md)
+<br>
