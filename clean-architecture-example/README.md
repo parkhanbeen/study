@@ -22,3 +22,5 @@
 <br>
 [CHAPTER 09: 애플리케이션 조립하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter09.md)
 <br>
+[CHAPTER 10: 아키텍처 경계 강제하기](https://github.com/parkhanbeen/study/blob/master/clean-architecture-example/src/main/resources/%EC%A0%95%EB%A6%AC/chapter10.md)
+<br>
