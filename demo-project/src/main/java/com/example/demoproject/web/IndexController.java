@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.example.demoproject.config.auth.LoginUser;
+import com.example.demoproject.config.auth.dto.SessionUser;
 import com.example.demoproject.service.PostsService;
 import com.example.demoproject.web.dto.PostsListResponse;
 import com.example.demoproject.web.dto.PostsResponse;
-import lombok.Getter;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,14 +20,20 @@ import lombok.RequiredArgsConstructor;
 public class IndexController {
 
     private final PostsService postsService;
+    private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         List<PostsListResponse> postsListResponseList = postsService.findAllDesc().stream()
             .map(PostsListResponse::new)
             .collect(Collectors.toList());
 
         model.addAttribute("posts", postsListResponseList);
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+
         return "index";
     }
 

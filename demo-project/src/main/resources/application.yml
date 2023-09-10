@@ -2,3 +2,9 @@ spring:
   h2:
     console:
       enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER
+  profiles:
+    include: oauth
+  session:
+    store-type: jdbc
