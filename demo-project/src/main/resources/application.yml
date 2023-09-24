@@ -1,10 +1,18 @@
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
   h2:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER
+    url: jdbc:h2:mem:testdb;MODE=MySQL;NON_KEYWORDS=USER
   profiles:
     include: oauth
-  session:
-    store-type: jdbc
+
+---
+spring:
+  profiles:
+    active: prod
+    include: oauth, prod-db
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect

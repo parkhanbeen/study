@@ -1,11 +1,15 @@
 spring:
   jpa:
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
   h2:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER;MODE=MySQL
   profiles:
     include: oauth
   session:
