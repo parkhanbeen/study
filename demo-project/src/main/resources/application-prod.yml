@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: prod
+    include: oauth, prod-db
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect

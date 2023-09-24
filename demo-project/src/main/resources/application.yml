@@ -1,3 +1,4 @@
+---
 spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -8,11 +9,3 @@ spring:
     url: jdbc:h2:mem:testdb;MODE=MySQL;NON_KEYWORDS=USER
   profiles:
     include: oauth
-
----
-spring:
-  profiles:
-    active: prod
-    include: oauth, prod-db
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
