@@ -10,3 +10,6 @@ spring:
       username: sa
   profiles:
     include: oauth
+
+  pid:
+    file: /home/ec2-user/app/step2/demo-project.pid

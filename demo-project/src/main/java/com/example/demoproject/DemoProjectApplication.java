@@ -2,12 +2,15 @@ package com.example.demoproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.ApplicationPidFileWriter;
 
 @SpringBootApplication
 public class DemoProjectApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoProjectApplication.class, args);
+        SpringApplication application = new SpringApplication(DemoProjectApplication.class);
+        application.addListeners(new ApplicationPidFileWriter());
+        application.run(args);
     }
 
 }
