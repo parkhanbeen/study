@@ -11,6 +11,7 @@ class DemoProjectApplicationTests {
     void contextLoads() {
         Assertions.assertThat(true).isTrue();
         Assertions.assertThat(true).isTrue();
+        Assertions.assertThat(true).isTrue();
     }
 
 }
