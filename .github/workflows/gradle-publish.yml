@@ -25,10 +25,14 @@ jobs:
         java-version: '17' 
         distribution: 'temurin' 
         
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew 
+    - name: demo-project
+      run: |
+        cd demo-project 
+        chmod +x ./gradlew 
       shell: bash
 
     - name: Build with Gradle
-      run: ./gradlew clean build 
+      run: |
+        cd demo-project  
+        ./gradlew clean build 
       shell: bash
