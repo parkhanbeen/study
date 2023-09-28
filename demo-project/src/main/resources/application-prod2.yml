@@ -1,8 +1,12 @@
+server:
+  port: 8082
+
 spring:
   profiles:
-    active: prod
-    include: oauth, prod-db
+    include: oauth,prod-db
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  session:
+    store-type: jdbc
