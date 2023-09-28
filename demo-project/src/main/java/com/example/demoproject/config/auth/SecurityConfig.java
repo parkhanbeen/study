@@ -30,7 +30,8 @@ public class SecurityConfig {
                     antMatcher("/css/**"),
                     antMatcher("/images/**"),
                     antMatcher("/js/**"),
-                    antMatcher("/h2-console/**")).permitAll()
+                    antMatcher("/h2-console/**"),
+                    antMatcher("/profile")).permitAll()
                 .requestMatchers(
                     antMatcher("/api/v1/**")).hasRole(Role.USER.name())
                 .anyRequest().authenticated()
@@ -42,6 +43,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 }
