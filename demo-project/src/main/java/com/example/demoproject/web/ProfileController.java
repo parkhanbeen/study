@@ -2,6 +2,7 @@ package com.example.demoproject.web;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,6 @@ public class ProfileController {
 
         return profiles.stream()
             .filter(realProfiles::contains)
-            .findAny()
-            .orElse(defaultProfile);
+            .collect(Collectors.joining(", "));
     }
 }
