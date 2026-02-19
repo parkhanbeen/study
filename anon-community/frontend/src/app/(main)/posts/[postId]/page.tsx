@@ -8,6 +8,7 @@ import { serverFetch, ApiError } from "@/lib/api/client";
 import { PostDetailResponse } from "@/types/api";
 import { timeAgo } from "@/lib/utils";
 import { LikeButton } from "@/components/post/like-button";
+import { CommentList } from "@/components/comment/comment-list";
 
 interface Props {
   params: Promise<{ postId: string }>;
@@ -75,8 +76,7 @@ export default async function PostDetailPage({ params }: Props) {
 
       <Separator className="my-4" />
 
-      {/* Comments will be added in Task 10 */}
-      <p className="text-muted-foreground">Comments coming soon...</p>
+      <CommentList postId={post.id} />
     </article>
   );
 }
