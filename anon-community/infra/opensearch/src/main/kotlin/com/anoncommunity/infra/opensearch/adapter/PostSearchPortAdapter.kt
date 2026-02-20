@@ -187,32 +187,41 @@ class PostSearchPortAdapter(
         boolQuery.filter(QueryBuilders.termQuery("status", "PUBLISHED"))
 
         keyword?.let { kw ->
-            val mainQuery = QueryBuilders.multiMatchQuery(kw)
-                .field("title", 3.0f)
-                .field("title.standard", 1.5f)
-                .field("title.icu", 2.0f)
-                .field("content", 2.0f)
-                .field("content.standard")
-                .field("content.icu", 1.5f)
-                .field("tags.text", 1.0f)
-                .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
-                .minimumShouldMatch(dynamicMinimumShouldMatch(kw))
+            if (isChosungQuery(kw)) {
+                val chosungPattern = "*${kw.replace(" ", "")}*"
+                val chosungBool = QueryBuilders.boolQuery()
+                    .should(QueryBuilders.wildcardQuery("titleChosung", chosungPattern))
+                    .should(QueryBuilders.wildcardQuery("contentChosung", chosungPattern))
+                    .minimumShouldMatch(1)
+                boolQuery.must(chosungBool)
+            } else {
+                val mainQuery = QueryBuilders.multiMatchQuery(kw)
+                    .field("title", 3.0f)
+                    .field("title.standard", 1.5f)
+                    .field("title.icu", 2.0f)
+                    .field("content", 2.0f)
+                    .field("content.standard")
+                    .field("content.icu", 1.5f)
+                    .field("tags.text", 1.0f)
+                    .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
+                    .minimumShouldMatch(dynamicMinimumShouldMatch(kw))
 
-            val phraseBoostQuery = QueryBuilders.multiMatchQuery(kw)
-                .field("title", 2.0f)
-                .field("content", 1.0f)
-                .type(MultiMatchQueryBuilder.Type.PHRASE)
-                .slop(1)
+                val phraseBoostQuery = QueryBuilders.multiMatchQuery(kw)
+                    .field("title", 2.0f)
+                    .field("content", 1.0f)
+                    .type(MultiMatchQueryBuilder.Type.PHRASE)
+                    .slop(1)
 
-            val ngramQuery = QueryBuilders.multiMatchQuery(kw)
-                .field("title.ngram", 0.3f)
-                .field("content.ngram", 0.3f)
-                .field("tags.ngram", 0.2f)
-                .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
+                val ngramQuery = QueryBuilders.multiMatchQuery(kw)
+                    .field("title.ngram", 0.3f)
+                    .field("content.ngram", 0.3f)
+                    .field("tags.ngram", 0.2f)
+                    .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
 
-            boolQuery.must(mainQuery)
-            boolQuery.should(phraseBoostQuery)
-            boolQuery.should(ngramQuery)
+                boolQuery.must(mainQuery)
+                boolQuery.should(phraseBoostQuery)
+                boolQuery.should(ngramQuery)
+            }
         }
 
         category?.let { cat ->
@@ -323,6 +332,16 @@ class PostSearchPortAdapter(
             createdAt = doc.createdAt,
             updatedAt = doc.updatedAt,
         )
+    }
+
+    /**
+     * Returns true if the keyword consists entirely of Korean consonants (초성).
+     * Safety guard: limits to 6 chars to prevent expensive leading-wildcard scans.
+     */
+    private fun isChosungQuery(keyword: String): Boolean {
+        val consonants = '\u3131'..'\u314E'
+        val stripped = keyword.replace(" ", "")
+        return stripped.isNotEmpty() && stripped.length <= 6 && stripped.all { it in consonants }
     }
 
     /**

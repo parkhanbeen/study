@@ -217,6 +217,109 @@ class PostSearchPortAdapterSpec : DescribeSpec({
             }
         }
 
+        context("searchWithCursor chosung (initial consonant) query") {
+
+            it("should use wildcard on titleChosung and contentChosung for pure-consonant keyword") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+                adapter.searchWithCursor(CursorSearchQuery(keyword = "ㄱㄴㄷ", size = 10))
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("wildcard") shouldBe true
+                queryJson.contains("titleChosung") shouldBe true
+                queryJson.contains("contentChosung") shouldBe true
+            }
+
+            it("should NOT use multi_match when keyword is pure consonants") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+                adapter.searchWithCursor(CursorSearchQuery(keyword = "ㅈㅊㅋ", size = 10))
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("multi_match") shouldBe false
+            }
+
+            it("should use regular multi_match for normal Korean keyword, not wildcard on chosung fields") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+                adapter.searchWithCursor(CursorSearchQuery(keyword = "재택근무", size = 10))
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("multi_match") shouldBe true
+                queryJson.contains("titleChosung") shouldBe false
+            }
+
+            it("should NOT treat keyword longer than 6 consonants as chosung query") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+                adapter.searchWithCursor(CursorSearchQuery(keyword = "ㄱㄴㄷㄹㅁㅂㅅ", size = 10))
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("multi_match") shouldBe true
+                queryJson.contains("titleChosung") shouldBe false
+            }
+
+            it("should include wildcard pattern with asterisk around consonants") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+                adapter.searchWithCursor(CursorSearchQuery(keyword = "ㅈㄱ", size = 10))
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("*ㅈㄱ*") shouldBe true
+            }
+        }
+
+        context("초성 검색 (chosung query)") {
+
+            it("should use wildcard query on titleChosung when keyword is all consonants") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+
+                adapter.searchHitsWithCursor(CursorSearchQuery(keyword = "ㅁㅅㅅ", size = 10))
+
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("wildcard") shouldBe true
+                queryJson.contains("titleChosung") shouldBe true
+            }
+
+            it("should NOT use multi_match when keyword is all consonants (chosung query)") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+
+                adapter.searchHitsWithCursor(CursorSearchQuery(keyword = "ㄷㅇ", size = 10))
+
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("multi_match") shouldBe false
+            }
+
+            it("should NOT activate chosung path when keyword has vowels (e.g. 운동)") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+
+                adapter.searchHitsWithCursor(CursorSearchQuery(keyword = "운동", size = 10))
+
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("multi_match") shouldBe true
+                queryJson.contains("wildcard") shouldBe false
+            }
+
+            it("should NOT activate chosung path when chosung query is longer than 6 chars (safety guard)") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+
+                adapter.searchHitsWithCursor(CursorSearchQuery(keyword = "ㄱㄴㄷㄹㅁㅂㅅ", size = 10))
+
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("wildcard") shouldBe false
+            }
+
+            it("should search both titleChosung and contentChosung in chosung query") {
+                val requestSlot = slot<SearchRequest>()
+                every { client.search(capture(requestSlot), any<RequestOptions>()) } returns mockResponse
+
+                adapter.searchHitsWithCursor(CursorSearchQuery(keyword = "ㅇㄷ", size = 10))
+
+                val queryJson = requestSlot.captured.source().toString()
+                queryJson.contains("titleChosung") shouldBe true
+                queryJson.contains("contentChosung") shouldBe true
+            }
+        }
+
         context("getHotTags") {
             it("should send aggregation query to opensearch") {
                 val requestSlot = slot<SearchRequest>()
