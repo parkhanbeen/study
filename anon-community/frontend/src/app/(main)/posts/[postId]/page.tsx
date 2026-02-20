@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { serverFetch, ApiError } from "@/lib/api/client";
 import { PostDetailResponse, POST_CATEGORIES } from "@/types/api";
@@ -12,6 +10,7 @@ import { MarkdownContent } from "@/components/post/markdown-content";
 import { CommentList } from "@/components/comment/comment-list";
 import { PostActions } from "@/components/post/post-actions";
 import { TranslateButton } from "@/components/post/translate-button";
+import { BackButton } from "@/components/post/back-button";
 
 interface Props {
   params: Promise<{ postId: string }>;
@@ -40,11 +39,7 @@ export default async function PostDetailPage({ params }: Props) {
   return (
     <article className="mx-auto max-w-2xl">
       <div className="mb-6 flex items-center justify-between">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/">
-            <ArrowLeft className="mr-1 h-4 w-4" /> 뒤로
-          </Link>
-        </Button>
+        <BackButton />
         <PostActions postId={post.id} authorId={post.authorId} />
       </div>
 
