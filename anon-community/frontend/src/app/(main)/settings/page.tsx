@@ -10,19 +10,36 @@ import { useAuthStore } from "@/stores/auth-store";
 import { logout } from "@/lib/api/auth";
 import { fetchAPI } from "@/lib/api/client";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const LANGUAGES = [
   { value: "ko", label: "한국어" },
   { value: "en", label: "English" },
   { value: "ja", label: "日本語" },
-  { value: "zh", label: "中文" },
+  { value: "zh-CN", label: "中文(简体)" },
+  { value: "zh-TW", label: "中文(繁體)" },
 ];
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { clearAuth } = useAuthStore();
+  const { clearAuth, isLoggedIn } = useAuthStore();
   const [language, setLanguage] = useState("ko");
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.replace("/login?callbackUrl=/settings");
+    }
+  }, [isLoggedIn, router]);
+
+  useEffect(() => {
+    fetchAPI<{ preferredLanguage: string | null }>("/members/me")
+      .then((member) => {
+        if (member.preferredLanguage) setLanguage(member.preferredLanguage);
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!isLoggedIn) return null;
 
   const handleLanguageChange = async (value: string) => {
     try {
@@ -31,9 +48,9 @@ export default function SettingsPage() {
         body: JSON.stringify({ language: value }),
       });
       setLanguage(value);
-      toast.success("Language updated");
+      toast.success("언어가 변경되었습니다");
     } catch {
-      toast.error("Failed to update language");
+      toast.error("언어 변경에 실패했습니다");
     }
   };
 
@@ -44,21 +61,21 @@ export default function SettingsPage() {
       router.push("/");
       router.refresh();
     } catch {
-      toast.error("Logout failed");
+      toast.error("로그아웃에 실패했습니다");
     }
   };
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <h1 className="text-2xl font-bold">설정</h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>Language</CardTitle>
+          <CardTitle>언어</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label>Preferred language</Label>
+            <Label>선호 언어</Label>
             <Select value={language} onValueChange={handleLanguageChange}>
               <SelectTrigger className="w-48">
                 <SelectValue />
@@ -78,7 +95,7 @@ export default function SettingsPage() {
       <Separator />
 
       <Button variant="destructive" onClick={handleLogout}>
-        Logout
+        로그아웃
       </Button>
     </div>
   );
