@@ -15,4 +15,8 @@ data class PostDocument(
     val createdAt: Instant,
     val updatedAt: Instant,
     val commentCount: Int = 0,
+    val likeCount: Int = 0,
+    val viewCount: Int = 0,
+    val titleChosung: String = "",
+    val contentChosung: String = "",
 )
