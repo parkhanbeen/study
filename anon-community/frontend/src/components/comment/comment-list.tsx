@@ -41,9 +41,11 @@ function groupByThread(comments: CommentResponse[]): CommentResponse[] {
   }
 
   // Orphan replies whose parent isn't in the current pages
+  const resultIds = new Set<number>(result.map((c) => c.id));
   for (const c of comments) {
-    if (c.depth === 1 && !result.includes(c)) {
+    if (c.depth === 1 && !resultIds.has(c.id)) {
       result.push(c);
+      resultIds.add(c.id);
     }
   }
 
@@ -124,7 +126,7 @@ export function CommentList({ postId, initialCommentCount }: CommentListProps) {
         </Button>
       )}
 
-      <CommentForm postId={postId} />
+      {!isError && <CommentForm postId={postId} />}
     </div>
   );
 }
