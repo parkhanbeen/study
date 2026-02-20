@@ -56,6 +56,19 @@ export interface UpdateLanguageRequest {
 }
 
 // ── Post ──
+export type PostCategory = "DAILY" | "ADVICE" | "HUMOR" | "INFORMATION" | "QUESTION" | "DISCUSSION" | "MEDIA" | "FEEDBACK";
+
+export const POST_CATEGORIES: { value: PostCategory; label: string }[] = [
+  { value: "DAILY", label: "일상" },
+  { value: "ADVICE", label: "고민" },
+  { value: "HUMOR", label: "유머" },
+  { value: "INFORMATION", label: "정보" },
+  { value: "QUESTION", label: "질문" },
+  { value: "DISCUSSION", label: "토론" },
+  { value: "MEDIA", label: "미디어" },
+  { value: "FEEDBACK", label: "피드백" },
+];
+
 export type PostStatus = "PUBLISHED" | "HIDDEN" | "UNDER_REVIEW" | "REMOVED" | "DELETED";
 
 export interface PostResponse {
@@ -63,6 +76,7 @@ export interface PostResponse {
   authorId: MemberId;
   title: string;
   content: string;
+  category: PostCategory;
   tags: string[];
   status: PostStatus;
   createdAt: string;
@@ -78,12 +92,14 @@ export interface PostDetailResponse extends PostResponse {
 export interface CreatePostRequest {
   title: string;
   content: string;
+  category: PostCategory;
   tags?: string[];
 }
 
 export interface UpdatePostRequest {
   title?: string;
   content?: string;
+  category?: PostCategory;
   tags?: string[];
 }
 
@@ -123,9 +139,17 @@ export interface CursorResponse<T> {
 }
 
 // ── Search ──
+export type SearchSortBy = "createdAt" | "likeCount" | "commentCount" | "viewCount" | "relevance";
+export type SearchDateRange = "today" | "this_week" | "this_month";
+
+export interface HotTagsResponse {
+  tags: string[];
+}
+
 export interface SearchPostsParams {
   keyword?: string;
   tags?: string[];
+  category?: PostCategory;
   language?: string;
   page?: number;
   size?: number;
@@ -134,9 +158,12 @@ export interface SearchPostsParams {
 export interface CursorSearchPostsParams {
   keyword?: string;
   tags?: string[];
+  category?: PostCategory;
   language?: string;
   size?: number;
   searchAfter?: string;
+  sortBy?: SearchSortBy;
+  dateRange?: SearchDateRange;
 }
 
 // ── Error ──
