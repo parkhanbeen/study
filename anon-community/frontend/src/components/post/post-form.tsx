@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useDraft } from "@/lib/hooks/use-draft";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +29,8 @@ export function PostForm({ mode, post }: PostFormProps) {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
@@ -42,6 +46,7 @@ export function PostForm({ mode, post }: PostFormProps) {
     if (mode === "create") {
       createMutation.mutate(data, {
         onSuccess: (res) => {
+          clearDraft();
           router.push(`/posts/${res.id}`);
           router.refresh();
         },
@@ -58,8 +63,70 @@ export function PostForm({ mode, post }: PostFormProps) {
 
   const isPending = createMutation.isPending || updateMutation.isPending;
 
+  const { saveDraft, loadDraft, clearDraft, hasDraft } = useDraft();
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
+
+  // Show restore banner on mount (create mode only)
+  useEffect(() => {
+    if (mode === "create" && hasDraft()) {
+      setShowDraftBanner(true);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-save: subscribe to form changes, debounce 3 seconds
+  useEffect(() => {
+    if (mode !== "create") return;
+    let timer: ReturnType<typeof setTimeout>;
+    const subscription = watch((values) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (values.title || values.content) {
+          saveDraft(values as PostFormData);
+        }
+      }, 3000);
+    });
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timer);
+    };
+  }, [watch, saveDraft, mode]);
+
+  function handleRestoreDraft() {
+    const draft = loadDraft();
+    if (!draft) return;
+    setValue("title", draft.title);
+    setValue("content", draft.content);
+    setValue("category", draft.category);
+    setValue("tags", draft.tags);
+    setShowDraftBanner(false);
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {showDraftBanner && (
+        <div className="flex items-center justify-between rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm dark:border-amber-700 dark:bg-amber-950/30">
+          <span className="text-amber-800 dark:text-amber-200">
+            💾 임시저장된 글이 있습니다
+          </span>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleRestoreDraft}
+              className="text-xs font-medium text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
+            >
+              불러오기
+            </button>
+            <button
+              type="button"
+              onClick={() => { clearDraft(); setShowDraftBanner(false); }}
+              className="text-xs text-muted-foreground hover:text-foreground"
+            >
+              삭제
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-2">
         <Label htmlFor="title">제목</Label>
         <Input id="title" {...register("title")} placeholder="게시글 제목" maxLength={200} />
