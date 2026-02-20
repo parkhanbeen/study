@@ -149,11 +149,11 @@ class PostIndexMapping(
         client.indices().exists(GetIndexRequest(name), RequestOptions.DEFAULT)
 
     companion object {
-        const val INDEX_NAME = "posts-v2"
+        const val INDEX_NAME = "posts-v4"
         const val ALIAS_NAME = "posts-read"
         private const val REINDEX_SLICES = 4
 
-        private val INDEX_SETTINGS = """
+        internal val INDEX_SETTINGS = """
         {
           "settings": {
             "number_of_shards": 3,
@@ -223,7 +223,7 @@ class PostIndexMapping(
                 "search_analyzer": "nori_search_analyzer",
                 "fields": {
                   "standard": { "type": "text", "analyzer": "standard" },
-                  "ngram": { "type": "text", "analyzer": "ngram_analyzer" },
+                  "ngram": { "type": "text", "analyzer": "ngram_analyzer", "search_analyzer": "nori_analyzer" },
                   "icu": { "type": "text", "analyzer": "icu_analyzer" }
                 }
               },
@@ -233,7 +233,7 @@ class PostIndexMapping(
                 "search_analyzer": "nori_search_analyzer",
                 "fields": {
                   "standard": { "type": "text", "analyzer": "standard" },
-                  "ngram": { "type": "text", "analyzer": "ngram_analyzer" },
+                  "ngram": { "type": "text", "analyzer": "ngram_analyzer", "search_analyzer": "nori_analyzer" },
                   "icu": { "type": "text", "analyzer": "icu_analyzer" }
                 }
               },
@@ -247,7 +247,11 @@ class PostIndexMapping(
               "status": { "type": "keyword" },
               "createdAt": { "type": "date" },
               "updatedAt": { "type": "date" },
-              "commentCount": { "type": "integer" }
+              "commentCount": { "type": "integer" },
+              "likeCount": { "type": "integer" },
+              "viewCount": { "type": "integer" },
+              "titleChosung": { "type": "keyword" },
+              "contentChosung": { "type": "keyword" }
             }
           }
         }
