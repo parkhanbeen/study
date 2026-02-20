@@ -26,8 +26,12 @@ export function LikeButton({ postId, likeCount }: LikeButtonProps) {
 
   const handleClick = () => {
     if (!isLoggedIn) {
-      toast.info("로그인이 필요합니다");
-      router.push(`/login?callbackUrl=/posts/${postId}`);
+      toast.info("로그인이 필요합니다", {
+        action: {
+          label: "로그인",
+          onClick: () => router.push(`/login?callbackUrl=${encodeURIComponent(`/posts/${postId}`)}`),
+        },
+      });
       return;
     }
 
