@@ -22,14 +22,15 @@ const LANGUAGES = [
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { clearAuth, isLoggedIn } = useAuthStore();
+  const { clearAuth, isLoggedIn, isInitialized } = useAuthStore();
   const [language, setLanguage] = useState("ko");
 
   useEffect(() => {
+    if (!isInitialized) return;
     if (!isLoggedIn) {
       router.replace("/login?callbackUrl=/settings");
     }
-  }, [isLoggedIn, router]);
+  }, [isInitialized, isLoggedIn, router]);
 
   useEffect(() => {
     fetchAPI<{ preferredLanguage: string | null }>("/members/me")
@@ -39,6 +40,7 @@ export default function SettingsPage() {
       .catch(() => {});
   }, []);
 
+  if (!isInitialized) return null;
   if (!isLoggedIn) return null;
 
   const handleLanguageChange = async (value: string) => {
