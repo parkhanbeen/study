@@ -13,14 +13,20 @@ export function FollowingFeedList() {
   const { isLoggedIn } = useAuthStore();
   const observerRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } =
     useInfiniteQuery({
       queryKey: ["following-feed"],
       queryFn: ({ pageParam }) =>
         feedApi.getFollowing(pageParam as string | undefined),
       initialPageParam: undefined as string | undefined,
-      getNextPageParam: (lastPage) =>
-        lastPage.hasNext ? (lastPage.searchAfter ?? undefined) : undefined,
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.hasNext) return undefined;
+        if (!lastPage.searchAfter) {
+          console.warn("[FollowingFeedList] hasNext=true but searchAfter is null — stopping pagination");
+          return undefined;
+        }
+        return lastPage.searchAfter;
+      },
       enabled: isLoggedIn,
     });
 
@@ -69,6 +75,17 @@ export function FollowingFeedList() {
         <PostCardSkeleton />
         <PostCardSkeleton />
         <PostCardSkeleton />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="rounded-lg border p-8 text-center">
+        <p className="text-sm text-muted-foreground">팔로잉 피드를 불러올 수 없습니다.</p>
+        <Button onClick={() => refetch()} size="sm" className="mt-2" variant="outline">
+          다시 시도
+        </Button>
       </div>
     );
   }
