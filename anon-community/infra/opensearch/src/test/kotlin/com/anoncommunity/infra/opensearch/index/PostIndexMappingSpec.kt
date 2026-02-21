@@ -6,8 +6,8 @@ import io.kotest.matchers.string.shouldContain
 
 class PostIndexMappingSpec : DescribeSpec({
     describe("PostIndexMapping") {
-        it("should use posts-v4 as index name") {
-            PostIndexMapping.INDEX_NAME shouldBe "posts-v4"
+        it("should use posts-v5 as index name") {
+            PostIndexMapping.INDEX_NAME shouldBe "posts-v5"
         }
 
         it("should include likeCount field with integer type in mappings") {
