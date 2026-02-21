@@ -61,8 +61,9 @@ class GetFollowingFeedUseCaseSpec : DescribeSpec({
                 every { postFeedPort.getFollowingFeed(listOf(2L, 3L), any()) } returns PageResult(listOf(mockPost), 0, 20, 1L, 1)
                 every { postStatsQueryPort.findByPostIds(any()) } returns emptyMap()
 
-                useCase.invoke(GetFollowingFeedQuery(activeProfileId = 1L, pageable = DomainPageable()))
+                val result = useCase.invoke(GetFollowingFeedQuery(activeProfileId = 1L, pageable = DomainPageable()))
 
+                result.content.size shouldBe 1
                 verify(exactly = 0) { followQueryPort.findFollowingIds(any(), any()) }
             }
         }

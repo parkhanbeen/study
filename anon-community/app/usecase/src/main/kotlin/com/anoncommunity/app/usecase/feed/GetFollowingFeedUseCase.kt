@@ -10,7 +10,6 @@ import com.anoncommunity.domain.member.port.FollowQueryPort
 import com.anoncommunity.domain.post.port.PostFeedPort
 import com.anoncommunity.domain.post.port.PostStatsQueryPort
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 data class GetFollowingFeedQuery(val activeProfileId: Long, val pageable: DomainPageable = DomainPageable())
 
@@ -22,7 +21,6 @@ class GetFollowingFeedUseCase(
     private val followingIdsCache: FollowingIdsCache,
 ) : QueryUseCase<GetFollowingFeedQuery, PageResult<PostWithStats>> {
 
-    @Transactional(readOnly = true)
     override fun invoke(query: GetFollowingFeedQuery): PageResult<PostWithStats> {
         val profileId = ProfileId(query.activeProfileId)
 
