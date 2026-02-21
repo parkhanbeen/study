@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { FeedList } from "@/components/post/feed-list";
+import { FeedTabs } from "@/components/post/feed-tabs";
 import { serverFetch } from "@/lib/api/client";
 import { PageResponse, PostDetailResponse } from "@/types/api";
 
@@ -19,12 +19,12 @@ export default async function FeedPage() {
   try {
     initialData = await serverFetch<PageResponse<PostDetailResponse>>("/feed?page=0&size=20");
   } catch {
-    // Backend unavailable — FeedList renders empty state
+    // Backend unavailable — FeedTabs renders empty state
   }
 
   return (
     <Suspense fallback={<FeedSkeleton />}>
-      <FeedList initialData={initialData} />
+      <FeedTabs initialData={initialData} />
     </Suspense>
   );
 }

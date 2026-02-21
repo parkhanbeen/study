@@ -1,5 +1,5 @@
 import { fetchAPI } from "./client";
-import { PostDetailResponse, PageResponse, PostCategory } from "@/types/api";
+import { PostDetailResponse, PageResponse, PostCategory, CursorResponse } from "@/types/api";
 
 export type FeedSort = "latest" | "oldest" | "likes" | "comments" | "views";
 
@@ -30,4 +30,8 @@ export const feedApi = {
     params.set("sortDirection", "DESC");
     return fetchAPI<PageResponse<PostDetailResponse>>(`/feed?${params.toString()}`);
   },
+  getFollowing: (cursor?: string, size = 20) =>
+    fetchAPI<CursorResponse<PostDetailResponse>>(
+      `/feed/following?${new URLSearchParams({ ...(cursor ? { cursor } : {}), size: String(size) }).toString()}`
+    ),
 };
