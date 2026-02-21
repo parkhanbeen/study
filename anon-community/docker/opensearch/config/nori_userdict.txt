@@ -1,0 +1,60 @@
+# Nori user dictionary for anon-community
+# Format: word (one per line) — prevents compound decomposition
+# Proper nouns / brand names
+삼성전자
+블랙핑크
+뉴진스
+아이브
+에스파
+르세라핌
+카카오톡
+네이버
+인스타그램
+유튜브
+넷플릭스
+# Tech terms that should NOT be split
+스프링부트
+마이크로서비스
+타입스크립트
+자바스크립트
+리액트네이티브
+# Community-specific compound words
+맛집추천
+일상스타그램
+데일리룩
+오운완
+
+# 커뮤니티 신조어 / 줄임말 (분해 방지)
+갓생
+스드메
+짠테크
+겟잇뷰티
+갓벽
+인증샷
+맛집투천
+
+# 패션/뷰티 복합어
+패션위크
+쇼핑몰
+스트리트패션
+캐주얼룩
+오피스룩
+포멀룩
+
+# 커뮤니티 활동 용어
+댓글알림
+팔로잉
+팔로워
+좋아요순
+최신순
+조회순
+
+# IT/서비스 고유명사 (추가)
+무신사
+지그재그
+에이블리
+카카오페이
+네이버페이
+토스뱅크
+쿠팡이츠
+배달의민족

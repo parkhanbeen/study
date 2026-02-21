@@ -1,0 +1,57 @@
+# Synonym dictionary for anon-community
+# Format: word1, word2, word3 (bidirectional synonyms)
+
+# Food
+맛집, 맛있는식당, 레스토랑
+카페, 커피숍, 카페점
+한식, 한국음식
+일식, 일본음식
+중식, 중국음식
+
+# Tech / Development
+개발, 프로그래밍, 코딩
+백엔드, 서버개발
+프론트엔드, 프론트
+리액트, React
+넥스트, Next.js
+스프링, Spring
+코틀린, Kotlin
+파이썬, Python
+자바스크립트, JavaScript, JS
+
+# Entertainment
+유튜브, YouTube
+넷플릭스, Netflix
+인스타, 인스타그램, Instagram
+
+# Travel
+여행, 관광, 투어
+캠핑, 글램핑
+
+# Daily
+일상, 데일리
+고민, 상담, 조언
+운동, 헬스, 피트니스
+다이어트, 식단관리
+
+# 해외직구 줄임말
+직구, 해외직구, 해외직접구매
+
+# 브랜드 한글/영문 변형
+나이키, nike, Nike
+아디다스, adidas, Adidas
+뉴발란스, newbalance
+반스, vans
+컨버스, converse
+무신사, musinsa
+
+# 커뮤니티 줄임말 ↔ 원형
+스드메, 스튜디오드레스메이크업
+오운완, 오늘운동완료
+갓생, 갓생살기
+짠테크, 짠테크족, 절약
+
+# 구매/할인 관련
+핫딜, 할인, 세일
+특가, 한정판매
+품절, 재고없음, 매진

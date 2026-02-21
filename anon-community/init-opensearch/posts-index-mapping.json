@@ -1,0 +1,101 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "refresh_interval": "1s",
+    "analysis": {
+      "analyzer": {
+        "nori_analyzer": {
+          "type": "custom",
+          "tokenizer": "nori_mixed",
+          "filter": ["lowercase", "nori_part_of_speech", "korean_stopwords", "nori_readingform"]
+        },
+        "nori_search_analyzer": {
+          "type": "custom",
+          "tokenizer": "nori_mixed",
+          "filter": ["lowercase", "nori_part_of_speech", "korean_stopwords", "synonym_filter", "nori_readingform"]
+        },
+        "ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "ngram_tokenizer",
+          "filter": ["lowercase"]
+        },
+        "icu_analyzer": {
+          "type": "custom",
+          "tokenizer": "icu_tokenizer",
+          "filter": ["icu_normalizer", "icu_folding", "lowercase"]
+        }
+      },
+      "tokenizer": {
+        "nori_mixed": {
+          "type": "nori_tokenizer",
+          "decompound_mode": "mixed",
+          "user_dictionary": "nori_userdict.txt"
+        },
+        "ngram_tokenizer": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3,
+          "token_chars": ["letter", "digit"]
+        }
+      },
+      "filter": {
+        "nori_part_of_speech": {
+          "type": "nori_part_of_speech",
+          "stoptags": ["E", "IC", "J", "MAG", "MAJ", "SC", "SE", "SF", "SP", "SSC", "SSO", "SY", "XPN", "XSA", "XSN", "XSV"]
+        },
+        "korean_stopwords": {
+          "type": "stop",
+          "stopwords": ["의", "가", "이", "은", "는", "을", "를", "에", "에서", "로", "으로", "와", "과", "도", "만", "까지", "부터", "이다", "이것", "저것", "그것", "것", "등", "들", "좀", "잘", "못", "안"]
+        },
+        "synonym_filter": {
+          "type": "synonym",
+          "synonyms_path": "synonyms.txt",
+          "lenient": true
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": { "type": "long" },
+      "authorProfileId": { "type": "long" },
+      "category": { "type": "keyword" },
+      "title": {
+        "type": "text",
+        "analyzer": "nori_analyzer",
+        "search_analyzer": "nori_search_analyzer",
+        "fields": {
+          "standard": { "type": "text", "analyzer": "standard" },
+          "ngram": { "type": "text", "analyzer": "ngram_analyzer", "search_analyzer": "nori_analyzer" },
+          "icu": { "type": "text", "analyzer": "icu_analyzer" }
+        }
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "nori_analyzer",
+        "search_analyzer": "nori_search_analyzer",
+        "fields": {
+          "standard": { "type": "text", "analyzer": "standard" },
+          "ngram": { "type": "text", "analyzer": "ngram_analyzer", "search_analyzer": "nori_analyzer" },
+          "icu": { "type": "text", "analyzer": "icu_analyzer" }
+        }
+      },
+      "tags": {
+        "type": "keyword",
+        "fields": {
+          "text": { "type": "text", "analyzer": "nori_analyzer", "search_analyzer": "nori_search_analyzer" },
+          "ngram": { "type": "text", "analyzer": "ngram_analyzer" }
+        }
+      },
+      "status": { "type": "keyword" },
+      "createdAt": { "type": "date" },
+      "updatedAt": { "type": "date" },
+      "commentCount": { "type": "integer" },
+      "likeCount": { "type": "integer" },
+      "viewCount": { "type": "integer" },
+      "titleChosung": { "type": "keyword" },
+      "contentChosung": { "type": "keyword" }
+    }
+  }
+}

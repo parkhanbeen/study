@@ -1,0 +1,98 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application:
+    name: anon-community-api
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/anon_community?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:rootpassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: ${HIKARI_MAX_POOL_SIZE:20}
+      minimum-idle: ${HIKARI_MIN_IDLE:5}
+      connection-timeout: 3000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      leak-detection-threshold: 30000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: "5"
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 500ms
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 4
+          max-wait: 200ms
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+  api-docs:
+    path: /v3/api-docs
+
+opensearch:
+  host: ${OPENSEARCH_HOST:localhost}
+  port: ${OPENSEARCH_PORT:9200}
+
+jwt:
+  secret: ${JWT_SECRET:anon-community-jwt-secret-key-for-local-development-only-minimum-256-bits}
+  issuer: anon-community
+  access-token-expiry: 1800
+  refresh-token-expiry: 604800
+
+gateway:
+  internal-token: ${GATEWAY_INTERNAL_TOKEN:local-dev-token-do-not-use-in-prod}
+  auth:
+    enabled: ${GATEWAY_AUTH_ENABLED:false}
+
+cache:
+  feed:
+    ttl-seconds: 60
+  post:
+    ttl-seconds: 300
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+      group:
+        liveness:
+          include: ping
+        readiness:
+          include: ping,db,redis
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    com.anoncommunity: INFO
+    org.hibernate.SQL: WARN
