@@ -1,5 +1,10 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { serverFetch, ApiError } from "@/lib/api/client";
+
+interface MemberResponse {
+  id: number;
+}
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -10,12 +15,14 @@ export async function GET() {
   }
 
   try {
-    const payload = JSON.parse(atob(accessToken.split(".")[1]));
-    return NextResponse.json({
-      isLoggedIn: true,
-      memberId: payload.sub ? Number(payload.sub) : null,
-    });
-  } catch {
+    const member = await serverFetch<MemberResponse>("/members/me");
+    return NextResponse.json({ isLoggedIn: true, memberId: member.id });
+  } catch (e) {
+    // 401 = token invalid/expired, anything else = service error → treat as logged out
+    if (e instanceof ApiError && e.status === 401) {
+      return NextResponse.json({ isLoggedIn: false });
+    }
+    // Network error or other — fail gracefully
     return NextResponse.json({ isLoggedIn: false });
   }
 }
