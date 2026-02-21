@@ -87,6 +87,12 @@ class MemberProfileSpec : DescribeSpec({
                 profile.incrementFollowingCount()
                 profile.followingCount shouldBe 1
             }
+
+            it("should not decrement followingCount below 0") {
+                val profile = MemberProfile.create(ProfileId(1L), MemberId(10L), MemberNickname("us"), Bio(""), isDefault = true)
+                profile.decrementFollowingCount()
+                profile.followingCount shouldBe 0
+            }
         }
 
         context("requireDeletable") {

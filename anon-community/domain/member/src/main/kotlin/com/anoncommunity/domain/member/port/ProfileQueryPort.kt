@@ -2,6 +2,7 @@ package com.anoncommunity.domain.member.port
 
 import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.ProfileId
+import com.anoncommunity.domain.member.MemberNickname
 import com.anoncommunity.domain.member.MemberProfile
 
 interface ProfileQueryPort {
@@ -9,5 +10,5 @@ interface ProfileQueryPort {
     fun findByMemberId(memberId: MemberId): List<MemberProfile>
     fun findDefaultByMemberId(memberId: MemberId): MemberProfile?
     fun countByMemberId(memberId: MemberId): Int
-    fun existsByNickname(nickname: String): Boolean
+    fun existsByNickname(nickname: MemberNickname): Boolean
 }

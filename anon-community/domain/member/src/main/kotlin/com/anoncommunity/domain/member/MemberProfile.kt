@@ -1,5 +1,6 @@
 package com.anoncommunity.domain.member
 
+import com.anoncommunity.contract.AggregateRoot
 import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.ProfileId
 import java.time.Instant
@@ -15,7 +16,7 @@ class MemberProfile(
     val isDefault: Boolean = false,
     val createdAt: Instant = Instant.now(),
     updatedAt: Instant = Instant.now(),
-) {
+) : AggregateRoot() {
     var nickname: MemberNickname = nickname
         private set
 
@@ -53,6 +54,7 @@ class MemberProfile(
         updatedAt = Instant.now()
     }
 
+    // Uses maxOf(0, ...) instead of check() to handle CDC at-least-once delivery idempotently
     fun decrementPostCount() {
         postCount = maxOf(0, postCount - 1)
         updatedAt = Instant.now()
@@ -63,6 +65,7 @@ class MemberProfile(
         updatedAt = Instant.now()
     }
 
+    // Uses maxOf(0, ...) instead of check() to handle CDC at-least-once delivery idempotently
     fun decrementFollowerCount() {
         followerCount = maxOf(0, followerCount - 1)
         updatedAt = Instant.now()
@@ -73,6 +76,7 @@ class MemberProfile(
         updatedAt = Instant.now()
     }
 
+    // Uses maxOf(0, ...) instead of check() to handle CDC at-least-once delivery idempotently
     fun decrementFollowingCount() {
         followingCount = maxOf(0, followingCount - 1)
         updatedAt = Instant.now()
