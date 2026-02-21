@@ -7,10 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface PostLikeJpaRepository : JpaRepository<PostLikeEntity, Long> {
-    fun findByPostIdAndMemberId(postId: Long, memberId: Long): PostLikeEntity?
+    fun findByPostIdAndProfileId(postId: Long, profileId: Long): PostLikeEntity?
     fun countByPostId(postId: Long): Long
-    fun existsByPostIdAndMemberId(postId: Long, memberId: Long): Boolean
+    fun existsByPostIdAndProfileId(postId: Long, profileId: Long): Boolean
 
-    @Query("SELECT pl.postId FROM PostLikeEntity pl WHERE pl.memberId = :memberId ORDER BY pl.createdAt DESC")
-    fun findPostIdsByMemberId(memberId: Long, pageable: Pageable): Page<Long>
+    @Query("SELECT pl.postId FROM PostLikeEntity pl WHERE pl.profileId = :profileId ORDER BY pl.createdAt DESC")
+    fun findPostIdsByProfileId(profileId: Long, pageable: Pageable): Page<Long>
 }
