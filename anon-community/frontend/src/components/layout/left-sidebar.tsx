@@ -23,7 +23,7 @@ export function LeftSidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { isLoggedIn, isInitialized } = useAuthStore();
+  const { isLoggedIn, isInitialized, activeProfile } = useAuthStore();
 
   const currentCategory = pathname === "/" ? searchParams.get("category") : null;
 
@@ -37,6 +37,16 @@ export function LeftSidebar() {
 
   return (
     <nav className="sticky top-20 space-y-1">
+      {/* Active profile card */}
+      {isInitialized && isLoggedIn && activeProfile && (
+        <Link href={`/profiles/${activeProfile.id}`}>
+          <div className="p-3 rounded-lg border hover:bg-muted/50 mb-3">
+            <p className="font-medium text-sm">{activeProfile.nickname}</p>
+            <p className="text-xs text-muted-foreground">게시글 {activeProfile.postCount}개</p>
+          </div>
+        </Link>
+      )}
+
       {/* Write button */}
       {isInitialized && isLoggedIn && (
         <Button asChild className="w-full mb-3" size="sm">

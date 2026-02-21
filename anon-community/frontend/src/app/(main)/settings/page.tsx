@@ -11,6 +11,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { logout } from "@/lib/api/auth";
 import { fetchAPI } from "@/lib/api/client";
 import { MemberResponse } from "@/types/api";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
@@ -24,7 +25,7 @@ const LANGUAGES = [
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { clearAuth, isLoggedIn, isInitialized } = useAuthStore();
+  const { clearAuth, isLoggedIn, isInitialized, profiles, accounts, activeProfile, switchProfile } = useAuthStore();
   const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState("ko");
   const [member, setMember] = useState<MemberResponse | null>(null);
@@ -47,6 +48,15 @@ export default function SettingsPage() {
 
   if (!isInitialized) return null;
   if (!isLoggedIn) return null;
+
+  const handleSwitchProfile = async (profileId: number) => {
+    try {
+      await switchProfile(profileId);
+      toast.success("프로필이 전환되었습니다");
+    } catch {
+      toast.error("프로필 전환에 실패했습니다");
+    }
+  };
 
   const handleLanguageChange = async (value: string) => {
     try {
@@ -99,6 +109,63 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>프로필 관리</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {profiles.map((profile) => (
+            <div key={profile.id} className="flex items-center justify-between py-2 border-b last:border-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">{profile.nickname}</span>
+                {profile.isDefault && <Badge variant="secondary" className="text-xs">기본</Badge>}
+                {profile.id === activeProfile?.id && <Badge className="text-xs">현재</Badge>}
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={profile.id === activeProfile?.id}
+                  onClick={() => handleSwitchProfile(profile.id)}
+                >
+                  전환
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => toast.info("준비중입니다")}>
+                  수정
+                </Button>
+                {!profile.isDefault && (
+                  <Button size="sm" variant="destructive" onClick={() => toast.info("준비중입니다")}>
+                    삭제
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))}
+          {profiles.length < 5 && (
+            <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.info("준비중입니다")}>
+              + 프로필 추가
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>계정 관리</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {accounts.map((account) => (
+            <div key={account.memberId} className="flex justify-between text-sm py-1 border-b last:border-0">
+              <span className="text-muted-foreground">닉네임</span>
+              <span className="font-medium">{account.nickname}</span>
+            </div>
+          ))}
+          <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.info("준비중입니다")}>
+            계정 추가
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

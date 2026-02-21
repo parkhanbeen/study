@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuthStore } from "@/stores/auth-store";
 import { memberApi } from "@/lib/api/member";
 import { PostDetailResponse, PageResponse } from "@/types/api";
@@ -12,7 +13,7 @@ type Tab = "posts" | "liked";
 
 export default function MyPage() {
   const router = useRouter();
-  const { isLoggedIn, isInitialized } = useAuthStore();
+  const { isLoggedIn, isInitialized, activeProfile } = useAuthStore();
   const [tab, setTab] = useState<Tab>("posts");
   const [posts, setPosts] = useState<PostDetailResponse[]>([]);
   const [page, setPage] = useState(0);
@@ -54,6 +55,19 @@ export default function MyPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">마이페이지</h1>
+
+      {activeProfile && (
+        <Link href={`/profiles/${activeProfile.id}`}>
+          <div className="p-4 rounded-lg border hover:bg-muted/50">
+            <p className="font-semibold text-base">{activeProfile.nickname}</p>
+            <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
+              <span>게시글 {activeProfile.postCount}개</span>
+              <span>팔로워 {activeProfile.followerCount}명</span>
+              <span>팔로잉 {activeProfile.followingCount}명</span>
+            </div>
+          </div>
+        </Link>
+      )}
 
       <div className="flex gap-2 border-b">
         <button
