@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -22,8 +23,16 @@ const CATEGORY_TABS: { value: PostCategory | undefined; label: string }[] = [
 ];
 
 export function FeedList({ initialData }: FeedListProps) {
-  const [selectedCategory, setSelectedCategory] = useState<PostCategory | undefined>(undefined);
+  const searchParams = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<PostCategory | undefined>(
+    (searchParams.get("category") as PostCategory) || undefined,
+  );
   const [selectedSort, setSelectedSort] = useState<FeedSort>("latest");
+
+  useEffect(() => {
+    const cat = searchParams.get("category") as PostCategory | null;
+    setSelectedCategory(cat || undefined);
+  }, [searchParams]);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFeed({
     category: selectedCategory,
     sort: selectedSort,

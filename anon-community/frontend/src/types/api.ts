@@ -115,6 +115,7 @@ export interface CommentResponse {
   depth: number;
   status: CommentStatus;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateCommentRequest {
