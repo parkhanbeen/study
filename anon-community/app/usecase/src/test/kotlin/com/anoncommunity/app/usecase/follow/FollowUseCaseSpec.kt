@@ -54,6 +54,7 @@ class FollowUseCaseSpec : DescribeSpec({
                 useCase.invoke(FollowCommand(followerProfileId = 1L, followingProfileId = 2L))
 
                 verify(exactly = 0) { followCommandPort.save(any()) }
+                verify(exactly = 0) { followingIdsCache.invalidate(any()) }
             }
         }
 

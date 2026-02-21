@@ -40,6 +40,7 @@ class UnfollowUseCaseSpec : DescribeSpec({
                 useCase.invoke(UnfollowCommand(followerProfileId = 1L, followingProfileId = 2L))
 
                 verify(exactly = 0) { followCommandPort.delete(any(), any()) }
+                verify(exactly = 0) { followingIdsCache.invalidate(any()) }
             }
         }
     }
