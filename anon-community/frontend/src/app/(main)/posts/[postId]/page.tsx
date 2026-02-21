@@ -11,6 +11,7 @@ import { CommentList } from "@/components/comment/comment-list";
 import { PostActions } from "@/components/post/post-actions";
 import { TranslateButton } from "@/components/post/translate-button";
 import { BackButton } from "@/components/post/back-button";
+import { RelatedPostsSection } from "@/components/post/related-posts-section";
 
 interface Props {
   params: Promise<{ postId: string }>;
@@ -89,6 +90,8 @@ export default async function PostDetailPage({ params }: Props) {
       <Separator className="my-6" />
 
       <CommentList postId={post.id} initialCommentCount={post.commentCount} />
+
+      <RelatedPostsSection currentPostId={post.id} category={post.category} />
     </article>
   );
 }
