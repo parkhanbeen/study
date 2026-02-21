@@ -21,8 +21,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           {/* Main content */}
           <main className="flex-1 min-w-0 max-w-2xl">{children}</main>
 
-          {/* Right sidebar: large desktop only (xl+) */}
-          <aside className="hidden xl:block w-[260px] shrink-0">
+          {/* Right sidebar: large desktop only (1200px+) */}
+          <aside className="hidden min-[1200px]:block w-[260px] shrink-0">
             <RightSidebar />
           </aside>
         </div>
