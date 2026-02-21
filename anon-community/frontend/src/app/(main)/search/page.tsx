@@ -8,7 +8,7 @@ import { PostCard } from "@/components/post/post-card";
 import { PostCardSkeleton } from "@/components/post/post-card-skeleton";
 import { SearchInput } from "@/components/search/search-input";
 import { useSearchPosts, useHotTags } from "@/lib/hooks/use-search";
-import { PostCategory, POST_CATEGORIES, SearchSortBy, SearchDateRange, PostSearchHitResponse } from "@/types/api";
+import { PostCategory, POST_CATEGORIES, SearchSortBy, SearchDateRange } from "@/types/api";
 
 function SearchContent() {
   const searchParams = useSearchParams();

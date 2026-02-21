@@ -18,7 +18,8 @@ export function MobileBottomNav() {
   const { isLoggedIn, isInitialized } = useAuthStore();
 
   const handleNavClick = (href: string, requireAuth: boolean) => {
-    if (requireAuth && isInitialized && !isLoggedIn) {
+    // If auth state is not yet known or user is not logged in, redirect to login
+    if (requireAuth && (!isInitialized || !isLoggedIn)) {
       router.push(`/login?callbackUrl=${encodeURIComponent(href)}`);
       return;
     }
