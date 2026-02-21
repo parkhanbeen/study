@@ -3,7 +3,9 @@ package com.anoncommunity.app.consumer.domain
 import com.anoncommunity.contract.event.ProcessedEventPort
 import com.anoncommunity.contract.model.PostId
 import com.anoncommunity.domain.post.port.PostStatsCommandPort
+import com.anoncommunity.domain.post.port.PostStatsQueryPort
 import com.anoncommunity.infra.kafka.KafkaTopics
+import com.anoncommunity.infra.opensearch.adapter.PostIndexWriter
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class LikeEventConsumer(
     private val postStatsCommandPort: PostStatsCommandPort,
+    private val postStatsQueryPort: PostStatsQueryPort,
+    private val postIndexWriter: PostIndexWriter,
     private val processedEventPort: ProcessedEventPort,
     private val objectMapper: ObjectMapper,
 ) {
@@ -41,11 +45,19 @@ class LikeEventConsumer(
                     val affected = postStatsCommandPort.incrementLikeCount(postId)
                     check(affected > 0) { "No post_stats row found for postId=${postId.value}, eventId=$eventId" }
                     log.info("Incremented like count for post: id={}", postId.value)
+                    val stats = postStatsQueryPort.findByPostId(postId)
+                    if (stats != null) {
+                        postIndexWriter.updateStats(postId.value, stats.likeCount, stats.commentCount)
+                    }
                 }
                 EVENT_POST_UNLIKED -> {
                     val affected = postStatsCommandPort.decrementLikeCount(postId)
                     check(affected > 0) { "No post_stats row found for postId=${postId.value}, eventId=$eventId" }
                     log.info("Decremented like count for post: id={}", postId.value)
+                    val stats = postStatsQueryPort.findByPostId(postId)
+                    if (stats != null) {
+                        postIndexWriter.updateStats(postId.value, stats.likeCount, stats.commentCount)
+                    }
                 }
                 else -> log.warn("Unknown like event type: eventType={}, eventId={}", eventType, eventId)
             }

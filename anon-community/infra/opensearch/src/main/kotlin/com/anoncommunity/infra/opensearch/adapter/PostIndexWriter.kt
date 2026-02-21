@@ -48,4 +48,18 @@ class PostIndexWriter(
             throw e
         }
     }
+
+    fun updateStats(postId: Long, likeCount: Int, commentCount: Int) {
+        val doc = mapOf("likeCount" to likeCount, "commentCount" to commentCount)
+        val json = objectMapper.writeValueAsString(doc)
+        val request = org.opensearch.action.update.UpdateRequest(INDEX_WRITE, postId.toString())
+            .doc(json, org.opensearch.common.xcontent.XContentType.JSON)
+        try {
+            client.update(request, org.opensearch.client.RequestOptions.DEFAULT)
+            log.debug("Updated stats in post document: id={}, likeCount={}, commentCount={}", postId, likeCount, commentCount)
+        } catch (e: java.io.IOException) {
+            log.error("Failed to update stats in post document: id={}", postId, e)
+            throw e
+        }
+    }
 }
