@@ -172,6 +172,7 @@ export function PostForm({ mode, post }: PostFormProps) {
             />
           )}
         />
+        {errors.content && <p className="text-sm text-destructive">{errors.content.message}</p>}
       </div>
 
       <div className="space-y-2">
@@ -181,6 +182,7 @@ export function PostForm({ mode, post }: PostFormProps) {
           control={control}
           render={({ field }) => <TagInput tags={field.value} onChange={field.onChange} />}
         />
+        {errors.tags && <p className="text-sm text-destructive">{errors.tags.message}</p>}
       </div>
 
       <div className="flex justify-between">
