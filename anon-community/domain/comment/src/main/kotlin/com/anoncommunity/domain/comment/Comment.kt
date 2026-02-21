@@ -2,15 +2,15 @@ package com.anoncommunity.domain.comment
 
 import com.anoncommunity.contract.AggregateRoot
 import com.anoncommunity.contract.model.CommentId
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.comment.event.CommentDomainEvent
 import java.time.Instant
 
 class Comment(
     val id: CommentId,
     val postId: PostId,
-    val authorId: MemberId,
+    val authorProfileId: ProfileId,
     content: CommentContent,
     val parentCommentId: CommentId?,
     val depth: Int,
@@ -43,7 +43,7 @@ class Comment(
             CommentDomainEvent.CommentDeleted(
                 commentId = id,
                 postId = postId,
-                authorId = authorId,
+                authorProfileId = authorProfileId,
             )
         )
     }
@@ -54,7 +54,7 @@ class Comment(
         fun create(
             id: CommentId,
             postId: PostId,
-            authorId: MemberId,
+            authorProfileId: ProfileId,
             content: CommentContent,
             parentCommentId: CommentId? = null,
             depth: Int = 0,
@@ -71,7 +71,7 @@ class Comment(
             return Comment(
                 id = id,
                 postId = postId,
-                authorId = authorId,
+                authorProfileId = authorProfileId,
                 content = content,
                 parentCommentId = parentCommentId,
                 depth = depth,
