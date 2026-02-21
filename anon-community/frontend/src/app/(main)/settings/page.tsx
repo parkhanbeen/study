@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/stores/auth-store";
 import { logout } from "@/lib/api/auth";
 import { fetchAPI } from "@/lib/api/client";
+import { MemberResponse } from "@/types/api";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
@@ -26,6 +27,7 @@ export default function SettingsPage() {
   const { clearAuth, isLoggedIn, isInitialized } = useAuthStore();
   const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState("ko");
+  const [member, setMember] = useState<MemberResponse | null>(null);
 
   useEffect(() => {
     if (!isInitialized) return;
@@ -35,9 +37,10 @@ export default function SettingsPage() {
   }, [isInitialized, isLoggedIn, router]);
 
   useEffect(() => {
-    fetchAPI<{ preferredLanguage: string | null }>("/members/me")
-      .then((member) => {
-        if (member.preferredLanguage) setLanguage(member.preferredLanguage);
+    fetchAPI<MemberResponse>("/members/me")
+      .then((data) => {
+        setMember(data);
+        if (data.preferredLanguage) setLanguage(data.preferredLanguage);
       })
       .catch(() => {});
   }, []);
@@ -72,6 +75,30 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">설정</h1>
+
+      {member && (
+        <Card>
+          <CardHeader>
+            <CardTitle>계정 정보</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">닉네임</span>
+              <span className="font-medium">{member.nickname}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">게시글 수</span>
+              <span className="font-medium">{member.postCount}개</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">가입일</span>
+              <span className="font-medium">
+                {new Date(member.createdAt).toLocaleDateString("ko-KR")}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
