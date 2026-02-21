@@ -17,6 +17,11 @@ class FollowEventConsumer(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
+    private companion object {
+        const val EVENT_FOLLOW_CREATED = "FollowCreated"
+        const val EVENT_FOLLOW_DELETED = "FollowDeleted"
+    }
+
     @KafkaListener(
         topics = ["anon-community-cdc.anon_community.profile_follows"],
         groupId = "\${spring.kafka.consumer.group-id}",
@@ -45,14 +50,20 @@ class FollowEventConsumer(
 
             if (isInsert) {
                 val eventId = "${rowId}_c"
-                if (!processedEventPort.markProcessed(eventId, "FollowCreated")) return
-                profileCommandPort.incrementFollowerCount(followingProfileId)
-                profileCommandPort.incrementFollowingCount(followerProfileId)
+                if (!processedEventPort.markProcessed(eventId, EVENT_FOLLOW_CREATED)) return
+                val affectedFollower = profileCommandPort.incrementFollowerCount(followingProfileId)
+                check(affectedFollower > 0) { "No member_profile row found for profileId=${followingProfileId.value}, eventId=$eventId" }
+                val affectedFollowing = profileCommandPort.incrementFollowingCount(followerProfileId)
+                check(affectedFollowing > 0) { "No member_profile row found for profileId=${followerProfileId.value}, eventId=$eventId" }
+                log.info("Incremented follow counts: follower={}, following={}, eventId={}", followerProfileId.value, followingProfileId.value, eventId)
             } else {
                 val eventId = "${rowId}_d"
-                if (!processedEventPort.markProcessed(eventId, "FollowDeleted")) return
-                profileCommandPort.decrementFollowerCount(followingProfileId)
-                profileCommandPort.decrementFollowingCount(followerProfileId)
+                if (!processedEventPort.markProcessed(eventId, EVENT_FOLLOW_DELETED)) return
+                val affectedFollower = profileCommandPort.decrementFollowerCount(followingProfileId)
+                check(affectedFollower > 0) { "No member_profile row found for profileId=${followingProfileId.value}, eventId=$eventId" }
+                val affectedFollowing = profileCommandPort.decrementFollowingCount(followerProfileId)
+                check(affectedFollowing > 0) { "No member_profile row found for profileId=${followerProfileId.value}, eventId=$eventId" }
+                log.info("Decremented follow counts: follower={}, following={}, eventId={}", followerProfileId.value, followingProfileId.value, eventId)
             }
         } catch (e: Exception) {
             log.error("Failed to process CDC message for profile_follows", e)
