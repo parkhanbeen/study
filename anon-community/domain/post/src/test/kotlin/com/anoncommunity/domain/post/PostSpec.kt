@@ -124,6 +124,30 @@ class PostSpec : DescribeSpec({
                 deletedPost.edit(title = PostTitle("New Title"))
             }
         }
+
+        it("should throw when editing a hidden post") {
+            val hiddenPost = createPublishedPost().also { it.hide() }
+
+            shouldThrow<IllegalStateException> {
+                hiddenPost.edit(title = PostTitle("New Title"))
+            }
+        }
+
+        it("should throw when editing a post under review") {
+            val underReviewPost = createPublishedPost().also { it.markForReview() }
+
+            shouldThrow<IllegalStateException> {
+                underReviewPost.edit(title = PostTitle("New Title"))
+            }
+        }
+
+        it("should throw when editing a removed post") {
+            val removedPost = createPublishedPost().also { it.remove() }
+
+            shouldThrow<IllegalStateException> {
+                removedPost.edit(title = PostTitle("New Title"))
+            }
+        }
     }
 
     describe("Post.softDelete") {
