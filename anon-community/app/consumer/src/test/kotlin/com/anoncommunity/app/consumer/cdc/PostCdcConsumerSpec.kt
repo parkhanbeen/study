@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.mockk.*
 
 class PostCdcConsumerSpec : DescribeSpec({
@@ -284,24 +285,43 @@ class PostCdcConsumerSpec : DescribeSpec({
         }
 
         context("timestamp parsing error cases") {
-            it("timestamps가 null이면 IllegalArgumentException을 던진다") {
+            it("should throw when created_at is null") {
                 val message = """
                     {
                         "id": 1, "author_id": 10, "title": "Test", "content": "Body",
                         "category": "DAILY", "status": "PUBLISHED",
                         "tags": "[]",
                         "created_at": null,
+                        "updated_at": 1000000,
+                        "__op": "c", "__deleted": "false"
+                    }
+                """.trimIndent()
+
+                val ex = shouldThrow<IllegalArgumentException> {
+                    consumer.consume(message)
+                }
+                ex.message shouldBe "timestamp must not be null"
+            }
+
+            it("should throw when updated_at is null") {
+                val message = """
+                    {
+                        "id": 1, "author_id": 10, "title": "Test", "content": "Body",
+                        "category": "DAILY", "status": "PUBLISHED",
+                        "tags": "[]",
+                        "created_at": 1000000,
                         "updated_at": null,
                         "__op": "c", "__deleted": "false"
                     }
                 """.trimIndent()
 
-                shouldThrow<IllegalArgumentException> {
+                val ex = shouldThrow<IllegalArgumentException> {
                     consumer.consume(message)
                 }
+                ex.message shouldBe "timestamp must not be null"
             }
 
-            it("tags JSON이 유효하지 않으면 IllegalArgumentException을 던진다") {
+            it("should throw when tags JSON is invalid") {
                 val message = """
                     {
                         "id": 1, "author_id": 10, "title": "Test", "content": "Body",
@@ -313,9 +333,10 @@ class PostCdcConsumerSpec : DescribeSpec({
                     }
                 """.trimIndent()
 
-                shouldThrow<IllegalArgumentException> {
+                val ex = shouldThrow<IllegalArgumentException> {
                     consumer.consume(message)
                 }
+                ex.message shouldContain "Cannot parse tags"
             }
         }
 
