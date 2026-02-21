@@ -18,8 +18,12 @@ function SearchContent() {
   const [category, setCategory] = useState<PostCategory | undefined>(
     (searchParams.get("category") as PostCategory) || undefined,
   );
-  const [sortBy, setSortBy] = useState<SearchSortBy>("createdAt");
-  const [dateRange, setDateRange] = useState<SearchDateRange | undefined>(undefined);
+  const [sortBy, setSortBy] = useState<SearchSortBy>(
+    (searchParams.get("sortBy") as SearchSortBy) ?? "createdAt",
+  );
+  const [dateRange, setDateRange] = useState<SearchDateRange | undefined>(
+    (searchParams.get("dateRange") as SearchDateRange) || undefined,
+  );
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useSearchPosts(
     keyword,
@@ -39,8 +43,10 @@ function SearchContent() {
     if (keyword) params.set("keyword", keyword);
     tags.forEach((t) => params.append("tags", t));
     if (category) params.set("category", category);
-    router.replace(`/search?${params.toString()}`);
-  }, [keyword, tags, category, router]);
+    if (sortBy !== "createdAt") params.set("sortBy", sortBy);
+    if (dateRange) params.set("dateRange", dateRange);
+    router.replace(`/search?${params.toString()}`, { scroll: false });
+  }, [keyword, tags, category, sortBy, dateRange, router]);
 
   // Infinite scroll
   useEffect(() => {
