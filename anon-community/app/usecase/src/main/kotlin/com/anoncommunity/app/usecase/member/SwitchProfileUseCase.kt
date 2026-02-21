@@ -7,6 +7,7 @@ import com.anoncommunity.domain.member.MemberProfile
 import com.anoncommunity.domain.member.exception.ProfileNotFoundException
 import com.anoncommunity.domain.member.port.ProfileQueryPort
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 data class SwitchProfileCommand(
     val memberId: Long,
@@ -21,6 +22,7 @@ data class SwitchProfileCommand(
  * JwtProvider lives in app/gateway and must NOT be injected into app/usecase.
  */
 @Service
+@Transactional(readOnly = true)
 class SwitchProfileUseCase(
     private val profileQueryPort: ProfileQueryPort,
 ) : CommandUseCase<SwitchProfileCommand, MemberProfile> {

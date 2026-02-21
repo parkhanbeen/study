@@ -11,9 +11,11 @@ import com.anoncommunity.domain.member.port.ProfileQueryPort
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.Called
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 
 class GetPublicProfileUseCaseSpec : DescribeSpec({
 
@@ -72,6 +74,7 @@ class GetPublicProfileUseCaseSpec : DescribeSpec({
 
                 result.profile.id shouldBe ProfileId(10L)
                 result.isFollowing shouldBe false
+                verify { followQueryPort wasNot Called }
             }
         }
 
