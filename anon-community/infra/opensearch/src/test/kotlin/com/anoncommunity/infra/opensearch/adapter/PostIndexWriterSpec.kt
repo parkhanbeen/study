@@ -32,6 +32,12 @@ class PostIndexWriterSpec : DescribeSpec({
     )
 
     describe("index") {
+        it("정상적으로 인덱싱되면 예외 없이 완료된다") {
+            every { client.index(any(), RequestOptions.DEFAULT) } returns mockk()
+
+            writer.index(document)
+        }
+
         it("OpenSearch 연결 실패 시 IOException을 전파한다") {
             every { client.index(any(), RequestOptions.DEFAULT) } throws IOException("Connection refused")
 
@@ -42,6 +48,12 @@ class PostIndexWriterSpec : DescribeSpec({
     }
 
     describe("delete") {
+        it("정상적으로 삭제되면 예외 없이 완료된다") {
+            every { client.delete(any(), RequestOptions.DEFAULT) } returns mockk()
+
+            writer.delete(1L)
+        }
+
         it("OpenSearch 연결 실패 시 IOException을 전파한다") {
             every { client.delete(any(), RequestOptions.DEFAULT) } throws IOException("Connection refused")
 
