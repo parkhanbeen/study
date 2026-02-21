@@ -41,7 +41,8 @@ class MemberController(
             bio = request.bio ?: "",
         ))
 
-        val accessToken = jwtTokenProvider.issueAccessToken(member.id.value)
+        // activeProfileId is 0L until Task 13 creates a default profile during signup
+        val accessToken = jwtTokenProvider.issueAccessToken(member.id.value, activeProfileId = 0L)
         val refreshToken = jwtTokenProvider.issueRefreshToken(member.id.value)
         refreshTokenPort.store(member.id.value, refreshToken, jwtProperties.refreshTokenExpiry)
 
