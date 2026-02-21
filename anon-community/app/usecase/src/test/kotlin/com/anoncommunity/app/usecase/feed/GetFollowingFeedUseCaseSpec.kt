@@ -23,7 +23,7 @@ class GetFollowingFeedUseCaseSpec : DescribeSpec({
     val followingIdsCache = mockk<FollowingIdsCache>(relaxed = true)
     val useCase = GetFollowingFeedUseCase(followQueryPort, postFeedPort, postStatsQueryPort, followingIdsCache)
 
-    beforeEach { clearMocks(followQueryPort, postFeedPort, postStatsQueryPort) }
+    beforeEach { clearMocks(followQueryPort, postFeedPort, postStatsQueryPort, followingIdsCache) }
 
     describe("GetFollowingFeedUseCase") {
         context("팔로잉이 없는 경우") {
@@ -34,6 +34,7 @@ class GetFollowingFeedUseCaseSpec : DescribeSpec({
                 val result = useCase.invoke(GetFollowingFeedQuery(activeProfileId = 1L, pageable = DomainPageable()))
 
                 result.content.shouldBeEmpty()
+                verify(exactly = 1) { followingIdsCache.set(ProfileId(1L), emptyList()) }
                 verify(exactly = 0) { postFeedPort.getFollowingFeed(any(), any()) }
             }
         }
