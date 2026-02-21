@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,6 +24,7 @@ const LANGUAGES = [
 export default function SettingsPage() {
   const router = useRouter();
   const { clearAuth, isLoggedIn, isInitialized } = useAuthStore();
+  const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState("ko");
 
   useEffect(() => {
@@ -88,6 +90,27 @@ export default function SettingsPage() {
                     {lang.label}
                   </SelectItem>
                 ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>화면</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Label>테마</Label>
+            <Select value={theme ?? "system"} onValueChange={setTheme}>
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="system">시스템 설정</SelectItem>
+                <SelectItem value="light">라이트</SelectItem>
+                <SelectItem value="dark">다크</SelectItem>
               </SelectContent>
             </Select>
           </div>
