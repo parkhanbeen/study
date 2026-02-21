@@ -3,8 +3,11 @@ package com.anoncommunity.app.usecase.member
 import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.domain.member.Member
 import com.anoncommunity.domain.member.MemberProfile
+import com.anoncommunity.domain.member.exception.NicknameDuplicatedException
 import com.anoncommunity.domain.member.port.MemberCommandPort
 import com.anoncommunity.domain.member.port.ProfileCommandPort
+import com.anoncommunity.domain.member.port.ProfileQueryPort
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -18,17 +21,19 @@ class CreateMemberUseCaseSpec : DescribeSpec({
 
     val memberCommandPort = mockk<MemberCommandPort>()
     val profileCommandPort = mockk<ProfileCommandPort>()
+    val profileQueryPort = mockk<ProfileQueryPort>()
     val passwordEncoder = mockk<PasswordEncoder>()
 
-    val useCase = CreateMemberUseCase(memberCommandPort, profileCommandPort, passwordEncoder)
+    val useCase = CreateMemberUseCase(memberCommandPort, profileCommandPort, profileQueryPort, passwordEncoder)
 
     beforeEach {
-        clearMocks(memberCommandPort, profileCommandPort, passwordEncoder)
+        clearMocks(memberCommandPort, profileCommandPort, profileQueryPort, passwordEncoder)
     }
 
     describe("CreateMemberUseCase") {
         context("when valid command is given") {
             beforeEach {
+                every { profileQueryPort.existsByNickname(any()) } returns false
                 every { passwordEncoder.encode("rawPass123") } returns "encoded-hash"
                 every { memberCommandPort.save(any()) } answers {
                     val m = firstArg<Member>()
@@ -87,6 +92,29 @@ class CreateMemberUseCaseSpec : DescribeSpec({
                 verify(exactly = 1) {
                     profileCommandPort.save(match { it.isDefault && it.nickname.value == "testuser" })
                 }
+            }
+
+            it("should propagate exception when profile save fails") {
+                every { profileCommandPort.save(any()) } throws RuntimeException("DB error")
+
+                shouldThrow<RuntimeException> {
+                    useCase.invoke(CreateMemberCommand(nickname = "testuser", password = "rawPass123"))
+                }
+            }
+        }
+
+        context("when nickname is already taken") {
+            beforeEach {
+                every { profileQueryPort.existsByNickname(any()) } returns true
+            }
+
+            it("should throw NicknameDuplicatedException and not save member or profile") {
+                shouldThrow<NicknameDuplicatedException> {
+                    useCase.invoke(CreateMemberCommand(nickname = "testuser", password = "rawPass123"))
+                }
+
+                verify(exactly = 0) { memberCommandPort.save(any()) }
+                verify(exactly = 0) { profileCommandPort.save(any()) }
             }
         }
     }
