@@ -11,9 +11,9 @@ export default function MainError({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 gap-4">
-      <h2 className="text-xl font-bold">Something went wrong</h2>
-      <p className="text-muted-foreground">{error.message || "An unexpected error occurred"}</p>
-      <Button onClick={reset}>Try again</Button>
+      <h2 className="text-xl font-bold">오류가 발생했습니다</h2>
+      <p className="text-muted-foreground">{error.message || "예기치 않은 오류가 발생했습니다"}</p>
+      <Button onClick={reset}>다시 시도</Button>
     </div>
   );
 }

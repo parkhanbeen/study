@@ -20,10 +20,10 @@ export function useCreateComment(postId: number) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postId] });
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
-      toast.success("Comment posted");
+      toast.success("댓글이 등록되었습니다");
     },
     onError: () => {
-      toast.error("Failed to post comment");
+      toast.error("댓글 등록에 실패했습니다");
     },
   });
 }
@@ -35,10 +35,10 @@ export function useDeleteComment(postId: number) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postId] });
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
-      toast.success("Comment deleted");
+      toast.success("댓글이 삭제되었습니다");
     },
     onError: () => {
-      toast.error("Failed to delete comment");
+      toast.error("댓글 삭제에 실패했습니다");
     },
   });
 }

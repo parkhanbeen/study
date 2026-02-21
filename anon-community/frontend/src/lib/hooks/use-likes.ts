@@ -20,6 +20,9 @@ export function useLike(postId: number) {
       }
       return { previous };
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["feed"] });
+    },
     onError: (err, _vars, context) => {
       if (context?.previous) {
         queryClient.setQueryData(["post", postId], context.previous);
@@ -27,7 +30,7 @@ export function useLike(postId: number) {
       if (err instanceof ApiError && err.code === "ALREADY_LIKED") {
         return;
       }
-      toast.error("Failed to like post");
+      toast.error("좋아요에 실패했습니다");
     },
   });
 }
@@ -48,6 +51,9 @@ export function useUnlike(postId: number) {
       }
       return { previous };
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["feed"] });
+    },
     onError: (err, _vars, context) => {
       if (context?.previous) {
         queryClient.setQueryData(["post", postId], context.previous);
@@ -55,7 +61,7 @@ export function useUnlike(postId: number) {
       if (err instanceof ApiError && err.code === "LIKE_NOT_FOUND") {
         return;
       }
-      toast.error("Failed to unlike post");
+      toast.error("좋아요 취소에 실패했습니다");
     },
   });
 }
