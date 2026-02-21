@@ -3,8 +3,8 @@ package com.anoncommunity.app.api.controller
 import com.anoncommunity.app.api.exception.ApiExceptionHandler
 import com.anoncommunity.app.usecase.post.*
 import com.anoncommunity.contract.exception.AccessDeniedException
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.post.*
 import com.anoncommunity.domain.post.exception.PostNotFoundException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -44,13 +44,13 @@ class PostControllerSpec : DescribeSpec({
 
     fun createTestPost(
         id: Long = 1L,
-        authorId: Long = 100L,
+        authorProfileId: Long = 100L,
         title: String = "Test Title",
         content: String = "Test Content",
         tags: List<String> = listOf("kotlin"),
     ): Post = Post.create(
         id = PostId(id),
-        authorId = MemberId(authorId),
+        authorProfileId = ProfileId(authorProfileId),
         title = PostTitle(title),
         content = PostContent(content),
         tags = tags.map { Tag(it) },
@@ -66,14 +66,15 @@ class PostControllerSpec : DescribeSpec({
                 header("X-Member-Id", "100")
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
-                    mapOf("title" to "Test Title", "content" to "Test Content", "tags" to listOf("kotlin"))
+                    mapOf("title" to "Test Title", "content" to "Test Content", "category" to "DAILY", "tags" to listOf("kotlin"))
                 )
             }.andExpect {
                 status { isCreated() }
                 jsonPath("$.id") { value(1) }
-                jsonPath("$.authorId") { value(100) }
+                jsonPath("$.authorProfileId") { value(100) }
                 jsonPath("$.title") { value("Test Title") }
                 jsonPath("$.content") { value("Test Content") }
+                jsonPath("$.category") { value("DAILY") }
                 jsonPath("$.tags[0]") { value("kotlin") }
                 jsonPath("$.status") { value("PUBLISHED") }
                 jsonPath("$.createdAt") { exists() }
@@ -86,7 +87,7 @@ class PostControllerSpec : DescribeSpec({
                 header("X-Member-Id", "100")
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
-                    mapOf("title" to "", "content" to "Test Content")
+                    mapOf("title" to "", "content" to "Test Content", "category" to "DAILY")
                 )
             }.andExpect {
                 status { isBadRequest() }
@@ -185,7 +186,7 @@ class PostControllerSpec : DescribeSpec({
             mockMvc.get("/api/v1/posts/1").andExpect {
                 status { isOk() }
                 jsonPath("$.id") { value(1) }
-                jsonPath("$.authorId") { value(100) }
+                jsonPath("$.authorProfileId") { value(100) }
                 jsonPath("$.title") { value("Test Title") }
                 jsonPath("$.content") { value("Test Content") }
                 jsonPath("$.tags[0]") { value("kotlin") }

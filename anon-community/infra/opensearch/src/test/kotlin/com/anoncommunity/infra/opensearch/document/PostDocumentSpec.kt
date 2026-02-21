@@ -13,7 +13,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should include commentCount field with default value 0") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",
@@ -29,7 +29,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should allow setting commentCount") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",
@@ -46,7 +46,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should include likeCount field with default value 0") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",
@@ -62,7 +62,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should include viewCount field with default value 0") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",
@@ -78,7 +78,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should allow setting likeCount and viewCount") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",
@@ -97,7 +97,7 @@ class PostDocumentSpec : DescribeSpec({
 
         it("should include titleChosung field with default empty string") {
             val doc = PostDocument(
-                id = 1L, authorId = 100L, title = "Test", content = "Content",
+                id = 1L, authorProfileId = 100L, title = "Test", content = "Content",
                 category = "DAILY", tags = emptyList(), status = "PUBLISHED",
                 createdAt = Instant.now(), updatedAt = Instant.now(),
             )
@@ -107,7 +107,7 @@ class PostDocumentSpec : DescribeSpec({
 
         it("should allow setting titleChosung and contentChosung") {
             val doc = PostDocument(
-                id = 1L, authorId = 100L, title = "무신사", content = "운동 추천",
+                id = 1L, authorProfileId = 100L, title = "무신사", content = "운동 추천",
                 category = "DAILY", tags = emptyList(), status = "PUBLISHED",
                 createdAt = Instant.now(), updatedAt = Instant.now(),
                 titleChosung = "ㅁㅅㅅ",
@@ -121,7 +121,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should serialize and deserialize commentCount correctly") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",
@@ -146,7 +146,7 @@ class PostDocumentSpec : DescribeSpec({
             val json = """
                 {
                     "id": 1,
-                    "authorId": 100,
+                    "authorProfileId": 100,
                     "title": "Test",
                     "content": "Content",
                     "category": "DAILY",
@@ -171,7 +171,7 @@ class PostDocumentSpec : DescribeSpec({
             val json = """
                 {
                     "id": 1,
-                    "authorId": 100,
+                    "authorProfileId": 100,
                     "title": "Test",
                     "content": "Content",
                     "category": "DAILY",
@@ -196,7 +196,7 @@ class PostDocumentSpec : DescribeSpec({
         it("should serialize and deserialize likeCount and viewCount correctly") {
             val doc = PostDocument(
                 id = 1L,
-                authorId = 100L,
+                authorProfileId = 100L,
                 title = "Test",
                 content = "Content",
                 category = "DAILY",

@@ -37,7 +37,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                 val message = """
                     {
                         "id": 1,
-                        "author_id": 100,
+                        "author_profile_id": 100,
                         "title": "Hello World",
                         "content": "This is a test post",
                         "tags": "[\"kotlin\",\"spring\"]",
@@ -57,7 +57,7 @@ class PostCdcConsumerSpec : DescribeSpec({
 
                 with(captured.captured) {
                     id shouldBe 1L
-                    authorId shouldBe 100L
+                    authorProfileId shouldBe 100L
                     title shouldBe "Hello World"
                     content shouldBe "This is a test post"
                     tags shouldBe listOf("kotlin", "spring")
@@ -69,7 +69,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                 val message = """
                     {
                         "id": 1,
-                        "author_id": 100,
+                        "author_profile_id": 100,
                         "title": "Updated Title",
                         "content": "Updated content",
                         "tags": null,
@@ -99,7 +99,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                 val message = """
                     {
                         "id": 42,
-                        "author_id": 100,
+                        "author_profile_id": 100,
                         "title": "To be deleted",
                         "content": "content",
                         "tags": null,
@@ -121,7 +121,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                 val message = """
                     {
                         "id": 42,
-                        "author_id": 100,
+                        "author_profile_id": 100,
                         "title": "Deleted",
                         "content": "content",
                         "tags": null,
@@ -147,7 +147,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                         "before": null,
                         "after": {
                             "id": 5,
-                            "author_id": 200,
+                            "author_profile_id": 200,
                             "title": "Envelope Post",
                             "content": "Created via envelope",
                             "tags": "[\"java\"]",
@@ -166,7 +166,7 @@ class PostCdcConsumerSpec : DescribeSpec({
 
                 with(captured.captured) {
                     id shouldBe 5L
-                    authorId shouldBe 200L
+                    authorProfileId shouldBe 200L
                     title shouldBe "Envelope Post"
                     tags shouldBe listOf("java")
                 }
@@ -181,7 +181,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                         },
                         "after": {
                             "id": 5,
-                            "author_id": 200,
+                            "author_profile_id": 200,
                             "title": "New Title",
                             "content": "Updated via envelope",
                             "tags": null,
@@ -208,7 +208,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                     {
                         "before": {
                             "id": 10,
-                            "author_id": 200,
+                            "author_profile_id": 200,
                             "title": "To Delete",
                             "content": "content",
                             "tags": null,
@@ -232,7 +232,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should handle empty tags array") {
                 val message = """
                     {
-                        "id": 1, "author_id": 1, "title": "t", "content": "c",
+                        "id": 1, "author_profile_id": 1, "title": "t", "content": "c",
                         "tags": "[]",
                         "status": "PUBLISHED",
                         "created_at": 1700000000000, "updated_at": 1700000000000,
@@ -250,7 +250,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should handle null tags") {
                 val message = """
                     {
-                        "id": 1, "author_id": 1, "title": "t", "content": "c",
+                        "id": 1, "author_profile_id": 1, "title": "t", "content": "c",
                         "tags": null,
                         "status": "PUBLISHED",
                         "created_at": 1700000000000, "updated_at": 1700000000000,
@@ -268,7 +268,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should handle tags with special characters") {
                 val message = """
                     {
-                        "id": 1, "author_id": 1, "title": "t", "content": "c",
+                        "id": 1, "author_profile_id": 1, "title": "t", "content": "c",
                         "tags": "[\"C++\",\"C#\",\"한글태그\"]",
                         "status": "PUBLISHED",
                         "created_at": 1700000000000, "updated_at": 1700000000000,
@@ -288,7 +288,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should throw when created_at is null") {
                 val message = """
                     {
-                        "id": 1, "author_id": 10, "title": "Test", "content": "Body",
+                        "id": 1, "author_profile_id": 10, "title": "Test", "content": "Body",
                         "category": "DAILY", "status": "PUBLISHED",
                         "tags": "[]",
                         "created_at": null,
@@ -306,7 +306,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should throw when updated_at is null") {
                 val message = """
                     {
-                        "id": 1, "author_id": 10, "title": "Test", "content": "Body",
+                        "id": 1, "author_profile_id": 10, "title": "Test", "content": "Body",
                         "category": "DAILY", "status": "PUBLISHED",
                         "tags": "[]",
                         "created_at": 1000000,
@@ -324,7 +324,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should throw when tags JSON is invalid") {
                 val message = """
                     {
-                        "id": 1, "author_id": 10, "title": "Test", "content": "Body",
+                        "id": 1, "author_profile_id": 10, "title": "Test", "content": "Body",
                         "category": "DAILY", "status": "PUBLISHED",
                         "tags": "INVALID_JSON",
                         "created_at": 1000000,
@@ -344,7 +344,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should parse epoch milliseconds") {
                 val message = """
                     {
-                        "id": 1, "author_id": 1, "title": "t", "content": "c",
+                        "id": 1, "author_profile_id": 1, "title": "t", "content": "c",
                         "tags": null, "status": "PUBLISHED",
                         "created_at": 1700000000000, "updated_at": 1700001000000,
                         "__op": "c", "__deleted": "false"
@@ -365,7 +365,7 @@ class PostCdcConsumerSpec : DescribeSpec({
             it("should parse ISO-8601 timestamp strings") {
                 val message = """
                     {
-                        "id": 1, "author_id": 1, "title": "t", "content": "c",
+                        "id": 1, "author_profile_id": 1, "title": "t", "content": "c",
                         "tags": null, "status": "PUBLISHED",
                         "created_at": "2024-01-15T10:30:00Z",
                         "updated_at": "2024-01-15T11:00:00Z",
@@ -388,7 +388,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                 val message = """
                     {
                         "id": 1,
-                        "author_id": 100,
+                        "author_profile_id": 100,
                         "title": "무신사 할인",
                         "content": "운동 추천합니다",
                         "tags": null,
@@ -413,7 +413,7 @@ class PostCdcConsumerSpec : DescribeSpec({
                 val message = """
                     {
                         "id": 2,
-                        "author_id": 100,
+                        "author_profile_id": 100,
                         "title": "Hello World",
                         "content": "English content",
                         "tags": null,

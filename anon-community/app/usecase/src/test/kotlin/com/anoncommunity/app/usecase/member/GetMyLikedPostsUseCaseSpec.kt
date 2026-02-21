@@ -1,8 +1,8 @@
 package com.anoncommunity.app.usecase.member
 
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PageResult
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.like.port.LikeQueryPort
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostContent
@@ -20,7 +20,7 @@ class GetMyLikedPostsUseCaseSpec : DescribeSpec({
     val postQueryPort = mockk<PostQueryPort>()
     val useCase = GetMyLikedPostsUseCase(likeQueryPort, postQueryPort)
 
-    val memberId = MemberId(100L)
+    val profileId = ProfileId(100L)
     val postId = PostId(10L)
 
     beforeEach { clearMocks(likeQueryPort, postQueryPort) }
@@ -29,7 +29,7 @@ class GetMyLikedPostsUseCaseSpec : DescribeSpec({
         it("should return posts that the member has liked") {
             val post = Post.create(
                 id = postId,
-                authorId = MemberId(1L),
+                authorProfileId = ProfileId(1L),
                 title = PostTitle("Liked Post"),
                 content = PostContent("Content"),
             )
@@ -41,10 +41,10 @@ class GetMyLikedPostsUseCaseSpec : DescribeSpec({
                 totalPages = 1,
             )
 
-            every { likeQueryPort.findPostIdsByMemberId(memberId, any()) } returns postIdsPage
+            every { likeQueryPort.findPostIdsByProfileId(profileId, any()) } returns postIdsPage
             every { postQueryPort.findById(postId) } returns post
 
-            val result = useCase(GetMyLikedPostsQuery(memberId = memberId.value))
+            val result = useCase(GetMyLikedPostsQuery(memberId = profileId.value))
 
             result.content.size shouldBe 1
             result.totalElements shouldBe 1L
@@ -58,9 +58,9 @@ class GetMyLikedPostsUseCaseSpec : DescribeSpec({
                 totalElements = 0L,
                 totalPages = 0,
             )
-            every { likeQueryPort.findPostIdsByMemberId(memberId, any()) } returns emptyPage
+            every { likeQueryPort.findPostIdsByProfileId(profileId, any()) } returns emptyPage
 
-            val result = useCase(GetMyLikedPostsQuery(memberId = memberId.value))
+            val result = useCase(GetMyLikedPostsQuery(memberId = profileId.value))
 
             result.content shouldBe emptyList()
         }

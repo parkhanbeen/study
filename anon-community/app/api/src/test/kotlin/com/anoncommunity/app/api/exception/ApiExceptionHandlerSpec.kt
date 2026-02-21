@@ -5,6 +5,7 @@ import com.anoncommunity.contract.exception.AccessDeniedException
 import com.anoncommunity.contract.model.CommentId
 import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.comment.exception.CommentNotFoundException
 import com.anoncommunity.domain.like.exception.LikeNotFoundException
 import com.anoncommunity.domain.like.exception.PostAlreadyLikedException
@@ -58,8 +59,8 @@ class ApiExceptionHandlerSpec : DescribeSpec({
             Case("CommentNotFound → 404", HttpStatus.NOT_FOUND, "COMMENT_NOT_FOUND", "Comment not found: 42") {
                 handler.handleCommentNotFound(CommentNotFoundException(CommentId(42L)))
             },
-            Case("LikeNotFound → 404", HttpStatus.NOT_FOUND, "LIKE_NOT_FOUND", "Like not found for post 10 by member 20") {
-                handler.handleLikeNotFound(LikeNotFoundException(PostId(10L), MemberId(20L)))
+            Case("LikeNotFound → 404", HttpStatus.NOT_FOUND, "LIKE_NOT_FOUND", "Like not found for post 10 by profile 20") {
+                handler.handleLikeNotFound(LikeNotFoundException(PostId(10L), ProfileId(20L)))
             },
             Case("MemberNotFound → 404", HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "Member not found: 99") {
                 handler.handleMemberNotFound(MemberNotFoundException(MemberId(99L)))
@@ -73,8 +74,8 @@ class ApiExceptionHandlerSpec : DescribeSpec({
             Case("IllegalState → 409", HttpStatus.CONFLICT, "CONFLICT", "Operation conflict") {
                 handler.handleConflict(IllegalStateException("Account is not active"))
             },
-            Case("PostAlreadyLiked → 409", HttpStatus.CONFLICT, "ALREADY_LIKED", "Member 10 already liked post 5") {
-                handler.handleAlreadyLiked(PostAlreadyLikedException(PostId(5L), MemberId(10L)))
+            Case("PostAlreadyLiked → 409", HttpStatus.CONFLICT, "ALREADY_LIKED", "Profile 10 already liked post 5") {
+                handler.handleAlreadyLiked(PostAlreadyLikedException(PostId(5L), ProfileId(10L)))
             },
             Case("SearchExecution → 503 with generic Korean message", HttpStatus.SERVICE_UNAVAILABLE, "SEARCH_UNAVAILABLE", "검색 서비스를 일시적으로 사용할 수 없습니다") {
                 handler.handleSearchExecution(SearchExecutionException("OpenSearch connection refused", RuntimeException("java.net.ConnectException: Connection refused")))

@@ -3,8 +3,8 @@ package com.anoncommunity.app.usecase.post
 import com.anoncommunity.contract.event.DomainEvent
 import com.anoncommunity.contract.event.DomainEventPublisher
 import com.anoncommunity.contract.exception.AccessDeniedException
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostContent
 import com.anoncommunity.domain.post.PostTitle
@@ -30,7 +30,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
     val useCase = UpdatePostUseCase(postQueryPort, postCommandPort, eventPublisher)
 
-    val authorId = MemberId(100L)
+    val authorId = ProfileId(100L)
     val postId = PostId(10L)
 
     beforeEach {
@@ -42,7 +42,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should update title and publish PostEdited event") {
                 val existingPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Original Title"),
                     content = PostContent("Original Content"),
                 )
@@ -73,7 +73,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should skip event when no fields changed") {
                 val existingPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Same Title"),
                     content = PostContent("Same Content"),
                 )
@@ -100,7 +100,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should throw AccessDeniedException") {
                 val existingPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Original Title"),
                     content = PostContent("Original Content"),
                 )
@@ -146,7 +146,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should throw PostNotFoundException when post is HIDDEN") {
                 val hiddenPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Title"),
                     content = PostContent("Content"),
                 ).also { it.hide() }
@@ -171,7 +171,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should throw PostNotFoundException when post is UNDER_REVIEW") {
                 val underReviewPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Title"),
                     content = PostContent("Content"),
                 ).also { it.markForReview() }
@@ -196,7 +196,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should throw PostNotFoundException when post is REMOVED") {
                 val removedPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Title"),
                     content = PostContent("Content"),
                 ).also { it.remove() }
@@ -221,7 +221,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
             it("should throw PostNotFoundException when post is DELETED") {
                 val deletedPost = Post.create(
                     id = postId,
-                    authorId = authorId,
+                    authorProfileId = authorId,
                     title = PostTitle("Title"),
                     content = PostContent("Content"),
                 ).also { it.softDelete() }

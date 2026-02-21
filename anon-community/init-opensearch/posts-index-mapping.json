@@ -59,7 +59,7 @@
   "mappings": {
     "properties": {
       "id": { "type": "long" },
-      "authorId": { "type": "long" },
+      "authorProfileId": { "type": "long" },
       "category": { "type": "keyword" },
       "title": {
         "type": "text",

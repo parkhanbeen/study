@@ -57,7 +57,7 @@ class PostIndexWriterIntegrationSpec : DescribeSpec({
                 {
                     "properties": {
                         "id": { "type": "long" },
-                        "authorId": { "type": "long" },
+                        "authorProfileId": { "type": "long" },
                         "title": { "type": "text" },
                         "content": { "type": "text" },
                         "tags": { "type": "keyword" },
@@ -86,7 +86,7 @@ class PostIndexWriterIntegrationSpec : DescribeSpec({
                 val now = Instant.now()
                 val document = PostDocument(
                     id = 1L,
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     title = "Integration Test Post",
                     content = "This verifies that CDC indexing works end-to-end",
                     tags = listOf("kotlin", "opensearch"),
@@ -107,7 +107,7 @@ class PostIndexWriterIntegrationSpec : DescribeSpec({
 
                 val source = response.sourceAsMap
                 source["id"] shouldBe 1
-                source["authorId"] shouldBe 100
+                source["authorProfileId"] shouldBe 100
                 source["title"] shouldBe "Integration Test Post"
                 source["tags"] shouldBe listOf("kotlin", "opensearch")
                 source["status"] shouldBe "PUBLISHED"
@@ -116,7 +116,7 @@ class PostIndexWriterIntegrationSpec : DescribeSpec({
             it("should upsert when indexing with the same ID") {
                 val now = Instant.now()
                 val original = PostDocument(
-                    id = 2L, authorId = 100L, title = "Original",
+                    id = 2L, authorProfileId = 100L, title = "Original",
                     content = "Original content", tags = listOf("v1"),
                     status = "PUBLISHED", createdAt = now, updatedAt = now,
                 )
@@ -142,7 +142,7 @@ class PostIndexWriterIntegrationSpec : DescribeSpec({
             it("should index Korean content and empty tags correctly") {
                 val now = Instant.now()
                 val document = PostDocument(
-                    id = 4L, authorId = 200L,
+                    id = 4L, authorProfileId = 200L,
                     title = "한글 제목 테스트",
                     content = "한글 본문 내용입니다.",
                     tags = emptyList(),
@@ -168,7 +168,7 @@ class PostIndexWriterIntegrationSpec : DescribeSpec({
             it("should remove a document from OpenSearch") {
                 val now = Instant.now()
                 val document = PostDocument(
-                    id = 3L, authorId = 100L, title = "To Delete",
+                    id = 3L, authorProfileId = 100L, title = "To Delete",
                     content = "Will be deleted", tags = emptyList(),
                     status = "PUBLISHED", createdAt = now, updatedAt = now,
                 )

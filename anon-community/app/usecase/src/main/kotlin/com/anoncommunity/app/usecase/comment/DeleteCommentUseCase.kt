@@ -2,7 +2,7 @@ package com.anoncommunity.app.usecase.comment
 
 import com.anoncommunity.contract.event.DomainEventPublisher
 import com.anoncommunity.contract.model.CommentId
-import com.anoncommunity.contract.model.MemberId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.contract.usecase.CommandUseCase
 import com.anoncommunity.domain.comment.CommentStatus
 import com.anoncommunity.domain.comment.exception.CommentNotFoundException
@@ -33,8 +33,8 @@ class DeleteCommentUseCase(
             throw CommentNotFoundException(commentId)
         }
 
-        // 타인 댓글 삭제 방지: authorId 노출 방지를 위해 CommentNotFoundException 사용 (UpdateCommentUseCase와 일관성)
-        if (comment.authorId != MemberId(command.requesterId)) {
+        // 타인 댓글 삭제 방지: authorProfileId 노출 방지를 위해 CommentNotFoundException 사용 (UpdateCommentUseCase와 일관성)
+        if (comment.authorProfileId != ProfileId(command.requesterId)) {
             throw CommentNotFoundException(commentId)
         }
 

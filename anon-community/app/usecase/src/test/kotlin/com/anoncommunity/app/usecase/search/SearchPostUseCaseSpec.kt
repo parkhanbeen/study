@@ -1,8 +1,8 @@
 package com.anoncommunity.app.usecase.search
 
 import com.anoncommunity.contract.model.DomainPageable
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PageResult
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.contract.model.PostId
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostContent
@@ -29,7 +29,7 @@ class SearchPostUseCaseSpec : DescribeSpec({
 
     val testPost = Post.create(
         id = PostId(1L),
-        authorId = MemberId(100L),
+        authorProfileId = ProfileId(100L),
         title = PostTitle("Search Result"),
         content = PostContent("Search Content"),
         tags = listOf(Tag("kotlin")),

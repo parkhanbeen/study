@@ -6,7 +6,8 @@ import java.time.Instant
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class PostDocument(
     val id: Long,
-    val authorId: Long,
+    val authorProfileId: Long,
+    val authorNickname: String = "",
     val title: String,
     val content: String,
     val category: String = "DAILY",

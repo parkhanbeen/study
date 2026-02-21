@@ -19,6 +19,7 @@ interface PostSearchPort {
 
 interface PostFeedPort {
     fun getFeed(category: String?, pageable: DomainPageable): PageResult<Post>
+    fun getFollowingFeed(followingProfileIds: List<Long>, pageable: DomainPageable): PageResult<Post>
 }
 
 data class PostSearchQuery(

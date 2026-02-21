@@ -3,6 +3,7 @@ package com.anoncommunity.app.usecase.member
 import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PageResult
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostContent
 import com.anoncommunity.domain.post.PostTitle
@@ -26,7 +27,7 @@ class GetMyPostsUseCaseSpec : DescribeSpec({
         it("should return page of posts authored by member") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = memberId,
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("My Post"),
                 content = PostContent("Content"),
             )
@@ -36,7 +37,7 @@ class GetMyPostsUseCaseSpec : DescribeSpec({
             val result = useCase(GetMyPostsQuery(memberId = memberId.value))
 
             result.content.size shouldBe 1
-            result.content[0].authorId shouldBe memberId
+            result.content[0].authorProfileId shouldBe ProfileId(100L)
             result.totalElements shouldBe 1L
         }
 

@@ -1,8 +1,8 @@
 package com.anoncommunity.app.usecase.member
 
 import com.anoncommunity.contract.model.DomainPageable
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PageResult
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.contract.model.SortDirection
 import com.anoncommunity.contract.usecase.QueryUseCase
 import com.anoncommunity.domain.like.port.LikeQueryPort
@@ -31,7 +31,7 @@ class GetMyLikedPostsUseCase(
             sortBy = "createdAt",
             sortDirection = SortDirection.DESC,
         )
-        val postIdsPage = likeQueryPort.findPostIdsByMemberId(MemberId(query.memberId), pageable)
+        val postIdsPage = likeQueryPort.findPostIdsByProfileId(ProfileId(query.memberId), pageable)
         // TODO: N+1 — replace with PostQueryPort.findByIds(ids) when added to the port
         val posts = postIdsPage.content.mapNotNull { postQueryPort.findById(it) }
         return PageResult(

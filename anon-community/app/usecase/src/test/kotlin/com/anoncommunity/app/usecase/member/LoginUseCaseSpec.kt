@@ -1,9 +1,7 @@
 package com.anoncommunity.app.usecase.member
 
 import com.anoncommunity.contract.model.MemberId
-import com.anoncommunity.domain.member.Bio
 import com.anoncommunity.domain.member.Member
-import com.anoncommunity.domain.member.MemberNickname
 import com.anoncommunity.domain.member.port.MemberQueryPort
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -28,17 +26,14 @@ class LoginUseCaseSpec : DescribeSpec({
         it("should return member on valid credentials") {
             val member = Member.create(
                 id = MemberId(1L),
-                nickname = MemberNickname("testuser"),
-                bio = Bio("hello"),
                 passwordHash = "hashed-pw",
             )
-            every { memberQueryPort.findByNickname(MemberNickname("testuser")) } returns member
+            every { memberQueryPort.findByNickname(any()) } returns member
             every { passwordEncoder.matches("correctPass", "hashed-pw") } returns true
 
             val result = useCase(LoginCommand(nickname = "testuser", password = "correctPass"))
 
             result.id shouldBe MemberId(1L)
-            result.nickname shouldBe MemberNickname("testuser")
         }
 
         it("should throw InvalidCredentialsException when member not found") {
@@ -52,10 +47,9 @@ class LoginUseCaseSpec : DescribeSpec({
         it("should throw InvalidCredentialsException on wrong password") {
             val member = Member.create(
                 id = MemberId(1L),
-                nickname = MemberNickname("testuser"),
                 passwordHash = "hashed-pw",
             )
-            every { memberQueryPort.findByNickname(MemberNickname("testuser")) } returns member
+            every { memberQueryPort.findByNickname(any()) } returns member
             every { passwordEncoder.matches("wrongPass", "hashed-pw") } returns false
 
             shouldThrow<InvalidCredentialsException> {
@@ -66,10 +60,9 @@ class LoginUseCaseSpec : DescribeSpec({
         it("should throw InvalidCredentialsException when passwordHash is null") {
             val member = Member.create(
                 id = MemberId(1L),
-                nickname = MemberNickname("testuser"),
                 passwordHash = null,
             )
-            every { memberQueryPort.findByNickname(MemberNickname("testuser")) } returns member
+            every { memberQueryPort.findByNickname(any()) } returns member
 
             shouldThrow<InvalidCredentialsException> {
                 useCase(LoginCommand(nickname = "testuser", password = "anyPass"))
@@ -79,12 +72,11 @@ class LoginUseCaseSpec : DescribeSpec({
         it("suspended 계정은 InvalidCredentialsException을 던진다") {
             val member = Member.create(
                 id = MemberId(1L),
-                nickname = MemberNickname("testuser"),
                 passwordHash = "hashed-pw",
             )
             member.suspend()
 
-            every { memberQueryPort.findByNickname(MemberNickname("testuser")) } returns member
+            every { memberQueryPort.findByNickname(any()) } returns member
             every { passwordEncoder.matches("correctPass", "hashed-pw") } returns true
 
             shouldThrow<InvalidCredentialsException> {
@@ -95,12 +87,11 @@ class LoginUseCaseSpec : DescribeSpec({
         it("banned 계정은 InvalidCredentialsException을 던진다") {
             val member = Member.create(
                 id = MemberId(1L),
-                nickname = MemberNickname("testuser"),
                 passwordHash = "hashed-pw",
             )
             member.ban()
 
-            every { memberQueryPort.findByNickname(MemberNickname("testuser")) } returns member
+            every { memberQueryPort.findByNickname(any()) } returns member
             every { passwordEncoder.matches("correctPass", "hashed-pw") } returns true
 
             shouldThrow<InvalidCredentialsException> {
@@ -111,11 +102,10 @@ class LoginUseCaseSpec : DescribeSpec({
         it("비활성화된 계정은 InvalidCredentialsException을 던진다") {
             val member = Member.create(
                 id = MemberId(1L),
-                nickname = MemberNickname("inactive"),
                 passwordHash = "hashed-pw",
             ).also { it.suspend() }
 
-            every { memberQueryPort.findByNickname(MemberNickname("inactive")) } returns member
+            every { memberQueryPort.findByNickname(any()) } returns member
             every { passwordEncoder.matches("pass", "hashed-pw") } returns true
 
             shouldThrow<InvalidCredentialsException> {

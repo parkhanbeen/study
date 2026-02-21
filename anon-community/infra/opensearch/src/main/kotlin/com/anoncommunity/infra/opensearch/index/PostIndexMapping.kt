@@ -149,7 +149,7 @@ class PostIndexMapping(
         client.indices().exists(GetIndexRequest(name), RequestOptions.DEFAULT)
 
     companion object {
-        const val INDEX_NAME = "posts-v4"
+        const val INDEX_NAME = "posts-v5"
         const val ALIAS_NAME = "posts-read"
         private const val REINDEX_SLICES = 4
 
@@ -215,7 +215,7 @@ class PostIndexMapping(
           "mappings": {
             "properties": {
               "id": { "type": "long" },
-              "authorId": { "type": "long" },
+              "authorProfileId": { "type": "long" },
               "category": { "type": "keyword" },
               "title": {
                 "type": "text",

@@ -109,7 +109,7 @@ class PostCdcConsumer(
 
         return PostDocument(
             id = node.path("id").asLong(),
-            authorId = node.path("author_id").asLong(),
+            authorProfileId = node.path("author_profile_id").asLong(),
             title = title,
             content = content,
             category = node.path("category").asText("DAILY"),

@@ -1,9 +1,9 @@
 package com.anoncommunity.infra.opensearch.adapter
 
 import com.anoncommunity.contract.model.DomainPageable
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PageResult
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.contract.model.SortDirection
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostCategory
@@ -105,6 +105,16 @@ class PostSearchPortAdapter(
         val boolQuery = BoolQueryBuilder()
         boolQuery.filter(QueryBuilders.termQuery("status", "PUBLISHED"))
         category?.let { boolQuery.filter(QueryBuilders.termQuery("category", it)) }
+        return executeSearch(boolQuery, pageable)
+    }
+
+    override fun getFollowingFeed(followingProfileIds: List<Long>, pageable: DomainPageable): PageResult<Post> {
+        if (followingProfileIds.isEmpty()) {
+            return PageResult(content = emptyList(), page = pageable.page, size = pageable.size, totalElements = 0, totalPages = 0)
+        }
+        val boolQuery = BoolQueryBuilder()
+        boolQuery.filter(QueryBuilders.termQuery("status", "PUBLISHED"))
+        boolQuery.filter(QueryBuilders.termsQuery("authorProfileId", followingProfileIds))
         return executeSearch(boolQuery, pageable)
     }
 
@@ -323,7 +333,7 @@ class PostSearchPortAdapter(
         val doc = objectMapper.readValue(source, PostDocument::class.java)
         return Post(
             id = PostId(doc.id),
-            authorId = MemberId(doc.authorId),
+            authorProfileId = ProfileId(doc.authorProfileId),
             title = PostTitle(doc.title),
             content = PostContent(doc.content),
             category = runCatching { PostCategory.valueOf(doc.category) }.getOrDefault(PostCategory.DAILY),

@@ -21,7 +21,7 @@ class PostIndexWriterSpec : DescribeSpec({
 
     val document = PostDocument(
         id = 1L,
-        authorId = 10L,
+        authorProfileId = 10L,
         title = "test",
         content = "body",
         category = "DAILY",

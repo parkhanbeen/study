@@ -3,6 +3,7 @@ package com.anoncommunity.app.api.dto
 import com.anoncommunity.contract.model.PageResult
 import com.anoncommunity.domain.comment.Comment
 import com.anoncommunity.domain.member.Member
+import com.anoncommunity.domain.member.MemberProfile
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.app.usecase.post.PostWithStats
 import com.anoncommunity.domain.post.port.PostSearchHit
@@ -10,7 +11,7 @@ import java.time.Instant
 
 data class PostResponse(
     val id: Long,
-    val authorId: Long,
+    val authorProfileId: Long,
     val title: String,
     val content: String,
     val category: String,
@@ -22,7 +23,7 @@ data class PostResponse(
     companion object {
         fun from(post: Post) = PostResponse(
             id = post.id.value,
-            authorId = post.authorId.value,
+            authorProfileId = post.authorProfileId.value,
             title = post.title.value,
             content = post.content.value,
             category = post.category.name,
@@ -36,7 +37,7 @@ data class PostResponse(
 
 data class PostDetailResponse(
     val id: Long,
-    val authorId: Long,
+    val authorProfileId: Long,
     val title: String,
     val content: String,
     val category: String,
@@ -51,7 +52,7 @@ data class PostDetailResponse(
     companion object {
         fun from(result: PostWithStats) = PostDetailResponse(
             id = result.post.id.value,
-            authorId = result.post.authorId.value,
+            authorProfileId = result.post.authorProfileId.value,
             title = result.post.title.value,
             content = result.post.content.value,
             category = result.post.category.name,
@@ -68,7 +69,7 @@ data class PostDetailResponse(
 
 data class PostSearchHitResponse(
     val id: Long,
-    val authorId: Long,
+    val authorProfileId: Long,
     val title: String,
     val content: String,
     val category: String,
@@ -81,7 +82,7 @@ data class PostSearchHitResponse(
     companion object {
         fun from(hit: PostSearchHit) = PostSearchHitResponse(
             id = hit.post.id.value,
-            authorId = hit.post.authorId.value,
+            authorProfileId = hit.post.authorProfileId.value,
             title = hit.post.title.value,
             content = hit.post.content.value,
             category = hit.post.category.name,
@@ -97,7 +98,7 @@ data class PostSearchHitResponse(
 data class CommentResponse(
     val id: Long,
     val postId: Long,
-    val authorId: Long,
+    val authorProfileId: Long,
     val content: String,
     val parentCommentId: Long?,
     val depth: Int,
@@ -109,7 +110,7 @@ data class CommentResponse(
         fun from(comment: Comment) = CommentResponse(
             id = comment.id.value,
             postId = comment.postId.value,
-            authorId = comment.authorId.value,
+            authorProfileId = comment.authorProfileId.value,
             content = comment.content.value,
             parentCommentId = comment.parentCommentId?.value,
             depth = comment.depth,
@@ -129,11 +130,11 @@ data class MemberResponse(
     val createdAt: Instant,
 ) {
     companion object {
-        fun from(member: Member) = MemberResponse(
+        fun from(member: Member, profile: MemberProfile? = null) = MemberResponse(
             id = member.id.value,
-            nickname = member.nickname.value,
-            bio = member.bio.value,
-            postCount = member.postCount,
+            nickname = profile?.nickname?.value ?: "",
+            bio = profile?.bio?.value ?: "",
+            postCount = profile?.postCount ?: 0,
             preferredLanguage = member.preferredLanguage?.value,
             createdAt = member.createdAt,
         )

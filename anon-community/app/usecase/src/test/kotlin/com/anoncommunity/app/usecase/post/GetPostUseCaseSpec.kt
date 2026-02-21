@@ -1,7 +1,7 @@
 package com.anoncommunity.app.usecase.post
 
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostContent
 import com.anoncommunity.domain.post.PostStats
@@ -23,12 +23,12 @@ class GetPostUseCaseSpec : DescribeSpec({
 
     val useCase = GetPostUseCase(postQueryPort, postStatsQueryPort)
 
-    val authorId = MemberId(100L)
+    val authorId = ProfileId(100L)
     val postId = PostId(10L)
 
     val testPost = Post.create(
         id = postId,
-        authorId = authorId,
+        authorProfileId = authorId,
         title = PostTitle("Test Post"),
         content = PostContent("Test Content"),
     )
@@ -79,7 +79,7 @@ class GetPostUseCaseSpec : DescribeSpec({
 
         context("post is not PUBLISHED") {
             fun nonPublishedPost(configure: Post.() -> Unit) = Post.create(
-                id = postId, authorId = authorId,
+                id = postId, authorProfileId = authorId,
                 title = PostTitle("Test Post"), content = PostContent("Test Content"),
             ).also { it.pullDomainEvents(); it.configure() }
 

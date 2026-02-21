@@ -2,8 +2,8 @@ package com.anoncommunity.app.usecase.post
 
 import com.anoncommunity.contract.event.DomainEventPublisher
 import com.anoncommunity.contract.exception.AccessDeniedException
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.contract.usecase.CommandUseCase
 import com.anoncommunity.domain.post.Post
 import com.anoncommunity.domain.post.PostCategory
@@ -43,7 +43,7 @@ class UpdatePostUseCase(
             throw PostNotFoundException(postId)
         }
 
-        if (post.authorId != MemberId(command.requesterId)) {
+        if (post.authorProfileId != ProfileId(command.requesterId)) {
             throw AccessDeniedException("Only the author can edit this post")
         }
 

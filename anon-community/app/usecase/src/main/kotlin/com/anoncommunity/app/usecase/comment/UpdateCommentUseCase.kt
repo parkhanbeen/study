@@ -1,7 +1,7 @@
 package com.anoncommunity.app.usecase.comment
 
 import com.anoncommunity.contract.model.CommentId
-import com.anoncommunity.contract.model.MemberId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.contract.usecase.CommandUseCase
 import com.anoncommunity.domain.comment.Comment
 import com.anoncommunity.domain.comment.CommentContent
@@ -30,8 +30,8 @@ class UpdateCommentUseCase(
         val comment = commentQueryPort.findById(commentId)
             ?: throw CommentNotFoundException(commentId)
 
-        // 타인 댓글 수정 방지: authorId 노출 방지를 위해 CommentNotFoundException 사용
-        if (comment.authorId != MemberId(command.requesterId)) {
+        // 타인 댓글 수정 방지: authorProfileId 노출 방지를 위해 CommentNotFoundException 사용
+        if (comment.authorProfileId != ProfileId(command.requesterId)) {
             throw CommentNotFoundException(commentId)
         }
 

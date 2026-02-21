@@ -1,8 +1,8 @@
 package com.anoncommunity.app.usecase.comment
 
 import com.anoncommunity.contract.model.CommentId
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.comment.Comment
 import com.anoncommunity.domain.comment.CommentContent
 import com.anoncommunity.domain.comment.exception.CommentNotFoundException
@@ -25,7 +25,7 @@ class UpdateCommentUseCaseSpec : DescribeSpec({
     val activeComment = Comment.create(
         id = CommentId(1L),
         postId = PostId(10L),
-        authorId = MemberId(100L),
+        authorProfileId = ProfileId(100L),
         content = CommentContent("Original content"),
     )
 
@@ -78,7 +78,7 @@ class UpdateCommentUseCaseSpec : DescribeSpec({
                 val deletedComment = Comment.create(
                     id = CommentId(1L),
                     postId = PostId(10L),
-                    authorId = MemberId(100L),
+                    authorProfileId = ProfileId(100L),
                     content = CommentContent("Original"),
                 ).apply { softDelete() }
 

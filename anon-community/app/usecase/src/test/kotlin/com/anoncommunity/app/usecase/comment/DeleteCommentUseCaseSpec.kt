@@ -3,8 +3,8 @@ package com.anoncommunity.app.usecase.comment
 import com.anoncommunity.contract.event.DomainEvent
 import com.anoncommunity.contract.event.DomainEventPublisher
 import com.anoncommunity.contract.model.CommentId
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.comment.Comment
 import com.anoncommunity.domain.comment.CommentContent
 import com.anoncommunity.domain.comment.CommentStatus
@@ -40,7 +40,7 @@ class DeleteCommentUseCaseSpec : DescribeSpec({
                 val existingComment = Comment.create(
                     id = CommentId(1L),
                     postId = PostId(10L),
-                    authorId = MemberId(100L),
+                    authorProfileId = ProfileId(100L),
                     content = CommentContent("Comment to delete"),
                     depth = 0,
                 )
@@ -62,7 +62,7 @@ class DeleteCommentUseCaseSpec : DescribeSpec({
                     .shouldBeInstanceOf<CommentDomainEvent.CommentDeleted>()
                 event.commentId shouldBe CommentId(1L)
                 event.postId shouldBe PostId(10L)
-                event.authorId shouldBe MemberId(100L)
+                event.authorProfileId shouldBe ProfileId(100L)
             }
         }
 
@@ -71,7 +71,7 @@ class DeleteCommentUseCaseSpec : DescribeSpec({
                 val existingComment = Comment.create(
                     id = CommentId(1L),
                     postId = PostId(10L),
-                    authorId = MemberId(100L),
+                    authorProfileId = ProfileId(100L),
                     content = CommentContent("Someone else's comment"),
                     depth = 0,
                 )
