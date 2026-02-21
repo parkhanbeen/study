@@ -1,7 +1,15 @@
 import { fetchAPI } from "./client";
 import { PostDetailResponse, PageResponse, PostCategory } from "@/types/api";
 
-export type FeedSort = "latest" | "oldest";
+export type FeedSort = "latest" | "oldest" | "likes" | "comments" | "views";
+
+const SORT_MAP: Record<FeedSort, { sortBy: string; sortDirection: string }> = {
+  latest:   { sortBy: "createdAt",    sortDirection: "DESC" },
+  oldest:   { sortBy: "createdAt",    sortDirection: "ASC"  },
+  likes:    { sortBy: "likeCount",    sortDirection: "DESC" },
+  comments: { sortBy: "commentCount", sortDirection: "DESC" },
+  views:    { sortBy: "viewCount",    sortDirection: "DESC" },
+};
 
 export const feedApi = {
   get: (page = 0, size = 20, category?: PostCategory, sort: FeedSort = "latest") => {
@@ -9,8 +17,9 @@ export const feedApi = {
     params.set("page", String(page));
     params.set("size", String(size));
     if (category) params.set("category", category);
-    params.set("sortBy", "createdAt");
-    params.set("sortDirection", sort === "latest" ? "DESC" : "ASC");
+    const { sortBy, sortDirection } = SORT_MAP[sort];
+    params.set("sortBy", sortBy);
+    params.set("sortDirection", sortDirection);
     return fetchAPI<PageResponse<PostDetailResponse>>(`/feed?${params.toString()}`);
   },
   getHot: (limit = 5) => {

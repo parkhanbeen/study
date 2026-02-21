@@ -75,6 +75,9 @@ export function FeedList({ initialData }: FeedListProps) {
           >
             <option value="latest">최신순</option>
             <option value="oldest">오래된순</option>
+            <option value="likes">좋아요순</option>
+            <option value="comments">댓글순</option>
+            <option value="views">조회순</option>
           </select>
         </div>
       </div>
