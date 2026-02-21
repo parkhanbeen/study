@@ -24,14 +24,17 @@ export function TranslateButton({ title, content }: TranslateButtonProps) {
   const [translatedContent, setTranslatedContent] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const doTranslate = async (lang: string) => {
     setIsLoading(true);
     setShowTranslation(false);
+    setIsError(false);
     try {
       const text = `${title}\n---\n${content}`;
       const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${encodeURIComponent(text)}`;
       const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const fullTranslation = data[0]?.map((item: [string]) => item[0]).join("") ?? "";
       const parts = fullTranslation.split("\n---\n");
@@ -39,6 +42,7 @@ export function TranslateButton({ title, content }: TranslateButtonProps) {
       setTranslatedContent(parts.slice(1).join("\n---\n") || fullTranslation);
       setShowTranslation(true);
     } catch {
+      setIsError(true);
       const fallbackUrl = `https://translate.google.com/?sl=auto&tl=${lang}&text=${encodeURIComponent(title + "\n\n" + content)}`;
       window.open(fallbackUrl, "_blank");
     } finally {
@@ -78,6 +82,9 @@ export function TranslateButton({ title, content }: TranslateButtonProps) {
           </Button>
         )}
       </div>
+      {isError && (
+        <p className="text-xs text-destructive">번역에 실패했습니다. 잠시 후 다시 시도해주세요.</p>
+      )}
 
       {showTranslation && translatedTitle && (
         <div className="rounded-lg border bg-muted/30 p-4 space-y-2">

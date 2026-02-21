@@ -50,6 +50,7 @@ export function LeftSidebar() {
       {/* All posts */}
       <button
         onClick={() => handleCategoryClick(null)}
+        aria-current={!currentCategory ? "page" : undefined}
         className={cn(
           "w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors text-left",
           !currentCategory
@@ -65,6 +66,7 @@ export function LeftSidebar() {
         <button
           key={cat.value}
           onClick={() => handleCategoryClick(cat.value)}
+          aria-current={currentCategory === cat.value ? "page" : undefined}
           className={cn(
             "w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors text-left",
             currentCategory === cat.value
@@ -86,6 +88,7 @@ export function LeftSidebar() {
           <Link
             key={href}
             href={href}
+            aria-current={pathname === href ? "page" : undefined}
             className={cn(
               "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
               pathname === href
