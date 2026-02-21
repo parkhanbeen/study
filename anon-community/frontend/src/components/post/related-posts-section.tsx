@@ -19,12 +19,17 @@ export async function RelatedPostsSection({ currentPostId, category }: RelatedPo
   let posts: PostDetailResponse[] = [];
 
   try {
-    const data = await serverFetch<PageResponse<PostDetailResponse>>(
-      `/feed?category=${category}&page=0&size=6&sortBy=createdAt&sortDirection=DESC`
-    );
+    const params = new URLSearchParams({
+      category,
+      page: "0",
+      size: "6",
+      sortBy: "createdAt",
+      sortDirection: "DESC",
+    });
+    const data = await serverFetch<PageResponse<PostDetailResponse>>(`/feed?${params}`);
     posts = data.content.filter((p) => p.id !== currentPostId).slice(0, 5);
-  } catch {
-    // 백엔드 unavailable — 빈 상태로 graceful fallback
+  } catch (e) {
+    console.error("[RelatedPostsSection] Failed to fetch related posts:", e);
     return null;
   }
 
