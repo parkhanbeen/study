@@ -12,6 +12,7 @@ export function ClickableTag({ tag }: ClickableTagProps) {
 
   const handleTagClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    window.scrollTo({ top: 0, behavior: "instant" });
     router.push(`/search?tags=${encodeURIComponent(tag)}`);
   };
 

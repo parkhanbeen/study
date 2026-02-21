@@ -6,6 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHotPosts } from "@/lib/hooks/use-hot-posts";
 import { timeAgo } from "@/lib/utils";
+import { POST_CATEGORIES } from "@/types/api";
+
+function getCategoryLabel(category: string): string {
+  return POST_CATEGORIES.find((c) => c.value === category)?.label ?? category;
+}
 
 export function HotPostsSection() {
   const { data, isLoading } = useHotPosts(5);
@@ -37,7 +42,10 @@ export function HotPostsSection() {
                     {idx + 1}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{post.title}</p>
+                    <p className="truncate text-sm font-medium">
+                      {post.title}
+                      <span className="text-xs text-muted-foreground ml-1">{getCategoryLabel(post.category)}</span>
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       ♥ {post.likeCount} · {timeAgo(post.createdAt)}
                     </p>
