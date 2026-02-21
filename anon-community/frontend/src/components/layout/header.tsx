@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Search, PenSquare, LogIn, LogOut, Settings, User, Sun, Moon, Monitor } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,8 @@ export function Header() {
   const router = useRouter();
   const { isLoggedIn, nickname, clearAuth } = useAuthStore();
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const toggleTheme = () => {
     if (theme === "dark") setTheme("light");
@@ -27,7 +30,7 @@ export function Header() {
     else setTheme("dark");
   };
 
-  const ThemeIcon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
+  const ThemeIcon = !mounted ? Monitor : theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
 
   const handleLogout = async () => {
     try {
@@ -57,7 +60,15 @@ export function Header() {
             size="icon"
             onClick={toggleTheme}
             aria-label="테마 전환"
-            title={theme === "dark" ? "다크 모드" : theme === "light" ? "라이트 모드" : "시스템 모드"}
+            title={
+              !mounted
+                ? "테마 전환"
+                : theme === "dark"
+                ? "라이트 모드로 전환"
+                : theme === "light"
+                ? "시스템 모드로 전환"
+                : "다크 모드로 전환"
+            }
           >
             <ThemeIcon className="h-5 w-5" />
           </Button>
