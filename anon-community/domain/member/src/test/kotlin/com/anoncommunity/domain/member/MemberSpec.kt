@@ -8,17 +8,14 @@ import io.kotest.matchers.shouldBe
 
 class MemberSpec : DescribeSpec({
 
-    fun createActiveMember(postCount: Int = 0) = Member.create(
+    fun createActiveMember() = Member.create(
         id = MemberId(1L),
-        nickname = MemberNickname("testuser"),
-        bio = Bio("hello"),
-    ).also { repeat(postCount) { _ -> it.incrementPostCount() } }
+    )
 
     describe("Member.create") {
-        it("should create member with ACTIVE status, zero postCount, null preferredLanguage") {
+        it("should create member with ACTIVE status, null preferredLanguage") {
             val member = createActiveMember()
             member.status shouldBe MemberStatus.ACTIVE
-            member.postCount shouldBe 0
             member.preferredLanguage shouldBe null
             member.isActive shouldBe true
         }
@@ -83,50 +80,6 @@ class MemberSpec : DescribeSpec({
             val member = createActiveMember()
             member.ban()
             shouldThrow<IllegalStateException> { member.activate() }
-        }
-    }
-
-    describe("Member.incrementPostCount") {
-        it("should increment by 1 and update updatedAt") {
-            val member = createActiveMember()
-            val before = member.updatedAt
-            member.incrementPostCount()
-            member.postCount shouldBe 1
-            member.updatedAt shouldBeGreaterThanOrEqualTo before
-        }
-    }
-
-    describe("Member.decrementPostCount") {
-        it("should decrement by 1") {
-            val member = createActiveMember(postCount = 2)
-            member.decrementPostCount()
-            member.postCount shouldBe 1
-        }
-
-        it("should throw when postCount is 0") {
-            val member = createActiveMember()
-            shouldThrow<IllegalStateException> { member.decrementPostCount() }
-        }
-    }
-
-    describe("Member.updateProfile") {
-        it("should update nickname only") {
-            val member = createActiveMember()
-            member.updateProfile(nickname = MemberNickname("newnick"))
-            member.nickname shouldBe MemberNickname("newnick")
-        }
-
-        it("should update bio only") {
-            val member = createActiveMember()
-            member.updateProfile(bio = Bio("new bio"))
-            member.bio shouldBe Bio("new bio")
-        }
-
-        it("should not change updatedAt when no args provided") {
-            val member = createActiveMember()
-            val before = member.updatedAt
-            member.updateProfile()
-            member.updatedAt shouldBe before
         }
     }
 

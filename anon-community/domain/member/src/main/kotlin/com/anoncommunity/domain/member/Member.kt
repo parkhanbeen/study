@@ -6,26 +6,14 @@ import java.time.Instant
 
 class Member(
     val id: MemberId,
-    nickname: MemberNickname,
-    bio: Bio,
     passwordHash: String?,
-    postCount: Int,
     status: MemberStatus,
     val createdAt: Instant,
     updatedAt: Instant,
     preferredLanguage: PreferredLanguage?,
 ) : AggregateRoot() {
 
-    var nickname: MemberNickname = nickname
-        private set
-
-    var bio: Bio = bio
-        private set
-
     var passwordHash: String? = passwordHash
-        private set
-
-    var postCount: Int = postCount
         private set
 
     var status: MemberStatus = status
@@ -40,27 +28,6 @@ class Member(
     fun updatePreferredLanguage(language: PreferredLanguage) {
         this.preferredLanguage = language
         this.updatedAt = Instant.now()
-    }
-
-    fun incrementPostCount() {
-        postCount++
-        updatedAt = Instant.now()
-    }
-
-    fun decrementPostCount() {
-        check(postCount > 0) { "Post count cannot be negative" }
-        postCount--
-        updatedAt = Instant.now()
-    }
-
-    fun updateProfile(
-        nickname: MemberNickname? = null,
-        bio: Bio? = null,
-    ) {
-        var changed = false
-        nickname?.let { this.nickname = it; changed = true }
-        bio?.let { this.bio = it; changed = true }
-        if (changed) updatedAt = Instant.now()
     }
 
     fun setPassword(hashedPassword: String) {
@@ -91,17 +58,12 @@ class Member(
     companion object {
         fun create(
             id: MemberId,
-            nickname: MemberNickname,
-            bio: Bio = Bio(""),
             passwordHash: String? = null,
         ): Member {
             val now = Instant.now()
             return Member(
                 id = id,
-                nickname = nickname,
-                bio = bio,
                 passwordHash = passwordHash,
-                postCount = 0,
                 status = MemberStatus.ACTIVE,
                 createdAt = now,
                 updatedAt = now,
