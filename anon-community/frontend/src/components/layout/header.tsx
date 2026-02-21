@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, PenSquare, LogIn, LogOut, Settings } from "lucide-react";
+import { Search, PenSquare, LogIn, LogOut, Settings, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,20 +25,23 @@ export function Header() {
       clearAuth();
       router.push("/");
       router.refresh();
-      toast.success("Logged out");
+      toast.success("로그아웃되었습니다");
     } catch {
-      toast.error("Logout failed");
+      toast.error("로그아웃에 실패했습니다");
     }
   };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold">
-          anon
+        <Link href="/" className="flex items-center gap-1.5 font-bold tracking-tight">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-xs text-primary-foreground">
+            A
+          </span>
+          <span className="text-lg">anon</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/search">
               <Search className="h-5 w-5" />
@@ -57,27 +60,33 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback>{nickname?.[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-sm font-medium text-primary">
+                        {nickname?.[0]?.toUpperCase() ?? "?"}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => router.push("/my")}>
+                    <User className="mr-2 h-4 w-4" />
+                    마이페이지
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/settings")}>
                     <Settings className="mr-2 h-4 w-4" />
-                    Settings
+                    설정
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                    로그아웃
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
-            <Button variant="ghost" size="sm" asChild>
+            <Button size="sm" asChild>
               <Link href="/login">
-                <LogIn className="mr-2 h-4 w-4" />
-                Login
+                <LogIn className="mr-1.5 h-4 w-4" />
+                로그인
               </Link>
             </Button>
           )}

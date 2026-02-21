@@ -1,0 +1,114 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/auth-store";
+import { memberApi } from "@/lib/api/member";
+import { PostDetailResponse, PageResponse } from "@/types/api";
+import { PostCard } from "@/components/post/post-card";
+import { Button } from "@/components/ui/button";
+
+type Tab = "posts" | "liked";
+
+export default function MyPage() {
+  const router = useRouter();
+  const { isLoggedIn, isInitialized } = useAuthStore();
+  const [tab, setTab] = useState<Tab>("posts");
+  const [posts, setPosts] = useState<PostDetailResponse[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    if (!isLoggedIn) {
+      router.replace("/login?callbackUrl=/my");
+    }
+  }, [isInitialized, isLoggedIn, router]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    setLoading(true);
+    const fetchFn = tab === "posts" ? memberApi.myPosts(page) : memberApi.myLikedPosts(page);
+    fetchFn
+      .then((data: PageResponse<PostDetailResponse>) => {
+        setPosts(data.content);
+        setTotalPages(data.totalPages);
+      })
+      .catch(() => setPosts([]))
+      .finally(() => setLoading(false));
+  }, [tab, page, isLoggedIn]);
+
+  const handleTabChange = (newTab: Tab) => {
+    setTab(newTab);
+    setPage(0);
+    setPosts([]);
+  };
+
+  if (!isInitialized || !isLoggedIn) return null;
+
+  return (
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">마이페이지</h1>
+
+      <div className="flex gap-2 border-b">
+        <button
+          onClick={() => handleTabChange("posts")}
+          className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+            tab === "posts"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          내가 쓴 글
+        </button>
+        <button
+          onClick={() => handleTabChange("liked")}
+          className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+            tab === "liked"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          좋아요한 글
+        </button>
+      </div>
+
+      {loading && <p className="text-sm text-muted-foreground">불러오는 중...</p>}
+
+      {!loading && posts.length === 0 && (
+        <p className="text-sm text-muted-foreground py-8 text-center">
+          {tab === "posts" ? "작성한 글이 없습니다" : "좋아요한 글이 없습니다"}
+        </p>
+      )}
+
+      <div className="space-y-3">
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 pt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page === 0}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            이전
+          </Button>
+          <span className="text-sm self-center">{page + 1} / {totalPages}</span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= totalPages - 1}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            다음
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
