@@ -165,7 +165,8 @@ function SearchContent() {
       )}
 
       {!isLoading && posts.length === 0 && hasQuery && (
-        <div className="py-16 text-center">
+        <div className="flex flex-col items-center py-16 text-center">
+          <span className="text-5xl mb-4">🔍</span>
           <p className="text-lg font-medium text-muted-foreground">검색 결과가 없습니다</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {keyword ? `"${keyword}"에 대한 검색 결과가 없습니다` : `선택한 필터에 해당하는 게시글이 없습니다`}

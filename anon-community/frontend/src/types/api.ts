@@ -58,15 +58,15 @@ export interface UpdateLanguageRequest {
 // ── Post ──
 export type PostCategory = "DAILY" | "ADVICE" | "HUMOR" | "INFORMATION" | "QUESTION" | "DISCUSSION" | "MEDIA" | "FEEDBACK";
 
-export const POST_CATEGORIES: { value: PostCategory; label: string }[] = [
-  { value: "DAILY", label: "일상" },
-  { value: "ADVICE", label: "고민" },
-  { value: "HUMOR", label: "유머" },
-  { value: "INFORMATION", label: "정보" },
-  { value: "QUESTION", label: "질문" },
-  { value: "DISCUSSION", label: "토론" },
-  { value: "MEDIA", label: "미디어" },
-  { value: "FEEDBACK", label: "피드백" },
+export const POST_CATEGORIES: { value: PostCategory; label: string; emoji: string }[] = [
+  { value: "DAILY",       label: "일상",   emoji: "☀️" },
+  { value: "ADVICE",      label: "고민",   emoji: "💬" },
+  { value: "HUMOR",       label: "유머",   emoji: "😂" },
+  { value: "INFORMATION", label: "정보",   emoji: "📚" },
+  { value: "QUESTION",    label: "질문",   emoji: "❓" },
+  { value: "DISCUSSION",  label: "토론",   emoji: "🗣️" },
+  { value: "MEDIA",       label: "미디어", emoji: "🎬" },
+  { value: "FEEDBACK",    label: "피드백", emoji: "📝" },
 ];
 
 export type PostStatus = "PUBLISHED" | "HIDDEN" | "UNDER_REVIEW" | "REMOVED" | "DELETED";

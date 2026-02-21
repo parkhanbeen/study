@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PenSquare, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PostCard } from "./post-card";
@@ -131,22 +131,22 @@ export function FeedList({ initialData }: FeedListProps) {
       )}
 
       {!isLoading && posts.length === 0 && (
-        <div className="py-16 text-center">
-          <p className="text-lg font-medium text-muted-foreground">
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+            <span className="text-4xl">📝</span>
+          </div>
+          <h3 className="text-lg font-semibold">
             {selectedCategory ? "이 카테고리에 게시글이 없습니다" : "아직 게시글이 없습니다"}
-          </p>
+          </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            {selectedCategory ? "다른 카테고리를 둘러보거나 첫 글을 작성해보세요!" : "첫 번째로 무언가를 공유해보세요!"}
+            {selectedCategory ? "다른 카테고리를 둘러보거나 첫 글을 작성해보세요!" : "첫 번째 게시글을 작성해보세요!"}
           </p>
           {isLoggedIn ? (
-            <Button size="sm" className="mt-4" asChild>
-              <Link href="/posts/new">
-                <PenSquare className="mr-1.5 h-4 w-4" />
-                글 쓰기
-              </Link>
+            <Button asChild className="mt-4" size="sm">
+              <Link href="/posts/new">글쓰기</Link>
             </Button>
           ) : (
-            <Button size="sm" className="mt-4" asChild>
+            <Button asChild className="mt-4" size="sm">
               <Link href="/signup">가입하고 글 쓰기</Link>
             </Button>
           )}

@@ -15,7 +15,8 @@ function hasStats(post: PostResponse | PostDetailResponse): post is PostDetailRe
 }
 
 function getCategoryLabel(category: string): string {
-  return POST_CATEGORIES.find((c) => c.value === category)?.label ?? category;
+  const cat = POST_CATEGORIES.find((c) => c.value === category);
+  return cat ? `${cat.emoji} ${cat.label}` : category;
 }
 
 const CATEGORY_STYLES: Record<string, string> = {
