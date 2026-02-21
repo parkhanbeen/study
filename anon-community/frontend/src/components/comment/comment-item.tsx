@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Reply, Trash2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,6 +34,12 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
   const updateMutation = useUpdateComment(postId);
   const isAuthor = memberId === comment.authorId;
 
+  useEffect(() => {
+    if (!isEditing) {
+      setEditContent(comment.content);
+    }
+  }, [comment.content, isEditing]);
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editContent.trim()) return;
@@ -44,7 +50,7 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
   };
 
   return (
-    <div className={comment.depth === 1 ? "ml-8 border-l-2 border-muted pl-4" : ""}>
+    <div className={comment.depth >= 1 ? "ml-8 border-l-2 border-muted pl-4" : ""}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
@@ -71,6 +77,7 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                aria-label="댓글 수정"
                 onClick={() => { setEditContent(comment.content); setIsEditing(true); }}
               >
                 <Pencil className="h-3.5 w-3.5" />
@@ -81,6 +88,7 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                    aria-label="댓글 삭제"
                     disabled={deleteMutation.isPending}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -116,12 +124,16 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
             onChange={(e) => setEditContent(e.target.value)}
             className="min-h-[60px] text-sm resize-none"
             maxLength={1000}
+            aria-label="댓글 내용 수정"
           />
+          {updateMutation.isError && (
+            <p className="text-xs text-destructive">저장에 실패했습니다. 다시 시도해주세요.</p>
+          )}
           <div className="flex gap-2">
             <Button size="sm" type="submit" disabled={updateMutation.isPending || !editContent.trim()}>
               {updateMutation.isPending ? "저장 중..." : "저장"}
             </Button>
-            <Button size="sm" variant="ghost" type="button" onClick={() => setIsEditing(false)}>
+            <Button size="sm" variant="ghost" type="button" onClick={() => { setIsEditing(false); updateMutation.reset(); }}>
               취소
             </Button>
           </div>
