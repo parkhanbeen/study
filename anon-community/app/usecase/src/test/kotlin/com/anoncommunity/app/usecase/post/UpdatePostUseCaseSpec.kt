@@ -192,6 +192,56 @@ class UpdatePostUseCaseSpec : DescribeSpec({
                 verify(exactly = 0) { postCommandPort.save(any()) }
                 verify(exactly = 0) { eventPublisher.publish(any()) }
             }
+
+            it("should throw PostNotFoundException when post is REMOVED") {
+                val removedPost = Post.create(
+                    id = postId,
+                    authorId = authorId,
+                    title = PostTitle("Title"),
+                    content = PostContent("Content"),
+                ).also { it.remove() }
+
+                every { postQueryPort.findById(postId) } returns removedPost
+
+                val command = UpdatePostCommand(
+                    postId = postId.value,
+                    requesterId = authorId.value,
+                    title = "Updated",
+                )
+
+                val exception = shouldThrow<PostNotFoundException> {
+                    useCase(command)
+                }
+                exception.postId shouldBe postId
+
+                verify(exactly = 0) { postCommandPort.save(any()) }
+                verify(exactly = 0) { eventPublisher.publish(any()) }
+            }
+
+            it("should throw PostNotFoundException when post is DELETED") {
+                val deletedPost = Post.create(
+                    id = postId,
+                    authorId = authorId,
+                    title = PostTitle("Title"),
+                    content = PostContent("Content"),
+                ).also { it.softDelete() }
+
+                every { postQueryPort.findById(postId) } returns deletedPost
+
+                val command = UpdatePostCommand(
+                    postId = postId.value,
+                    requesterId = authorId.value,
+                    title = "Updated",
+                )
+
+                val exception = shouldThrow<PostNotFoundException> {
+                    useCase(command)
+                }
+                exception.postId shouldBe postId
+
+                verify(exactly = 0) { postCommandPort.save(any()) }
+                verify(exactly = 0) { eventPublisher.publish(any()) }
+            }
         }
     }
 })
