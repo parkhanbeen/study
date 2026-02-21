@@ -40,7 +40,7 @@ export function LeftSidebar() {
       {/* Active profile card */}
       {isInitialized && isLoggedIn && activeProfile && (
         <Link href={`/profiles/${activeProfile.id}`}>
-          <div className="p-3 rounded-lg border hover:bg-muted/50 mb-3">
+          <div className="p-3 rounded-lg border hover:bg-muted/50">
             <p className="font-medium text-sm">{activeProfile.nickname}</p>
             <p className="text-xs text-muted-foreground">게시글 {activeProfile.postCount}개</p>
           </div>

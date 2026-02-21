@@ -7,10 +7,18 @@ import { Badge } from "@/components/ui/badge";
 interface ProfileSwitcherProps {
   profiles: ActiveProfile[];
   currentProfileId: number | null;
-  onSwitch: (profileId: number) => void;
+  onSwitch: (profileId: number) => Promise<void>;
+  onEdit?: (profileId: number) => void;
+  onDelete?: (profileId: number) => void;
 }
 
-export function ProfileSwitcher({ profiles, currentProfileId, onSwitch }: ProfileSwitcherProps) {
+export function ProfileSwitcher({
+  profiles,
+  currentProfileId,
+  onSwitch,
+  onEdit,
+  onDelete,
+}: ProfileSwitcherProps) {
   return (
     <div className="space-y-2">
       {profiles.map((profile) => (
@@ -20,14 +28,26 @@ export function ProfileSwitcher({ profiles, currentProfileId, onSwitch }: Profil
             {profile.isDefault && <Badge variant="secondary" className="text-xs">기본</Badge>}
             {profile.id === currentProfileId && <Badge className="text-xs">현재</Badge>}
           </div>
-          <Button
-            size="sm"
-            variant="outline"
-            disabled={profile.id === currentProfileId}
-            onClick={() => onSwitch(profile.id)}
-          >
-            전환
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={profile.id === currentProfileId}
+              onClick={() => onSwitch(profile.id)}
+            >
+              전환
+            </Button>
+            {onEdit && (
+              <Button size="sm" variant="outline" onClick={() => onEdit(profile.id)}>
+                수정
+              </Button>
+            )}
+            {onDelete && !profile.isDefault && (
+              <Button size="sm" variant="destructive" onClick={() => onDelete(profile.id)}>
+                삭제
+              </Button>
+            )}
+          </div>
         </div>
       ))}
     </div>
