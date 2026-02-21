@@ -99,6 +99,7 @@ class CommentSpec : DescribeSpec({
                 .shouldBeInstanceOf<CommentDomainEvent.CommentDeleted>()
             event.commentId shouldBe CommentId(1L)
             event.postId shouldBe PostId(10L)
+            event.authorProfileId shouldBe ProfileId(100L)
         }
 
         it("should throw when deleting an already deleted comment") {
