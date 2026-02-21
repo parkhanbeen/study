@@ -1,3 +1,4 @@
+"use client";
 import { ProfileResponse } from "@/types/profile";
 import { FollowButton } from "./follow-button";
 
@@ -24,7 +25,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
             </div>
           </div>
           {profile.bio && (
-            <p className="text-sm text-muted-foreground mt-1 ml-15">
+            <p className="text-sm text-muted-foreground mt-1 ml-[60px]">
               {profile.bio}
             </p>
           )}

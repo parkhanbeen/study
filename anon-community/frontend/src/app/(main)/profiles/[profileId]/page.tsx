@@ -50,20 +50,20 @@ export default function ProfilePage({ params }: Props) {
     enabled: !isNaN(profileId),
   });
 
-  const { data: postsData } = useQuery({
+  const { data: postsData, isLoading: postsLoading } = useQuery({
     queryKey: ["profile-posts", profileId],
     queryFn: () => profilesApi.getProfilePosts(profileId),
     enabled: activeTab === "posts" && !isNaN(profileId),
     retry: false,
   });
 
-  const { data: followersData } = useQuery({
+  const { data: followersData, isLoading: followersLoading } = useQuery({
     queryKey: ["profile-followers", profileId],
     queryFn: () => profilesApi.getFollowers(profileId),
     enabled: activeTab === "followers" && !isNaN(profileId),
   });
 
-  const { data: followingData } = useQuery({
+  const { data: followingData, isLoading: followingLoading } = useQuery({
     queryKey: ["profile-following", profileId],
     queryFn: () => profilesApi.getFollowing(profileId),
     enabled: activeTab === "following" && !isNaN(profileId),
@@ -114,7 +114,11 @@ export default function ProfilePage({ params }: Props) {
       <div className="divide-y">
         {activeTab === "posts" && (
           <>
-            {!postsData || postsData.content.length === 0 ? (
+            {postsLoading ? (
+              <div className="p-8 text-center text-muted-foreground">
+                로딩 중...
+              </div>
+            ) : !postsData || postsData.content.length === 0 ? (
               <p className="p-8 text-center text-muted-foreground">
                 게시글이 없습니다.
               </p>
@@ -130,7 +134,11 @@ export default function ProfilePage({ params }: Props) {
 
         {activeTab === "followers" && (
           <>
-            {!followersData || followersData.content.length === 0 ? (
+            {followersLoading ? (
+              <div className="p-8 text-center text-muted-foreground">
+                로딩 중...
+              </div>
+            ) : !followersData || followersData.content.length === 0 ? (
               <p className="p-8 text-center text-muted-foreground">
                 팔로워가 없습니다.
               </p>
@@ -144,7 +152,11 @@ export default function ProfilePage({ params }: Props) {
 
         {activeTab === "following" && (
           <>
-            {!followingData || followingData.content.length === 0 ? (
+            {followingLoading ? (
+              <div className="p-8 text-center text-muted-foreground">
+                로딩 중...
+              </div>
+            ) : !followingData || followingData.content.length === 0 ? (
               <p className="p-8 text-center text-muted-foreground">
                 팔로잉이 없습니다.
               </p>
