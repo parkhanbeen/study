@@ -42,3 +42,19 @@ export function useDeleteComment(postId: number) {
     },
   });
 }
+
+export function useUpdateComment(postId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ commentId, content }: { commentId: number; content: string }) =>
+      commentsApi.update(postId, commentId, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+      toast.success("댓글이 수정되었습니다");
+    },
+    onError: () => {
+      toast.error("댓글 수정에 실패했습니다");
+    },
+  });
+}

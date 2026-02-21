@@ -10,4 +10,10 @@ export const commentsApi = {
 
   delete: (postId: number, commentId: number) =>
     fetchAPI<void>(`/posts/${postId}/comments/${commentId}`, { method: "DELETE" }),
+
+  update: (postId: number, commentId: number, content: string) =>
+    fetchAPI<CommentResponse>(`/posts/${postId}/comments/${commentId}`, {
+      method: "PUT",
+      body: JSON.stringify({ content }),
+    }),
 };
