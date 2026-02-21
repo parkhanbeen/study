@@ -12,6 +12,7 @@ import com.anoncommunity.domain.member.MemberNickname
 import com.anoncommunity.domain.member.exception.MemberNotFoundException
 import com.anoncommunity.domain.member.exception.NicknameDuplicatedException
 import com.anoncommunity.domain.post.exception.PostNotFoundException
+import com.anoncommunity.infra.opensearch.exception.SearchExecutionException
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -20,6 +21,7 @@ import jakarta.validation.ConstraintViolation
 import jakarta.validation.ConstraintViolationException
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -28,121 +30,68 @@ import org.springframework.web.bind.MissingRequestHeaderException
 class ApiExceptionHandlerSpec : DescribeSpec({
 
     val handler = ApiExceptionHandler()
+    val methodParam = mockk<MethodParameter>(relaxed = true)
 
     describe("ApiExceptionHandler") {
 
-        it("should return 401 UNAUTHORIZED for InvalidCredentialsException") {
-            val exception = InvalidCredentialsException()
+        data class Case(
+            val name: String,
+            val status: HttpStatus,
+            val code: String,
+            val message: String,
+            val invoke: () -> ResponseEntity<ErrorResponse>,
+        )
 
-            val response = handler.handleInvalidCredentials(exception)
-
-            response.statusCode shouldBe HttpStatus.UNAUTHORIZED
-            response.body!!.code shouldBe "UNAUTHORIZED"
-            response.body!!.message shouldBe "Invalid credentials"
+        listOf(
+            Case("InvalidCredentials → 401", HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Invalid credentials") {
+                handler.handleInvalidCredentials(InvalidCredentialsException())
+            },
+            Case("AccessDenied → 403", HttpStatus.FORBIDDEN, "FORBIDDEN", "You do not have permission") {
+                handler.handleAccessDenied(AccessDeniedException("You do not have permission"))
+            },
+            Case("MissingHeader → 400", HttpStatus.BAD_REQUEST, "MISSING_HEADER", "Required header: X-Member-Id") {
+                handler.handleMissingHeader(MissingRequestHeaderException("X-Member-Id", methodParam))
+            },
+            Case("PostNotFound → 404", HttpStatus.NOT_FOUND, "POST_NOT_FOUND", "Post not found: 1") {
+                handler.handlePostNotFound(PostNotFoundException(PostId(1L)))
+            },
+            Case("CommentNotFound → 404", HttpStatus.NOT_FOUND, "COMMENT_NOT_FOUND", "Comment not found: 42") {
+                handler.handleCommentNotFound(CommentNotFoundException(CommentId(42L)))
+            },
+            Case("LikeNotFound → 404", HttpStatus.NOT_FOUND, "LIKE_NOT_FOUND", "Like not found for post 10 by member 20") {
+                handler.handleLikeNotFound(LikeNotFoundException(PostId(10L), MemberId(20L)))
+            },
+            Case("MemberNotFound → 404", HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "Member not found: 99") {
+                handler.handleMemberNotFound(MemberNotFoundException(MemberId(99L)))
+            },
+            Case("NicknameDuplicated → 409", HttpStatus.CONFLICT, "NICKNAME_DUPLICATED", "Nickname already taken: duplicatedUser") {
+                handler.handleNicknameDuplicated(NicknameDuplicatedException(MemberNickname("duplicatedUser")))
+            },
+            Case("IllegalArgument → 400", HttpStatus.BAD_REQUEST, "BAD_REQUEST", "Invalid request") {
+                handler.handleBadRequest(IllegalArgumentException("Title cannot be empty"))
+            },
+            Case("IllegalState → 409", HttpStatus.CONFLICT, "CONFLICT", "Operation conflict") {
+                handler.handleConflict(IllegalStateException("Account is not active"))
+            },
+            Case("PostAlreadyLiked → 409", HttpStatus.CONFLICT, "ALREADY_LIKED", "Member 10 already liked post 5") {
+                handler.handleAlreadyLiked(PostAlreadyLikedException(PostId(5L), MemberId(10L)))
+            },
+            Case("SearchExecution → 503 with generic Korean message", HttpStatus.SERVICE_UNAVAILABLE, "SEARCH_UNAVAILABLE", "검색 서비스를 일시적으로 사용할 수 없습니다") {
+                handler.handleSearchExecution(SearchExecutionException("OpenSearch connection refused", RuntimeException("java.net.ConnectException: Connection refused")))
+            },
+            Case("Unexpected → 500", HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "Internal server error") {
+                handler.handleUnexpected(RuntimeException("Something went wrong"))
+            },
+        ).forEach { case ->
+            it(case.name) {
+                val response = case.invoke()
+                response.statusCode shouldBe case.status
+                response.body!!.code shouldBe case.code
+                response.body!!.message shouldBe case.message
+            }
         }
 
-        it("should return 403 FORBIDDEN for AccessDeniedException") {
-            val exception = AccessDeniedException("You do not have permission")
-
-            val response = handler.handleAccessDenied(exception)
-
-            response.statusCode shouldBe HttpStatus.FORBIDDEN
-            response.body!!.code shouldBe "FORBIDDEN"
-            response.body!!.message shouldBe "You do not have permission"
-        }
-
-        it("should return 400 BAD_REQUEST for MissingRequestHeaderException") {
-            val methodParam = mockk<MethodParameter>(relaxed = true)
-            val exception = MissingRequestHeaderException("X-Member-Id", methodParam)
-
-            val response = handler.handleMissingHeader(exception)
-
-            response.statusCode shouldBe HttpStatus.BAD_REQUEST
-            response.body!!.code shouldBe "MISSING_HEADER"
-            response.body!!.message shouldBe "Required header: X-Member-Id"
-        }
-
-        it("should return 404 NOT_FOUND for PostNotFoundException") {
-            val exception = PostNotFoundException(PostId(1L))
-
-            val response = handler.handlePostNotFound(exception)
-
-            response.statusCode shouldBe HttpStatus.NOT_FOUND
-            response.body!!.code shouldBe "POST_NOT_FOUND"
-            response.body!!.message shouldBe "Post not found: 1"
-        }
-
-        it("should return 404 NOT_FOUND for CommentNotFoundException") {
-            val exception = CommentNotFoundException(CommentId(42L))
-
-            val response = handler.handleCommentNotFound(exception)
-
-            response.statusCode shouldBe HttpStatus.NOT_FOUND
-            response.body!!.code shouldBe "COMMENT_NOT_FOUND"
-            response.body!!.message shouldBe "Comment not found: 42"
-        }
-
-        it("should return 404 NOT_FOUND for LikeNotFoundException") {
-            val exception = LikeNotFoundException(PostId(10L), MemberId(20L))
-
-            val response = handler.handleLikeNotFound(exception)
-
-            response.statusCode shouldBe HttpStatus.NOT_FOUND
-            response.body!!.code shouldBe "LIKE_NOT_FOUND"
-            response.body!!.message shouldBe "Like not found for post 10 by member 20"
-        }
-
-        it("should return 404 NOT_FOUND for MemberNotFoundException") {
-            val exception = MemberNotFoundException(MemberId(99L))
-
-            val response = handler.handleMemberNotFound(exception)
-
-            response.statusCode shouldBe HttpStatus.NOT_FOUND
-            response.body!!.code shouldBe "MEMBER_NOT_FOUND"
-            response.body!!.message shouldBe "Member not found: 99"
-        }
-
-        it("should return 409 CONFLICT for NicknameDuplicatedException") {
-            val exception = NicknameDuplicatedException(MemberNickname("duplicatedUser"))
-
-            val response = handler.handleNicknameDuplicated(exception)
-
-            response.statusCode shouldBe HttpStatus.CONFLICT
-            response.body!!.code shouldBe "NICKNAME_DUPLICATED"
-            response.body!!.message shouldBe "Nickname already taken: duplicatedUser"
-        }
-
-        it("should return 400 BAD_REQUEST for IllegalArgumentException") {
-            val exception = IllegalArgumentException("Title cannot be empty")
-
-            val response = handler.handleBadRequest(exception)
-
-            response.statusCode shouldBe HttpStatus.BAD_REQUEST
-            response.body!!.code shouldBe "BAD_REQUEST"
-            response.body!!.message shouldBe "Invalid request"
-        }
-
-        it("should return 409 CONFLICT for IllegalStateException") {
-            val exception = IllegalStateException("Account is not active")
-
-            val response = handler.handleConflict(exception)
-
-            response.statusCode shouldBe HttpStatus.CONFLICT
-            response.body!!.code shouldBe "CONFLICT"
-            response.body!!.message shouldBe "Operation conflict"
-        }
-
-        it("should return 409 CONFLICT for PostAlreadyLikedException") {
-            val exception = PostAlreadyLikedException(PostId(5L), MemberId(10L))
-
-            val response = handler.handleAlreadyLiked(exception)
-
-            response.statusCode shouldBe HttpStatus.CONFLICT
-            response.body!!.code shouldBe "ALREADY_LIKED"
-            response.body!!.message shouldBe "Member 10 already liked post 5"
-        }
-
-        it("should return 400 BAD_REQUEST for MethodArgumentNotValidException with field errors") {
+        it("MethodArgumentNotValid → 400 with field details") {
             val fieldError = mockk<FieldError> {
                 every { field } returns "title"
                 every { defaultMessage } returns "must not be blank"
@@ -150,7 +99,6 @@ class ApiExceptionHandlerSpec : DescribeSpec({
             val bindingResult = mockk<BindingResult> {
                 every { fieldErrors } returns listOf(fieldError)
             }
-            val methodParam = mockk<MethodParameter>(relaxed = true)
             val exception = MethodArgumentNotValidException(methodParam, bindingResult)
 
             val response = handler.handleValidation(exception)
@@ -160,29 +108,18 @@ class ApiExceptionHandlerSpec : DescribeSpec({
             response.body!!.message shouldBe "title: must not be blank"
         }
 
-        it("should return 400 BAD_REQUEST for ConstraintViolationException") {
+        it("ConstraintViolation → 400 with field details") {
             val path = mockk<jakarta.validation.Path>()
             every { path.toString() } returns "title"
             val violation = mockk<ConstraintViolation<*>>()
             every { violation.propertyPath } returns path
             every { violation.message } returns "must not be blank"
-            val exception = ConstraintViolationException(setOf(violation))
 
-            val response = handler.handleConstraintViolation(exception)
+            val response = handler.handleConstraintViolation(ConstraintViolationException(setOf(violation)))
 
             response.statusCode shouldBe HttpStatus.BAD_REQUEST
             response.body!!.code shouldBe "VALIDATION_ERROR"
             response.body!!.message shouldBe "title: must not be blank"
-        }
-
-        it("should return 500 INTERNAL_SERVER_ERROR for unexpected Exception") {
-            val exception = RuntimeException("Something went wrong")
-
-            val response = handler.handleUnexpected(exception)
-
-            response.statusCode shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            response.body!!.code shouldBe "INTERNAL_ERROR"
-            response.body!!.message shouldBe "Internal server error"
         }
     }
 })
