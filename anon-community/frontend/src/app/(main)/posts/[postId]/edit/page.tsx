@@ -21,19 +21,20 @@ export default async function EditPostPage({ params }: Props) {
   }
 
   // Verify the current user is the post author before rendering the edit form.
-  // serverFetch reads the access_token cookie automatically.
+  // Keep redirect() outside the catch block — Next.js redirect() throws internally
+  // and would be swallowed if called inside a broad catch clause.
+  let me: MemberResponse;
   try {
-    const me = await serverFetch<MemberResponse>("/members/me");
-    if (me.id !== post.authorId) {
-      redirect(`/posts/${id}`);
-    }
+    me = await serverFetch<MemberResponse>("/members/me");
   } catch (e) {
     if (e instanceof ApiError && e.status === 401) {
       redirect(`/login?callbackUrl=${encodeURIComponent(`/posts/${id}/edit`)}`);
     }
-    // For any other error (network failure, 500, etc.), fail safe by
-    // sending the user back to the post detail page rather than exposing
-    // an edit form they may not be authorised to use.
+    // For any other error (network failure, 500, etc.), fail safe.
+    redirect(`/posts/${id}`);
+  }
+
+  if (me.id !== post.authorId) {
     redirect(`/posts/${id}`);
   }
 
