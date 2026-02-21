@@ -12,19 +12,8 @@ import { fetchAPI, ApiError } from "@/lib/api/client";
 import { loginSchema, LoginFormData } from "@/lib/validations/auth";
 import { toast } from "sonner";
 import { useState } from "react";
-import { ProfileResponse, ActiveProfile } from "@/types/profile";
-
-function toActiveProfile(p: ProfileResponse): ActiveProfile {
-  return {
-    id: p.id,
-    nickname: p.nickname,
-    bio: p.bio,
-    postCount: p.postCount,
-    followerCount: p.followerCount,
-    followingCount: p.followingCount,
-    isDefault: p.isDefault,
-  };
-}
+import { ProfileResponse } from "@/types/profile";
+import { toActiveProfile } from "@/lib/utils/profile";
 
 export function LoginForm() {
   const router = useRouter();

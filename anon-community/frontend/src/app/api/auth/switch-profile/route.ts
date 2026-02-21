@@ -12,10 +12,10 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { profileId } = body as { profileId: number };
+  const profileId = body?.profileId;
 
-  if (!profileId) {
-    return NextResponse.json({ code: "BAD_REQUEST", message: "profileId가 필요합니다" }, { status: 400 });
+  if (typeof profileId !== "number" || !Number.isInteger(profileId) || profileId <= 0) {
+    return NextResponse.json({ code: "BAD_REQUEST", message: "유효하지 않은 프로필 ID입니다" }, { status: 400 });
   }
 
   const res = await fetch(`${API_URL}/api/v1/auth/switch-profile`, {

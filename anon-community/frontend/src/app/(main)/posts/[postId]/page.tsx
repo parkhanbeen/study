@@ -41,16 +41,16 @@ export default async function PostDetailPage({ params }: Props) {
     <article className="mx-auto max-w-2xl">
       <div className="mb-6 flex items-center justify-between">
         <BackButton />
-        <PostActions postId={post.id} authorId={post.authorId} />
+        <PostActions postId={post.id} authorProfileId={post.authorProfileId} />
       </div>
 
       <h1 className="text-2xl font-bold leading-tight">{post.title}</h1>
 
       <div className="mt-3 flex items-center gap-3 text-sm text-muted-foreground">
         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-          {String(post.authorId).slice(-1)}
+          {String(post.authorProfileId).slice(-1)}
         </span>
-        <span>익명 #{post.authorId}</span>
+        <span>익명 #{post.authorProfileId}</span>
         <span>&middot;</span>
         <span>{timeAgo(post.createdAt)}</span>
         <span>&middot;</span>

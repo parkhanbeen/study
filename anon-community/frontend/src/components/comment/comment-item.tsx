@@ -32,7 +32,7 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
   const [editContent, setEditContent] = useState(comment.content);
   const deleteMutation = useDeleteComment(postId);
   const updateMutation = useUpdateComment(postId);
-  const isAuthor = activeProfile !== null && activeProfile.id === comment.authorId;
+  const isAuthor = activeProfile !== null && activeProfile.id === comment.authorProfileId;
 
   useEffect(() => {
     if (!isEditing) {
@@ -54,9 +54,9 @@ export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-            {String(comment.authorId).slice(-1)}
+            {String(comment.authorProfileId).slice(-1)}
           </span>
-          <span className="font-medium text-foreground">익명 #{comment.authorId}</span>
+          <span className="font-medium text-foreground">익명 #{comment.authorProfileId}</span>
           <span>&middot;</span>
           <span>{timeAgo(comment.createdAt)}</span>
         </div>

@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { serverFetch, ApiError } from "@/lib/api/client";
-import { PostDetailResponse, MemberResponse } from "@/types/api";
+import { PostDetailResponse } from "@/types/api";
+import { ProfileResponse } from "@/types/profile";
 import { PostForm } from "@/components/post/post-form";
 
 interface Props {
@@ -20,12 +21,12 @@ export default async function EditPostPage({ params }: Props) {
     throw e;
   }
 
-  // Verify the current user is the post author before rendering the edit form.
+  // Verify the current user owns the post's author profile before rendering the edit form.
   // Keep redirect() outside the catch block — Next.js redirect() throws internally
   // and would be swallowed if called inside a broad catch clause.
-  let me: MemberResponse;
+  let profiles: ProfileResponse[];
   try {
-    me = await serverFetch<MemberResponse>("/members/me");
+    profiles = await serverFetch<ProfileResponse[]>("/members/me/profiles");
   } catch (e) {
     if (e instanceof ApiError && e.status === 401) {
       redirect(`/login?callbackUrl=${encodeURIComponent(`/posts/${id}/edit`)}`);
@@ -34,7 +35,8 @@ export default async function EditPostPage({ params }: Props) {
     redirect(`/posts/${id}`);
   }
 
-  if (me.id !== post.authorId) {
+  const isAuthor = profiles.some((p) => p.id === post.authorProfileId);
+  if (!isAuthor) {
     redirect(`/posts/${id}`);
   }
 

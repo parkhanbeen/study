@@ -41,9 +41,9 @@ export function PostCard({ post, highlights }: PostCardProps) {
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-              {String(post.authorId).slice(-1)}
+              {String(post.authorProfileId).slice(-1)}
             </span>
-            <span>Anonymous #{post.authorId}</span>
+            <span>Anonymous #{post.authorProfileId}</span>
             <span>&middot;</span>
             <span>{timeAgo(post.createdAt)}</span>
             <span className="ml-auto">

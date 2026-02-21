@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import { ActiveProfile, LinkedAccount } from "@/types/profile";
+import { ActiveProfile, LinkedAccount, ProfileResponse } from "@/types/profile";
+import { fetchAPI } from "@/lib/api/client";
+import { toActiveProfile } from "@/lib/utils/profile";
 
 const LINKED_ACCOUNTS_KEY = "linked_accounts";
 
@@ -65,9 +67,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw new Error("프로필 전환에 실패했습니다");
     }
 
-    const profiles = get().profiles;
-    const newActive = profiles.find((p) => p.id === profileId);
-    if (newActive) {
+    let profiles = get().profiles;
+    let newActive = profiles.find((p) => p.id === profileId);
+    if (!newActive) {
+      // profiles list is stale — refetch from server
+      const fresh = await fetchAPI<ProfileResponse[]>("/members/me/profiles");
+      profiles = fresh.map(toActiveProfile);
+      newActive = profiles.find((p) => p.id === profileId);
+      if (newActive) {
+        set({ profiles, activeProfile: newActive });
+      } else {
+        throw new Error("전환할 프로필을 찾을 수 없습니다");
+      }
+    } else {
       set({ activeProfile: newActive });
     }
   },

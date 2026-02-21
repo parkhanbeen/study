@@ -26,5 +26,5 @@ export interface LinkedAccount {
   memberId: number;
   activeProfileId: number;
   nickname: string; // active profile nickname
-  accessToken: string; // NOT stored in httpOnly cookie — used for account switching UI only
+  // accessToken removed — not stored in localStorage for security
 }

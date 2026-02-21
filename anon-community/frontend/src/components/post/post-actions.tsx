@@ -5,21 +5,21 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth-store";
 import { useDeletePost } from "@/lib/hooks/use-posts";
-import { MemberId, PostId } from "@/types/api";
+import { PostId } from "@/types/api";
 import { useState } from "react";
 
 interface PostActionsProps {
   postId: PostId;
-  authorId: MemberId;
+  authorProfileId: number;
 }
 
-export function PostActions({ postId, authorId }: PostActionsProps) {
+export function PostActions({ postId, authorProfileId }: PostActionsProps) {
   const router = useRouter();
   const { activeProfile } = useAuthStore();
   const deleteMutation = useDeletePost();
   const [confirming, setConfirming] = useState(false);
 
-  if (!activeProfile || activeProfile.id !== authorId) return null;
+  if (!activeProfile || activeProfile.id !== authorProfileId) return null;
 
   const handleDelete = () => {
     if (!confirming) {

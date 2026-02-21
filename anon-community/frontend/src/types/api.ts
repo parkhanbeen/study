@@ -13,6 +13,7 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   memberId: MemberId;
+  activeProfileId: number;
 }
 
 export interface RefreshRequest {
@@ -23,6 +24,7 @@ export interface RefreshResponse {
   accessToken: string;
   refreshToken: string;
   memberId: MemberId;
+  activeProfileId: number;
 }
 
 export interface LogoutRequest {
@@ -73,7 +75,7 @@ export type PostStatus = "PUBLISHED" | "HIDDEN" | "UNDER_REVIEW" | "REMOVED" | "
 
 export interface PostResponse {
   id: PostId;
-  authorId: MemberId;
+  authorProfileId: number;
   title: string;
   content: string;
   category: PostCategory;
@@ -109,7 +111,7 @@ export type CommentStatus = "ACTIVE" | "DELETED";
 export interface CommentResponse {
   id: CommentId;
   postId: PostId;
-  authorId: MemberId;
+  authorProfileId: number;
   content: string;
   parentCommentId: CommentId | null;
   depth: number;
