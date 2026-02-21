@@ -147,6 +147,36 @@ data class MemberCreatedResponse(
     val refreshToken: String,
 )
 
+data class ProfileResponse(
+    val id: Long,
+    val memberId: Long,
+    val nickname: String,
+    val bio: String?,
+    val postCount: Int,
+    val followerCount: Int,
+    val followingCount: Int,
+    val isDefault: Boolean,
+    val isFollowing: Boolean = false,
+    val isMe: Boolean = false,
+    val createdAt: String,
+) {
+    companion object {
+        fun from(profile: MemberProfile, isFollowing: Boolean = false, isMe: Boolean = false) = ProfileResponse(
+            id = profile.id.value,
+            memberId = profile.memberId.value,
+            nickname = profile.nickname.value,
+            bio = profile.bio.value.ifBlank { null },
+            postCount = profile.postCount,
+            followerCount = profile.followerCount,
+            followingCount = profile.followingCount,
+            isDefault = profile.isDefault,
+            isFollowing = isFollowing,
+            isMe = isMe,
+            createdAt = profile.createdAt.toString(),
+        )
+    }
+}
+
 data class PageResponse<T>(
     val content: List<T>,
     val page: Int,

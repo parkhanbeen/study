@@ -63,7 +63,7 @@ class PostControllerSpec : DescribeSpec({
             every { createPostUseCase(any()) } returns testPost
 
             mockMvc.post("/api/v1/posts") {
-                header("X-Member-Id", "100")
+                header("X-Profile-Id", "100")
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
                     mapOf("title" to "Test Title", "content" to "Test Content", "category" to "DAILY", "tags" to listOf("kotlin"))
@@ -84,7 +84,7 @@ class PostControllerSpec : DescribeSpec({
 
         it("should return 400 when title is blank") {
             mockMvc.post("/api/v1/posts") {
-                header("X-Member-Id", "100")
+                header("X-Profile-Id", "100")
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
                     mapOf("title" to "", "content" to "Test Content", "category" to "DAILY")
@@ -95,7 +95,7 @@ class PostControllerSpec : DescribeSpec({
             }
         }
 
-        it("should return 400 when X-Member-Id header is missing") {
+        it("should return 400 when X-Profile-Id header is missing") {
             mockMvc.post("/api/v1/posts") {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
@@ -104,7 +104,7 @@ class PostControllerSpec : DescribeSpec({
             }.andExpect {
                 status { isBadRequest() }
                 jsonPath("$.code") { value("MISSING_HEADER") }
-                jsonPath("$.message") { value("Required header: X-Member-Id") }
+                jsonPath("$.message") { value("Required header: X-Profile-Id") }
             }
         }
     }
@@ -116,7 +116,7 @@ class PostControllerSpec : DescribeSpec({
             every { updatePostUseCase(any()) } returns updatedPost
 
             mockMvc.put("/api/v1/posts/1") {
-                header("X-Member-Id", "100")
+                header("X-Profile-Id", "100")
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
                     mapOf("title" to "Updated Title")
@@ -133,7 +133,7 @@ class PostControllerSpec : DescribeSpec({
             every { updatePostUseCase(any()) } throws AccessDeniedException("Only the author can edit this post")
 
             mockMvc.put("/api/v1/posts/1") {
-                header("X-Member-Id", "999")
+                header("X-Profile-Id", "999")
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(
                     mapOf("title" to "Hacked Title")
@@ -152,7 +152,7 @@ class PostControllerSpec : DescribeSpec({
             every { deletePostUseCase(any()) } just Runs
 
             mockMvc.delete("/api/v1/posts/1") {
-                header("X-Member-Id", "100")
+                header("X-Profile-Id", "100")
             }.andExpect {
                 status { isNoContent() }
             }
@@ -162,7 +162,7 @@ class PostControllerSpec : DescribeSpec({
             every { deletePostUseCase(any()) } throws AccessDeniedException("Only the author can delete this post")
 
             mockMvc.delete("/api/v1/posts/1") {
-                header("X-Member-Id", "999")
+                header("X-Profile-Id", "999")
             }.andExpect {
                 status { isForbidden() }
                 jsonPath("$.code") { value("FORBIDDEN") }

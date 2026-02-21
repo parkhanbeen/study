@@ -24,6 +24,7 @@ jib {
 dependencies {
     implementation(project(":app:usecase"))
     implementation(project(":infra:rdb"))
+    implementation(project(":infra:redis"))
     implementation(project(":infra:opensearch"))
     implementation(project(":infra:kafka"))
 
@@ -31,7 +32,6 @@ dependencies {
     implementation(Dependency.SPRING_BOOT_STARTER_DATA_JPA)
     implementation(Dependency.SPRING_BOOT_STARTER_VALIDATION)
     implementation(Dependency.SPRING_BOOT_STARTER_ACTUATOR)
-    implementation(Dependency.SPRING_BOOT_STARTER_DATA_REDIS)
     implementation(Dependency.MICROMETER_PROMETHEUS)
     implementation(Dependency.SPRINGDOC_OPENAPI)
     implementation(Dependency.SPRING_KAFKA)

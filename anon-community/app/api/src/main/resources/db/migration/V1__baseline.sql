@@ -1,0 +1,3 @@
+-- Baseline migration: existing schema as of initial implementation.
+-- This migration is intentionally empty because baseline-on-migrate=true
+-- handles the existing tables. Subsequent migrations go here.

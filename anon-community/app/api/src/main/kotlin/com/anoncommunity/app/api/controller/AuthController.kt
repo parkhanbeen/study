@@ -1,10 +1,13 @@
 package com.anoncommunity.app.api.controller
 
+import com.anoncommunity.app.api.dto.SwitchProfileRequest
 import com.anoncommunity.app.api.security.JwtProperties
 import com.anoncommunity.app.api.security.JwtTokenProvider
 import com.anoncommunity.app.usecase.member.LoginCommand
 import com.anoncommunity.contract.auth.RefreshTokenPort
 import com.anoncommunity.app.usecase.member.LoginUseCase
+import com.anoncommunity.app.usecase.member.SwitchProfileCommand
+import com.anoncommunity.app.usecase.member.SwitchProfileUseCase
 import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.domain.member.exception.MemberNotFoundException
 import com.anoncommunity.domain.member.port.MemberQueryPort
@@ -16,6 +19,7 @@ import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -26,6 +30,7 @@ class AuthController(
     private val jwtTokenProvider: JwtTokenProvider,
     private val jwtProperties: JwtProperties,
     private val loginUseCase: LoginUseCase,
+    private val switchProfileUseCase: SwitchProfileUseCase,
     private val memberQueryPort: MemberQueryPort,
     private val profileQueryPort: ProfileQueryPort,
     private val refreshTokenPort: RefreshTokenPort,
@@ -94,6 +99,24 @@ class AuthController(
         val memberId = jwtTokenProvider.validateRefreshToken(request.refreshToken)
         memberId?.let { refreshTokenPort.revoke(it) }
         return ResponseEntity.noContent().build()
+    }
+
+    @Operation(summary = "프로필 전환")
+    @PostMapping("/switch-profile")
+    fun switchProfile(
+        @RequestHeader("X-Member-Id") memberId: Long,
+        @Valid @RequestBody request: SwitchProfileRequest,
+    ): ResponseEntity<TokenResponse> {
+        val profile = switchProfileUseCase(SwitchProfileCommand(memberId = memberId, targetProfileId = request.profileId))
+        val newAccessToken = jwtTokenProvider.issueAccessToken(memberId, profile.id.value)
+        return ResponseEntity.ok(
+            TokenResponse(
+                accessToken = newAccessToken,
+                refreshToken = "",
+                memberId = memberId,
+                activeProfileId = profile.id.value,
+            )
+        )
     }
 }
 

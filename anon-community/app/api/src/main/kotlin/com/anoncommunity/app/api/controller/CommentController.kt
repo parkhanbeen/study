@@ -25,13 +25,13 @@ class CommentController(
     @PostMapping
     fun createComment(
         @PathVariable postId: Long,
-        @RequestHeader("X-Member-Id") memberId: Long,
+        @RequestHeader("X-Profile-Id") profileId: Long,
         @Valid @RequestBody request: CreateCommentRequest,
     ): ResponseEntity<CommentResponse> {
         val comment = createCommentUseCase(
             CreateCommentCommand(
                 postId = postId,
-                authorId = memberId,
+                authorId = profileId,
                 content = request.content,
                 parentCommentId = request.parentCommentId,
             )
@@ -43,13 +43,13 @@ class CommentController(
     fun updateComment(
         @PathVariable postId: Long,
         @PathVariable commentId: Long,
-        @RequestHeader("X-Member-Id") memberId: Long,
+        @RequestHeader("X-Profile-Id") profileId: Long,
         @Valid @RequestBody request: UpdateCommentRequest,
     ): ResponseEntity<CommentResponse> {
         val comment = updateCommentUseCase(
             UpdateCommentCommand(
                 commentId = commentId,
-                requesterId = memberId,
+                requesterId = profileId,
                 content = request.content,
             )
         )
@@ -60,9 +60,9 @@ class CommentController(
     fun deleteComment(
         @PathVariable postId: Long,
         @PathVariable commentId: Long,
-        @RequestHeader("X-Member-Id") memberId: Long,
+        @RequestHeader("X-Profile-Id") profileId: Long,
     ): ResponseEntity<Unit> {
-        deleteCommentUseCase(DeleteCommentCommand(commentId = commentId, requesterId = memberId))
+        deleteCommentUseCase(DeleteCommentCommand(commentId = commentId, requesterId = profileId))
         return ResponseEntity.noContent().build()
     }
 

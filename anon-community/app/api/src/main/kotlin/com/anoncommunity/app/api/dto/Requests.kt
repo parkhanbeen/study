@@ -40,3 +40,17 @@ data class UpdateLanguageRequest(
     @field:Pattern(regexp = "^(ko|en|ja|zh)$", message = "Supported languages: ko, en, ja, zh")
     val language: String,
 )
+
+data class CreateProfileRequest(
+    @field:NotBlank @field:Size(min = 2, max = 20) val nickname: String,
+    @field:Size(max = 200) val bio: String? = null,
+)
+
+data class UpdateProfileRequest(
+    @field:NotBlank @field:Size(min = 2, max = 20) val nickname: String,
+    @field:Size(max = 200) val bio: String? = null,
+)
+
+data class SwitchProfileRequest(
+    val profileId: Long,
+)

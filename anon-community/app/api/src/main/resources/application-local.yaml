@@ -1,0 +1,4 @@
+logging:
+  level:
+    com.anoncommunity: DEBUG
+    org.hibernate.SQL: DEBUG

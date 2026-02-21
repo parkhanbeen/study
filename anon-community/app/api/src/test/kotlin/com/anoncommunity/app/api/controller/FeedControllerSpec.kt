@@ -3,6 +3,7 @@ package com.anoncommunity.app.api.controller
 import com.anoncommunity.app.api.exception.ApiExceptionHandler
 import com.anoncommunity.app.usecase.feed.GetFeedQuery
 import com.anoncommunity.app.usecase.feed.GetFeedUseCase
+import com.anoncommunity.app.usecase.feed.GetFollowingFeedUseCase
 import com.anoncommunity.contract.model.PageResult
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -18,7 +19,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 class FeedControllerSpec : DescribeSpec({
 
     val getFeedUseCase = mockk<GetFeedUseCase>()
-    val controller = FeedController(getFeedUseCase)
+    val getFollowingFeedUseCase = mockk<GetFollowingFeedUseCase>()
+    val controller = FeedController(getFeedUseCase, getFollowingFeedUseCase)
     val mockMvc: MockMvc = MockMvcBuilders.standaloneSetup(controller)
         .setControllerAdvice(ApiExceptionHandler())
         .setValidator(LocalValidatorFactoryBean().apply { afterPropertiesSet() })
