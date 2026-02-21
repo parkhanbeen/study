@@ -7,6 +7,8 @@ import com.anoncommunity.domain.like.exception.LikeNotFoundException
 import com.anoncommunity.domain.like.exception.PostAlreadyLikedException
 import com.anoncommunity.domain.member.exception.MemberNotFoundException
 import com.anoncommunity.domain.member.exception.NicknameDuplicatedException
+import com.anoncommunity.domain.member.exception.ProfileLimitExceededException
+import com.anoncommunity.domain.member.exception.ProfileNotFoundException
 import com.anoncommunity.domain.post.exception.PostNotFoundException
 import com.anoncommunity.infra.opensearch.exception.SearchExecutionException
 import jakarta.validation.ConstraintViolationException
@@ -69,6 +71,20 @@ class ApiExceptionHandler {
     fun handleNicknameDuplicated(e: NicknameDuplicatedException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(ErrorResponse(code = "NICKNAME_DUPLICATED", message = e.message ?: "Nickname already taken"))
+    }
+
+    @ExceptionHandler(ProfileNotFoundException::class)
+    fun handleProfileNotFound(e: ProfileNotFoundException): ResponseEntity<ErrorResponse> {
+        log.warn("Profile not found: {}", e.message)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(ErrorResponse(code = "PROFILE_NOT_FOUND", message = e.message ?: "Profile not found"))
+    }
+
+    @ExceptionHandler(ProfileLimitExceededException::class)
+    fun handleProfileLimitExceeded(e: ProfileLimitExceededException): ResponseEntity<ErrorResponse> {
+        log.warn("Profile limit exceeded: {}", e.message)
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+            .body(ErrorResponse(code = "PROFILE_LIMIT_EXCEEDED", message = e.message ?: "Profile limit exceeded"))
     }
 
     @ExceptionHandler(IllegalArgumentException::class)

@@ -31,7 +31,7 @@ class CreateProfileUseCase(
         val nickname = MemberNickname(command.nickname)
 
         if (profileQueryPort.countByMemberId(memberId) >= MAX_PROFILES_PER_MEMBER) {
-            throw ProfileLimitExceededException()
+            throw ProfileLimitExceededException(MAX_PROFILES_PER_MEMBER)
         }
 
         if (profileQueryPort.existsByNickname(nickname)) {
