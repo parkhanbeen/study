@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
 
 interface MarkdownEditorProps {
   value: string;
@@ -119,7 +120,7 @@ export function MarkdownEditor({
       {tab === "preview" && (
         <div className="prose prose-neutral dark:prose-invert max-w-none p-4 text-sm">
           {value ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{value}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{value}</ReactMarkdown>
           ) : (
             <p className="text-muted-foreground">미리보기할 내용이 없습니다.</p>
           )}
