@@ -1,7 +1,7 @@
 package com.anoncommunity.domain.post
 
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.post.event.PostDomainEvent
 import com.anoncommunity.domain.post.event.PostField
 import io.kotest.assertions.throwables.shouldThrow
@@ -13,7 +13,7 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 
 fun createPublishedPost() = Post.create(
     id = PostId(1L),
-    authorId = MemberId(100L),
+    authorProfileId = ProfileId(100L),
     title = PostTitle("Test Title"),
     content = PostContent("Test Content"),
     tags = listOf(Tag("kotlin")),
@@ -25,14 +25,14 @@ class PostSpec : DescribeSpec({
         it("should create a post with PUBLISHED status") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Test Title"),
                 content = PostContent("Test Content"),
                 tags = listOf(Tag("kotlin"), Tag("spring")),
             )
 
             post.id shouldBe PostId(1L)
-            post.authorId shouldBe MemberId(100L)
+            post.authorProfileId shouldBe ProfileId(100L)
             post.title shouldBe PostTitle("Test Title")
             post.content shouldBe PostContent("Test Content")
             post.tags shouldBe listOf(Tag("kotlin"), Tag("spring"))
@@ -42,7 +42,7 @@ class PostSpec : DescribeSpec({
         it("should not record domain events (ID not yet assigned by DB)") {
             val post = Post.create(
                 id = PostId.UNSAVED,
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Test Title"),
                 content = PostContent("Test Content"),
                 tags = listOf(Tag("kotlin")),
@@ -56,7 +56,7 @@ class PostSpec : DescribeSpec({
         it("should update title and record PostEdited event") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Original Title"),
                 content = PostContent("Original Content"),
                 tags = listOf(Tag("kotlin")),
@@ -75,7 +75,7 @@ class PostSpec : DescribeSpec({
         it("should not record event when no fields change") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Original Title"),
                 content = PostContent("Original Content"),
                 tags = listOf(Tag("kotlin")),
@@ -89,7 +89,7 @@ class PostSpec : DescribeSpec({
         it("should update multiple fields in one edit") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Original Title"),
                 content = PostContent("Original Content"),
                 tags = listOf(Tag("kotlin")),
@@ -111,7 +111,7 @@ class PostSpec : DescribeSpec({
         it("should throw when editing a deleted post") {
             val deletedPost = Post.create(
                 id = PostId(2L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Title"),
                 content = PostContent("Content"),
             ).also {
@@ -154,7 +154,7 @@ class PostSpec : DescribeSpec({
         it("should change status to DELETED and record PostDeleted event") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Title"),
                 content = PostContent("Content"),
             ).also { it.pullDomainEvents() }
@@ -166,13 +166,13 @@ class PostSpec : DescribeSpec({
             val event = post.pullDomainEvents().first()
                 .shouldBeInstanceOf<PostDomainEvent.PostDeleted>()
             event.postId shouldBe PostId(1L)
-            event.authorId shouldBe MemberId(100L)
+            event.authorProfileId shouldBe ProfileId(100L)
         }
 
         it("should throw when deleting an already deleted post") {
             val post = Post.create(
                 id = PostId(1L),
-                authorId = MemberId(100L),
+                authorProfileId = ProfileId(100L),
                 title = PostTitle("Title"),
                 content = PostContent("Content"),
             ).also {

@@ -1,15 +1,15 @@
 package com.anoncommunity.domain.post
 
 import com.anoncommunity.contract.AggregateRoot
-import com.anoncommunity.contract.model.MemberId
 import com.anoncommunity.contract.model.PostId
+import com.anoncommunity.contract.model.ProfileId
 import com.anoncommunity.domain.post.event.PostDomainEvent
 import com.anoncommunity.domain.post.event.PostField
 import java.time.Instant
 
 class Post(
     val id: PostId,
-    val authorId: MemberId,
+    val authorProfileId: ProfileId,
     title: PostTitle,
     content: PostContent,
     category: PostCategory,
@@ -94,7 +94,7 @@ class Post(
         recordDomainEvent(
             PostDomainEvent.PostDeleted(
                 postId = id,
-                authorId = authorId,
+                authorProfileId = authorProfileId,
             )
         )
     }
@@ -132,7 +132,7 @@ class Post(
     companion object {
         fun create(
             id: PostId,
-            authorId: MemberId,
+            authorProfileId: ProfileId,
             title: PostTitle,
             content: PostContent,
             category: PostCategory = PostCategory.DAILY,
@@ -144,7 +144,7 @@ class Post(
             // after save, when the real ID is available.
             return Post(
                 id = id,
-                authorId = authorId,
+                authorProfileId = authorProfileId,
                 title = title,
                 content = content,
                 category = category,
