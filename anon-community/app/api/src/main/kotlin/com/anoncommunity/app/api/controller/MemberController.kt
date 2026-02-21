@@ -6,6 +6,8 @@ import com.anoncommunity.app.api.security.JwtTokenProvider
 import com.anoncommunity.app.usecase.member.CreateMemberCommand
 import com.anoncommunity.contract.auth.RefreshTokenPort
 import com.anoncommunity.app.usecase.member.CreateMemberUseCase
+import com.anoncommunity.app.usecase.member.GetMyLikedPostsQuery
+import com.anoncommunity.app.usecase.member.GetMyLikedPostsUseCase
 import com.anoncommunity.app.usecase.member.GetMyPostsQuery
 import com.anoncommunity.app.usecase.member.GetMyPostsUseCase
 import com.anoncommunity.app.usecase.member.UpdateLanguageCommand
@@ -24,6 +26,7 @@ class MemberController(
     private val createMemberUseCase: CreateMemberUseCase,
     private val updateLanguageUseCase: UpdateLanguageUseCase,
     private val getMyPostsUseCase: GetMyPostsUseCase,
+    private val getMyLikedPostsUseCase: GetMyLikedPostsUseCase,
     private val jwtTokenProvider: JwtTokenProvider,
     private val jwtProperties: JwtProperties,
     private val refreshTokenPort: RefreshTokenPort,
@@ -72,6 +75,17 @@ class MemberController(
         @RequestParam(defaultValue = "20") size: Int,
     ): ResponseEntity<PageResponse<PostResponse>> {
         val result = getMyPostsUseCase(GetMyPostsQuery(memberId = memberId, page = page, size = size))
+        return ResponseEntity.ok(PageResponse.from(result, PostResponse::from))
+    }
+
+    @Operation(summary = "내가 좋아요한 글 목록")
+    @GetMapping("/me/liked-posts")
+    fun getMyLikedPosts(
+        @RequestHeader("X-Member-Id") memberId: Long,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "20") size: Int,
+    ): ResponseEntity<PageResponse<PostResponse>> {
+        val result = getMyLikedPostsUseCase(GetMyLikedPostsQuery(memberId = memberId, page = page, size = size))
         return ResponseEntity.ok(PageResponse.from(result, PostResponse::from))
     }
 }
