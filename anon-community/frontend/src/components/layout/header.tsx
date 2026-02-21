@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, PenSquare, LogIn, LogOut, Settings, User } from "lucide-react";
+import { Search, PenSquare, LogIn, LogOut, Settings, User, Sun, Moon, Monitor } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,6 +19,15 @@ import { toast } from "sonner";
 export function Header() {
   const router = useRouter();
   const { isLoggedIn, nickname, clearAuth } = useAuthStore();
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    if (theme === "dark") setTheme("light");
+    else if (theme === "light") setTheme("system");
+    else setTheme("dark");
+  };
+
+  const ThemeIcon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
 
   const handleLogout = async () => {
     try {
@@ -42,6 +52,16 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label="테마 전환"
+            title={theme === "dark" ? "다크 모드" : theme === "light" ? "라이트 모드" : "시스템 모드"}
+          >
+            <ThemeIcon className="h-5 w-5" />
+          </Button>
+
           <Button variant="ghost" size="icon" asChild>
             <Link href="/search">
               <Search className="h-5 w-5" />
