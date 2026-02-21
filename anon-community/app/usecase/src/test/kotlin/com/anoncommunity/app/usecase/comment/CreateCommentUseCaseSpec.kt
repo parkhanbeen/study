@@ -70,7 +70,7 @@ class CreateCommentUseCaseSpec : DescribeSpec({
             it("should create with depth=0 and publish CommentCreated") {
                 val command = CreateCommentCommand(
                     postId = 10L,
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     content = "This is a top-level comment",
                 )
 
@@ -123,7 +123,7 @@ class CreateCommentUseCaseSpec : DescribeSpec({
             it("should create with depth=1") {
                 val command = CreateCommentCommand(
                     postId = 10L,
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     content = "This is a reply",
                     parentCommentId = 50L,
                 )
@@ -160,7 +160,7 @@ class CreateCommentUseCaseSpec : DescribeSpec({
             it("should throw IllegalStateException") {
                 val command = CreateCommentCommand(
                     postId = 10L,
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     content = "Reply to deleted",
                     parentCommentId = 50L,
                 )
@@ -187,7 +187,7 @@ class CreateCommentUseCaseSpec : DescribeSpec({
             it("should throw IllegalStateException") {
                 val command = CreateCommentCommand(
                     postId = 10L,
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     content = "Comment on deleted post",
                 )
 
@@ -206,7 +206,7 @@ class CreateCommentUseCaseSpec : DescribeSpec({
             it("should throw PostNotFoundException") {
                 val command = CreateCommentCommand(
                     postId = 999L,
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     content = "Comment on missing post",
                 )
 

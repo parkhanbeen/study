@@ -51,7 +51,7 @@ class DeletePostUseCaseSpec : DescribeSpec({
 
             val command = DeletePostCommand(
                 postId = postId.value,
-                requesterId = authorId.value,
+                requesterProfileId =authorId.value,
             )
 
             useCase(command)
@@ -81,7 +81,7 @@ class DeletePostUseCaseSpec : DescribeSpec({
 
             val command = DeletePostCommand(
                 postId = postId.value,
-                requesterId = 999L,
+                requesterProfileId =999L,
             )
 
             shouldThrow<AccessDeniedException> {
@@ -97,7 +97,7 @@ class DeletePostUseCaseSpec : DescribeSpec({
 
             val command = DeletePostCommand(
                 postId = 999L,
-                requesterId = authorId.value,
+                requesterProfileId =authorId.value,
             )
 
             val exception = shouldThrow<PostNotFoundException> {

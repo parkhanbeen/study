@@ -61,14 +61,14 @@ class LikePostUseCaseSpec : DescribeSpec({
             }
 
             it("should create a like and return it") {
-                val result = useCase(LikePostCommand(postId = 10L, memberId = 100L))
+                val result = useCase(LikePostCommand(postId = 10L, profileId =100L))
 
                 result.postId shouldBe PostId(10L)
                 result.profileId shouldBe ProfileId(100L)
             }
 
             it("should publish PostLiked event with saved id") {
-                useCase(LikePostCommand(postId = 10L, memberId = 100L))
+                useCase(LikePostCommand(postId = 10L, profileId =100L))
 
                 val captured = mutableListOf<List<DomainEvent>>()
                 verify { eventPublisher.publish(capture(captured)) }
@@ -87,7 +87,7 @@ class LikePostUseCaseSpec : DescribeSpec({
 
             it("should throw PostNotFoundException") {
                 shouldThrow<PostNotFoundException> {
-                    useCase(LikePostCommand(postId = 999L, memberId = 100L))
+                    useCase(LikePostCommand(postId = 999L, profileId =100L))
                 }
             }
         }
@@ -100,7 +100,7 @@ class LikePostUseCaseSpec : DescribeSpec({
 
             it("should throw PostAlreadyLikedException") {
                 shouldThrow<PostAlreadyLikedException> {
-                    useCase(LikePostCommand(postId = 10L, memberId = 100L))
+                    useCase(LikePostCommand(postId = 10L, profileId =100L))
                 }
             }
         }
@@ -118,7 +118,7 @@ class LikePostUseCaseSpec : DescribeSpec({
                 every { likeQueryPort.existsByPostIdAndProfileId(PostId(10L), ProfileId(200L)) } returns false
 
                 shouldThrow<IllegalArgumentException> {
-                    useCase(LikePostCommand(postId = 10L, memberId = 200L))
+                    useCase(LikePostCommand(postId = 10L, profileId =200L))
                 }.message shouldBe "Cannot like your own post"
 
                 verify(exactly = 0) { likeCommandPort.save(any()) }

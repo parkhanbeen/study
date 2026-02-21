@@ -18,7 +18,7 @@ class LikeController(
         @PathVariable postId: Long,
         @RequestHeader("X-Profile-Id") profileId: Long,
     ): ResponseEntity<Unit> {
-        likePostUseCase(LikePostCommand(postId = postId, memberId = profileId))
+        likePostUseCase(LikePostCommand(postId = postId, profileId = profileId))
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
@@ -27,7 +27,7 @@ class LikeController(
         @PathVariable postId: Long,
         @RequestHeader("X-Profile-Id") profileId: Long,
     ): ResponseEntity<Unit> {
-        unlikePostUseCase(UnlikePostCommand(postId = postId, memberId = profileId))
+        unlikePostUseCase(UnlikePostCommand(postId = postId, profileId = profileId))
         return ResponseEntity.noContent().build()
     }
 }

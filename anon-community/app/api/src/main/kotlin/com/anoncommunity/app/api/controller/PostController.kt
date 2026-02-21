@@ -27,7 +27,7 @@ class PostController(
     ): ResponseEntity<PostResponse> {
         val post = createPostUseCase(
             CreatePostCommand(
-                authorId = profileId,
+                authorProfileId = profileId,
                 title = request.title,
                 content = request.content,
                 category = request.category,
@@ -63,7 +63,7 @@ class PostController(
         @PathVariable postId: Long,
         @RequestHeader("X-Profile-Id") profileId: Long,
     ): ResponseEntity<Unit> {
-        deletePostUseCase(DeletePostCommand(postId = postId, requesterId = profileId))
+        deletePostUseCase(DeletePostCommand(postId = postId, requesterProfileId = profileId))
         return ResponseEntity.noContent().build()
     }
 

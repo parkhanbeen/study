@@ -31,7 +31,7 @@ class CommentController(
         val comment = createCommentUseCase(
             CreateCommentCommand(
                 postId = postId,
-                authorId = profileId,
+                authorProfileId = profileId,
                 content = request.content,
                 parentCommentId = request.parentCommentId,
             )
@@ -62,7 +62,7 @@ class CommentController(
         @PathVariable commentId: Long,
         @RequestHeader("X-Profile-Id") profileId: Long,
     ): ResponseEntity<Unit> {
-        deleteCommentUseCase(DeleteCommentCommand(commentId = commentId, requesterId = profileId))
+        deleteCommentUseCase(DeleteCommentCommand(commentId = commentId, requesterProfileId = profileId))
         return ResponseEntity.noContent().build()
     }
 

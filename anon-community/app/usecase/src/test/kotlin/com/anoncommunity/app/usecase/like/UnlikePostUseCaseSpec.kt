@@ -53,7 +53,7 @@ class UnlikePostUseCaseSpec : DescribeSpec({
             }
 
             it("should delete like and publish PostUnliked event") {
-                useCase(UnlikePostCommand(postId = 10L, memberId = 100L))
+                useCase(UnlikePostCommand(postId = 10L, profileId =100L))
 
                 verify(exactly = 1) { likeCommandPort.delete(postLikeId) }
 
@@ -75,7 +75,7 @@ class UnlikePostUseCaseSpec : DescribeSpec({
 
             it("should throw LikeNotFoundException") {
                 val exception = shouldThrow<LikeNotFoundException> {
-                    useCase(UnlikePostCommand(postId = 999L, memberId = 100L))
+                    useCase(UnlikePostCommand(postId = 999L, profileId =100L))
                 }
                 exception.postId shouldBe PostId(999L)
                 exception.profileId shouldBe ProfileId(100L)

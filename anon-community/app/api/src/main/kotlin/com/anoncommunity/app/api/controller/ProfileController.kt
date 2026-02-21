@@ -33,7 +33,13 @@ class ProfileController(
         @RequestHeader("X-Profile-Id", required = false) requesterProfileId: Long?,
     ): ResponseEntity<ProfileResponse> {
         val result = getPublicProfileUseCase(GetPublicProfileQuery(profileId, requesterProfileId))
-        return ResponseEntity.ok(ProfileResponse.from(result.profile, isFollowing = result.isFollowing))
+        return ResponseEntity.ok(
+            ProfileResponse.from(
+                result.profile,
+                isFollowing = result.isFollowing,
+                isMe = requesterProfileId == profileId,
+            )
+        )
     }
 
     @Operation(summary = "팔로워 목록")

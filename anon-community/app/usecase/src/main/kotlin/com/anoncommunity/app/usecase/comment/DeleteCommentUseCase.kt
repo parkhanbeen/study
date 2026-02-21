@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 
 data class DeleteCommentCommand(
     val commentId: Long,
-    val requesterId: Long,
+    val requesterProfileId: Long,
 )
 
 @Service
@@ -34,7 +34,7 @@ class DeleteCommentUseCase(
         }
 
         // 타인 댓글 삭제 방지: authorProfileId 노출 방지를 위해 CommentNotFoundException 사용 (UpdateCommentUseCase와 일관성)
-        if (comment.authorProfileId != ProfileId(command.requesterId)) {
+        if (comment.authorProfileId != ProfileId(command.requesterProfileId)) {
             throw CommentNotFoundException(commentId)
         }
 

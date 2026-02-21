@@ -45,7 +45,7 @@ class CreatePostUseCaseSpec : DescribeSpec({
 
             it("should create a post and return it with generated id") {
                 val command = CreatePostCommand(
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     title = "Test Title",
                     content = "Test Content",
                     category = "DAILY",
@@ -61,7 +61,7 @@ class CreatePostUseCaseSpec : DescribeSpec({
 
             it("should publish PostCreated event using saved id") {
                 val command = CreatePostCommand(
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     title = "Test Title",
                     content = "Test Content",
                     category = "DAILY",
@@ -83,7 +83,7 @@ class CreatePostUseCaseSpec : DescribeSpec({
 
             it("should save the post via PostCommandPort") {
                 val command = CreatePostCommand(
-                    authorId = 100L,
+                    authorProfileId = 100L,
                     title = "Test Title",
                     content = "Test Content",
                     category = "DAILY",

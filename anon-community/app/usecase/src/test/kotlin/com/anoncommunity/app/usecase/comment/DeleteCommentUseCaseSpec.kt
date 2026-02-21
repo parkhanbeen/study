@@ -48,7 +48,7 @@ class DeleteCommentUseCaseSpec : DescribeSpec({
                 every { commentQueryPort.findById(CommentId(1L)) } returns existingComment
                 every { commentCommandPort.save(any()) } answers { firstArg() }
 
-                val command = DeleteCommentCommand(commentId = 1L, requesterId = 100L)
+                val command = DeleteCommentCommand(commentId = 1L, requesterProfileId =100L)
                 useCase(command)
 
                 existingComment.status shouldBe CommentStatus.DELETED
@@ -78,7 +78,7 @@ class DeleteCommentUseCaseSpec : DescribeSpec({
 
                 every { commentQueryPort.findById(CommentId(1L)) } returns existingComment
 
-                val command = DeleteCommentCommand(commentId = 1L, requesterId = 999L)
+                val command = DeleteCommentCommand(commentId = 1L, requesterProfileId =999L)
 
                 val exception = shouldThrow<CommentNotFoundException> {
                     useCase(command)
@@ -94,7 +94,7 @@ class DeleteCommentUseCaseSpec : DescribeSpec({
             it("should throw CommentNotFoundException") {
                 every { commentQueryPort.findById(CommentId(999L)) } returns null
 
-                val command = DeleteCommentCommand(commentId = 999L, requesterId = 100L)
+                val command = DeleteCommentCommand(commentId = 999L, requesterProfileId =100L)
 
                 val exception = shouldThrow<CommentNotFoundException> {
                     useCase(command)
