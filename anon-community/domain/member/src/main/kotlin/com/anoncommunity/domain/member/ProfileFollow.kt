@@ -19,5 +19,13 @@ class ProfileFollow private constructor(
             require(followerProfileId != followingProfileId) { "Cannot follow yourself" }
             return ProfileFollow(id, followerProfileId, followingProfileId, Instant.now())
         }
+
+        // For DB reconstitution — skips self-follow validation since data is already persisted
+        fun fromDb(
+            id: ProfileFollowId,
+            followerProfileId: ProfileId,
+            followingProfileId: ProfileId,
+            createdAt: Instant,
+        ): ProfileFollow = ProfileFollow(id, followerProfileId, followingProfileId, createdAt)
     }
 }
