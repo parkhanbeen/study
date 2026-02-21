@@ -19,4 +19,28 @@ class ProfileCommandPortAdapter(
 
     @Transactional
     override fun delete(id: ProfileId) = repository.deleteById(id.value)
+
+    @Transactional
+    override fun incrementFollowerCount(profileId: ProfileId): Int =
+        repository.incrementFollowerCount(profileId.value)
+
+    @Transactional
+    override fun decrementFollowerCount(profileId: ProfileId): Int =
+        repository.decrementFollowerCount(profileId.value)
+
+    @Transactional
+    override fun incrementFollowingCount(profileId: ProfileId): Int =
+        repository.incrementFollowingCount(profileId.value)
+
+    @Transactional
+    override fun decrementFollowingCount(profileId: ProfileId): Int =
+        repository.decrementFollowingCount(profileId.value)
+
+    @Transactional
+    override fun incrementPostCount(profileId: ProfileId): Int =
+        repository.incrementPostCount(profileId.value)
+
+    @Transactional
+    override fun decrementPostCount(profileId: ProfileId): Int =
+        repository.decrementPostCount(profileId.value)
 }

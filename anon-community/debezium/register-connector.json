@@ -1,0 +1,29 @@
+{
+  "name": "anon-community-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "tasks.max": "1",
+    "database.hostname": "mysql",
+    "database.port": "3306",
+    "database.user": "debezium",
+    "database.password": "debezium_password",
+    "database.server.id": "184054",
+    "database.characterEncoding": "UTF-8",
+    "database.useUnicode": "true",
+    "topic.prefix": "anon-community-cdc",
+    "database.include.list": "anon_community",
+    "table.include.list": "anon_community.posts,anon_community.comments,anon_community.profile_follows",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+    "schema.history.internal.kafka.topic": "schema-changes.anon-community",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "transforms.unwrap.add.fields": "op,table,source.ts_ms",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "include.schema.changes": "false"
+  }
+}
