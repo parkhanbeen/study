@@ -28,15 +28,19 @@ export default function MyPage() {
 
   useEffect(() => {
     if (!isLoggedIn) return;
+    let isCancelled = false;
     setLoading(true);
     const fetchFn = tab === "posts" ? memberApi.myPosts(page) : memberApi.myLikedPosts(page);
     fetchFn
       .then((data: PageResponse<PostDetailResponse>) => {
-        setPosts(data.content);
-        setTotalPages(data.totalPages);
+        if (!isCancelled) {
+          setPosts(data.content);
+          setTotalPages(data.totalPages);
+        }
       })
-      .catch(() => setPosts([]))
-      .finally(() => setLoading(false));
+      .catch(() => { if (!isCancelled) setPosts([]); })
+      .finally(() => { if (!isCancelled) setLoading(false); });
+    return () => { isCancelled = true; };
   }, [tab, page, isLoggedIn]);
 
   const handleTabChange = (newTab: Tab) => {

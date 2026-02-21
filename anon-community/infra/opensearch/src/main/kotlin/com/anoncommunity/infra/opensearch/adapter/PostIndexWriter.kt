@@ -5,6 +5,7 @@ import com.anoncommunity.infra.opensearch.index.PostIndexMapping
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.opensearch.action.delete.DeleteRequest
 import org.opensearch.action.index.IndexRequest
+import org.opensearch.action.update.UpdateRequest
 import org.opensearch.client.RequestOptions
 import org.opensearch.client.RestHighLevelClient
 import org.opensearch.common.xcontent.XContentType
@@ -52,12 +53,12 @@ class PostIndexWriter(
     fun updateStats(postId: Long, likeCount: Int, commentCount: Int) {
         val doc = mapOf("likeCount" to likeCount, "commentCount" to commentCount)
         val json = objectMapper.writeValueAsString(doc)
-        val request = org.opensearch.action.update.UpdateRequest(INDEX_WRITE, postId.toString())
-            .doc(json, org.opensearch.common.xcontent.XContentType.JSON)
+        val request = UpdateRequest(INDEX_WRITE, postId.toString())
+            .doc(json, XContentType.JSON)
         try {
-            client.update(request, org.opensearch.client.RequestOptions.DEFAULT)
+            client.update(request, RequestOptions.DEFAULT)
             log.debug("Updated stats in post document: id={}, likeCount={}, commentCount={}", postId, likeCount, commentCount)
-        } catch (e: java.io.IOException) {
+        } catch (e: IOException) {
             log.error("Failed to update stats in post document: id={}", postId, e)
             throw e
         }

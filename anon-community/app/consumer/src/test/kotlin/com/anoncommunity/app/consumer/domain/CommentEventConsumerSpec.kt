@@ -131,5 +131,19 @@ class CommentEventConsumerSpec : DescribeSpec({
                 verify(exactly = 0) { postIndexWriter.updateStats(any(), any(), any()) }
             }
         }
+
+        context("OpenSearch sync after CommentDeleted") {
+            it("should call updateStats with current stats after decrement") {
+                every { processedEventPort.markProcessed("evt-sync-d", "CommentDeleted") } returns true
+                every { postStatsCommandPort.decrementCommentCount(PostId(1L)) } returns 1
+                every { postStatsQueryPort.findByPostId(PostId(1L)) } returns
+                    PostStats(postId = PostId(1L), likeCount = 1, commentCount = 4, viewCount = 0)
+
+                val message = """{"eventId":"evt-sync-d","eventType":"CommentDeleted","postId":{"value":1}}"""
+                consumer.consume(message)
+
+                verify(exactly = 1) { postIndexWriter.updateStats(1L, 1, 4) }
+            }
+        }
     }
 })

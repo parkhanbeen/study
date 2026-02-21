@@ -202,7 +202,7 @@ function SearchContent() {
       )}
 
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} highlights={(post as PostSearchHitResponse).highlights} />
+        <PostCard key={post.id} post={post} highlights={post.highlights} />
       ))}
 
       {isFetchingNextPage && <PostCardSkeleton />}
