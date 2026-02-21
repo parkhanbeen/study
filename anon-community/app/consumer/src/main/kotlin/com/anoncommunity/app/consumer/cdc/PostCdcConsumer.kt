@@ -94,9 +94,12 @@ class PostCdcConsumer(
             else {
                 try {
                     val parsed = objectMapper.readTree(tagsNode.asText())
-                    if (parsed.isArray) parsed.map { it.asText() } else emptyList()
+                    if (parsed.isArray) parsed.map { it.asText() }
+                    else throw IllegalArgumentException("Cannot parse tags: ${tagsNode.asText()}")
+                } catch (e: IllegalArgumentException) {
+                    throw e
                 } catch (e: Exception) {
-                    emptyList()
+                    throw IllegalArgumentException("Cannot parse tags: ${tagsNode.asText()}", e)
                 }
             }
         }
@@ -124,16 +127,14 @@ class PostCdcConsumer(
     }
 
     private fun parseTimestamp(node: JsonNode): Instant {
-        if (node.isNull || node.isMissingNode) {
-            log.warn("Timestamp node is null or missing, falling back to Instant.now()")
-            return Instant.now()
-        }
+        require(!node.isNull && !node.isMissingNode) { "timestamp must not be null" }
         return try {
-            if (node.isLong) Instant.ofEpochMilli(node.asLong())
+            if (node.isNumber) Instant.ofEpochMilli(node.asLong())
             else Instant.parse(node.asText())
+        } catch (e: IllegalArgumentException) {
+            throw e
         } catch (e: Exception) {
-            log.warn("Failed to parse timestamp: value={}, error={}", node, e.message)
-            Instant.now()
+            throw IllegalArgumentException("Cannot parse timestamp: $node", e)
         }
     }
 }
