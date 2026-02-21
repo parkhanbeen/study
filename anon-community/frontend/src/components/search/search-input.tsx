@@ -23,7 +23,7 @@ export function SearchInput({ value, onChange }: SearchInputProps) {
       <Input
         value={local}
         onChange={(e) => setLocal(e.target.value)}
-        placeholder="Search posts..."
+        placeholder="제목, 내용 또는 태그로 검색..."
         className="pl-10"
       />
     </div>

@@ -2,9 +2,10 @@ import { LoginRequest, CreateMemberRequest, ErrorResponse } from "@/types/api";
 import { ApiError } from "./client";
 
 // Route handler returns only non-sensitive data (tokens are in httpOnly cookies)
-interface AuthProxyResponse {
+export interface AuthProxyResponse {
   memberId: number;
   nickname?: string;
+  activeProfileId: number;
 }
 
 export async function login(data: LoginRequest): Promise<AuthProxyResponse> {

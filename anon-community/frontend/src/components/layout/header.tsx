@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthStore } from "@/stores/auth-store";
-import { logout } from "@/lib/api/auth";
+import { logout as logoutApi } from "@/lib/api/auth";
 import { toast } from "sonner";
 
 export function Header() {
   const router = useRouter();
-  const { isLoggedIn, nickname, clearAuth } = useAuthStore();
+  const { isLoggedIn, activeProfile, logout } = useAuthStore();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -34,8 +34,8 @@ export function Header() {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      clearAuth();
+      await logoutApi();
+      logout();
       router.push("/");
       router.refresh();
       toast.success("로그아웃되었습니다");
@@ -92,7 +92,7 @@ export function Header() {
                   <Button variant="ghost" size="icon">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback className="bg-primary/10 text-sm font-medium text-primary">
-                        {nickname?.[0]?.toUpperCase() ?? "?"}
+                        {activeProfile?.nickname?.[0]?.toUpperCase() ?? "?"}
                       </AvatarFallback>
                     </Avatar>
                   </Button>

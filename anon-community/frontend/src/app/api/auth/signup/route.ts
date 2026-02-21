@@ -36,8 +36,10 @@ export async function POST(request: NextRequest) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  // activeProfileId is not returned by signup response; let auth-initializer fetch profiles to resolve it
   return NextResponse.json({
     memberId: data.member.id,
     nickname: data.member.nickname,
+    activeProfileId: 0,
   });
 }

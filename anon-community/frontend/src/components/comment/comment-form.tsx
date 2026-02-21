@@ -32,7 +32,7 @@ export function CommentForm({ postId, parentCommentId, onCancel }: CommentFormPr
   };
 
   if (!isLoggedIn) {
-    return <p className="text-sm text-muted-foreground">Login to leave a comment</p>;
+    return <p className="text-sm text-muted-foreground">댓글을 작성하려면 로그인하세요</p>;
   }
 
   return (
@@ -40,18 +40,18 @@ export function CommentForm({ postId, parentCommentId, onCancel }: CommentFormPr
       <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder={parentCommentId ? "Write a reply..." : "Write a comment..."}
+        placeholder={parentCommentId ? "답글을 작성하세요..." : "댓글을 작성하세요..."}
         rows={3}
         maxLength={1000}
       />
       <div className="flex justify-end gap-2">
         {onCancel && (
           <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-            Cancel
+            취소
           </Button>
         )}
         <Button type="submit" size="sm" disabled={!content.trim() || createMutation.isPending}>
-          {createMutation.isPending ? "Posting..." : "Post"}
+          {createMutation.isPending ? "등록 중..." : "등록"}
         </Button>
       </div>
     </form>

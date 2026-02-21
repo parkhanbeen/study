@@ -27,12 +27,12 @@ interface CommentItemProps {
 }
 
 export function CommentItem({ comment, postId, onReply }: CommentItemProps) {
-  const { memberId } = useAuthStore();
+  const { activeProfile } = useAuthStore();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const deleteMutation = useDeleteComment(postId);
   const updateMutation = useUpdateComment(postId);
-  const isAuthor = memberId === comment.authorId;
+  const isAuthor = activeProfile !== null && activeProfile.id === comment.authorId;
 
   useEffect(() => {
     if (!isEditing) {

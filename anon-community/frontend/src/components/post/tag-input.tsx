@@ -14,7 +14,7 @@ export function TagInput({ tags, onChange }: TagInputProps) {
   const [input, setInput] = useState("");
 
   const addTag = (tag: string) => {
-    const trimmed = tag.trim();
+    const trimmed = tag.trim().replace(/^#/, "");
     if (trimmed && !tags.includes(trimmed) && tags.length < 10) {
       onChange([...tags, trimmed]);
     }
@@ -26,6 +26,9 @@ export function TagInput({ tags, onChange }: TagInputProps) {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // Skip during IME composition (Korean, Japanese, Chinese input)
+    if (e.nativeEvent.isComposing) return;
+
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       addTag(input);
@@ -37,23 +40,26 @@ export function TagInput({ tags, onChange }: TagInputProps) {
 
   return (
     <div className="space-y-2">
-      <div className="flex flex-wrap gap-1">
-        {tags.map((tag) => (
-          <Badge key={tag} variant="secondary" className="gap-1">
-            {tag}
-            <button type="button" onClick={() => removeTag(tag)}>
-              <X className="h-3 w-3" />
-            </button>
-          </Badge>
-        ))}
-      </div>
+      {tags.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {tags.map((tag) => (
+            <Badge key={tag} variant="secondary" className="gap-1">
+              #{tag}
+              <button type="button" onClick={() => removeTag(tag)}>
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
+        </div>
+      )}
       <Input
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Add tags (Enter or comma to add)"
+        placeholder={tags.length === 0 ? "태그 추가 (Enter 또는 쉼표로 추가)" : "태그 추가..."}
         maxLength={30}
       />
+      <p className="text-xs text-muted-foreground">{tags.length}/10 태그</p>
     </div>
   );
 }

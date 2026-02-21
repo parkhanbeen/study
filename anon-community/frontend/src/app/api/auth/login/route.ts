@@ -36,6 +36,6 @@ export async function POST(request: NextRequest) {
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
 
-  // Backend login response doesn't include nickname, so client passes it
-  return NextResponse.json({ memberId: data.memberId });
+  // Return memberId and activeProfileId — nickname is fetched separately via profiles API
+  return NextResponse.json({ memberId: data.memberId, activeProfileId: data.activeProfileId ?? 0 });
 }
