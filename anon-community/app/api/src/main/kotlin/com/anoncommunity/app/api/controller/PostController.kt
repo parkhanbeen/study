@@ -47,7 +47,7 @@ class PostController(
         val post = updatePostUseCase(
             UpdatePostCommand(
                 postId = postId,
-                requesterId = profileId,
+                requesterProfileId = profileId,
                 title = request.title,
                 content = request.content,
                 category = request.category,

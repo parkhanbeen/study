@@ -49,7 +49,7 @@ class CommentController(
         val comment = updateCommentUseCase(
             UpdateCommentCommand(
                 commentId = commentId,
-                requesterId = profileId,
+                requesterProfileId = profileId,
                 content = request.content,
             )
         )

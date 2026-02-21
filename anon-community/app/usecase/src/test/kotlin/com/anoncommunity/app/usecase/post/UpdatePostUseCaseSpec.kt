@@ -52,7 +52,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Updated Title",
                 )
 
@@ -83,7 +83,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Same Title",
                 )
 
@@ -109,7 +109,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = 999L,
+                    requesterProfileId = 999L,
                     title = "Hacked Title",
                 )
 
@@ -128,7 +128,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = 999L,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Does Not Matter",
                 )
 
@@ -155,7 +155,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Updated",
                 )
 
@@ -180,7 +180,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Updated",
                 )
 
@@ -205,7 +205,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Updated",
                 )
 
@@ -230,7 +230,7 @@ class UpdatePostUseCaseSpec : DescribeSpec({
 
                 val command = UpdatePostCommand(
                     postId = postId.value,
-                    requesterId = authorId.value,
+                    requesterProfileId = authorId.value,
                     title = "Updated",
                 )
 

@@ -2,6 +2,7 @@ package com.anoncommunity.app.api.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
 
 data class CreatePostRequest(
@@ -52,5 +53,5 @@ data class UpdateProfileRequest(
 )
 
 data class SwitchProfileRequest(
-    val profileId: Long,
+    @field:Positive val profileId: Long,
 )

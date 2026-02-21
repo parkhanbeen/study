@@ -6,6 +6,7 @@ import com.anoncommunity.app.usecase.follow.UnfollowCommand
 import com.anoncommunity.app.usecase.follow.UnfollowUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -23,7 +24,7 @@ class FollowController(
         @RequestHeader("X-Profile-Id") followerProfileId: Long,
     ): ResponseEntity<Unit> {
         followUseCase(FollowCommand(followerProfileId = followerProfileId, followingProfileId = profileId))
-        return ResponseEntity.ok().build()
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
     @Operation(summary = "언팔로우")

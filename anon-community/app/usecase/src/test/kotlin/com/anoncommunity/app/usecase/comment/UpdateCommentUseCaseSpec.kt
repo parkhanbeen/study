@@ -40,7 +40,7 @@ class UpdateCommentUseCaseSpec : DescribeSpec({
                 every { commentQueryPort.findById(CommentId(1L)) } returns activeComment
                 every { commentCommandPort.save(any()) } answers { firstArg() }
 
-                val command = UpdateCommentCommand(commentId = 1L, requesterId = 100L, content = "Updated content")
+                val command = UpdateCommentCommand(commentId = 1L, requesterProfileId = 100L, content = "Updated content")
                 val result = useCase(command)
 
                 result.content shouldBe CommentContent("Updated content")
@@ -52,7 +52,7 @@ class UpdateCommentUseCaseSpec : DescribeSpec({
             it("should throw CommentNotFoundException") {
                 every { commentQueryPort.findById(CommentId(1L)) } returns activeComment
 
-                val command = UpdateCommentCommand(commentId = 1L, requesterId = 999L, content = "Hack")
+                val command = UpdateCommentCommand(commentId = 1L, requesterProfileId = 999L, content = "Hack")
                 shouldThrow<CommentNotFoundException> {
                     useCase(command)
                 }
@@ -64,7 +64,7 @@ class UpdateCommentUseCaseSpec : DescribeSpec({
             it("should throw CommentNotFoundException") {
                 every { commentQueryPort.findById(CommentId(99L)) } returns null
 
-                val command = UpdateCommentCommand(commentId = 99L, requesterId = 100L, content = "Update")
+                val command = UpdateCommentCommand(commentId = 99L, requesterProfileId = 100L, content = "Update")
                 shouldThrow<CommentNotFoundException> {
                     useCase(command)
                 }
@@ -84,7 +84,7 @@ class UpdateCommentUseCaseSpec : DescribeSpec({
 
                 every { commentQueryPort.findById(CommentId(1L)) } returns deletedComment
 
-                val command = UpdateCommentCommand(commentId = 1L, requesterId = 100L, content = "Update")
+                val command = UpdateCommentCommand(commentId = 1L, requesterProfileId = 100L, content = "Update")
                 shouldThrow<CommentNotFoundException> {
                     useCase(command)
                 }

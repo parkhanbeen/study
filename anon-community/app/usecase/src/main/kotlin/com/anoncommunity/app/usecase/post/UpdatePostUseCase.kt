@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 
 data class UpdatePostCommand(
     val postId: Long,
-    val requesterId: Long,
+    val requesterProfileId: Long,
     val title: String? = null,
     val content: String? = null,
     val category: String? = null,
@@ -43,7 +43,7 @@ class UpdatePostUseCase(
             throw PostNotFoundException(postId)
         }
 
-        if (post.authorProfileId != ProfileId(command.requesterId)) {
+        if (post.authorProfileId != ProfileId(command.requesterProfileId)) {
             throw AccessDeniedException("Only the author can edit this post")
         }
 
