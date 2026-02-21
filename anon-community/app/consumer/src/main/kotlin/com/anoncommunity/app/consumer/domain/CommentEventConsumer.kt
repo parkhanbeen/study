@@ -39,12 +39,12 @@ class CommentEventConsumer(
             when (eventType) {
                 EVENT_COMMENT_CREATED -> {
                     val affected = postStatsCommandPort.incrementCommentCount(postId)
-                    check(affected > 0) { "No post_stats row found for postId=${postId.value}" }
+                    check(affected > 0) { "No post_stats row found for postId=${postId.value}, eventId=$eventId" }
                     log.info("Incremented comment count for post: id={}", postId.value)
                 }
                 EVENT_COMMENT_DELETED -> {
                     val affected = postStatsCommandPort.decrementCommentCount(postId)
-                    check(affected > 0) { "No post_stats row found for postId=${postId.value}" }
+                    check(affected > 0) { "No post_stats row found for postId=${postId.value}, eventId=$eventId" }
                     log.info("Decremented comment count for post: id={}", postId.value)
                 }
                 else -> log.warn("Unknown comment event type: eventType={}, eventId={}", eventType, eventId)

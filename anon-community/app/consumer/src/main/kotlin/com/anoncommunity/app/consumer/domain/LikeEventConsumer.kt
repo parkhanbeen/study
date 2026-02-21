@@ -39,12 +39,12 @@ class LikeEventConsumer(
             when (eventType) {
                 EVENT_POST_LIKED -> {
                     val affected = postStatsCommandPort.incrementLikeCount(postId)
-                    check(affected > 0) { "No post_stats row found for postId=${postId.value}" }
+                    check(affected > 0) { "No post_stats row found for postId=${postId.value}, eventId=$eventId" }
                     log.info("Incremented like count for post: id={}", postId.value)
                 }
                 EVENT_POST_UNLIKED -> {
                     val affected = postStatsCommandPort.decrementLikeCount(postId)
-                    check(affected > 0) { "No post_stats row found for postId=${postId.value}" }
+                    check(affected > 0) { "No post_stats row found for postId=${postId.value}, eventId=$eventId" }
                     log.info("Decremented like count for post: id={}", postId.value)
                 }
                 else -> log.warn("Unknown like event type: eventType={}, eventId={}", eventType, eventId)

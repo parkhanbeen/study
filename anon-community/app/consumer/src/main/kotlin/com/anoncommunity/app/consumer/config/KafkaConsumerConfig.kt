@@ -50,9 +50,10 @@ class KafkaConsumerConfig(
             maxElapsedTime = 120000L
         }
         val errorHandler = DefaultErrorHandler(recoverer, backOff).apply {
-            // Malformed CDC payloads (null timestamps, invalid JSON) are non-retryable:
-            // retrying the same broken message will never recover, so route to DLQ immediately.
+            // Malformed CDC payloads (null timestamps, invalid JSON) and missing post_stats rows
+            // are non-retryable: retrying the same broken message will never recover.
             addNotRetryableExceptions(IllegalArgumentException::class.java)
+            addNotRetryableExceptions(IllegalStateException::class.java)
         }
         factory.setCommonErrorHandler(errorHandler)
 
