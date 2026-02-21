@@ -1,5 +1,5 @@
 import { fetchAPI } from "./client";
-import { PostResponse, PageResponse, CursorResponse, SearchPostsParams, CursorSearchPostsParams, HotTagsResponse } from "@/types/api";
+import { PostResponse, PageResponse, CursorResponse, SearchPostsParams, CursorSearchPostsParams, HotTagsResponse, PostSearchHitResponse } from "@/types/api";
 
 function buildSearchParams(params: Record<string, string | string[] | number | undefined>): string {
   const sp = new URLSearchParams();
@@ -19,7 +19,7 @@ export const searchApi = {
     fetchAPI<PageResponse<PostResponse>>(`/search/posts?${buildSearchParams(params as Record<string, string | string[] | number | undefined>)}`),
 
   postsCursor: (params: CursorSearchPostsParams) =>
-    fetchAPI<CursorResponse<PostResponse>>(`/search/posts/cursor?${buildSearchParams(params as Record<string, string | string[] | number | undefined>)}`),
+    fetchAPI<CursorResponse<PostSearchHitResponse>>(`/search/posts/cursor?${buildSearchParams(params as Record<string, string | string[] | number | undefined>)}`),
 
   hotTags: (limit = 10) =>
     fetchAPI<HotTagsResponse>(`/search/hot-tags?limit=${limit}`),

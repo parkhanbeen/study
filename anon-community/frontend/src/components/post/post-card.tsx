@@ -7,6 +7,7 @@ import { ClickableTag } from "./clickable-tag";
 
 interface PostCardProps {
   post: PostResponse | PostDetailResponse;
+  highlights?: Record<string, string[]>;
 }
 
 function hasStats(post: PostResponse | PostDetailResponse): post is PostDetailResponse {
@@ -32,7 +33,7 @@ function getCategoryStyle(category: string): string {
   return CATEGORY_STYLES[category] ?? "bg-muted text-muted-foreground";
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, highlights }: PostCardProps) {
   return (
     <Link href={`/posts/${post.id}`}>
       <Card className="group transition-all hover:border-primary/30 hover:shadow-md">
@@ -53,11 +54,15 @@ export function PostCard({ post }: PostCardProps) {
             </span>
           </div>
           <h3 className="text-base font-semibold leading-snug transition-colors group-hover:text-primary">
-            {post.title}
+            {highlights?.title?.[0]
+              ? <span dangerouslySetInnerHTML={{ __html: highlights.title[0] }} />
+              : post.title}
           </h3>
         </CardHeader>
         <CardContent className="pb-2">
-          <p className="line-clamp-2 text-sm text-muted-foreground">{post.content}</p>
+          {highlights?.content?.[0]
+            ? <p dangerouslySetInnerHTML={{ __html: highlights.content[0] }} className="text-sm text-muted-foreground line-clamp-2" />
+            : <p className="line-clamp-2 text-sm text-muted-foreground">{post.content}</p>}
           {post.tags.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
               {post.tags.map((tag) => (

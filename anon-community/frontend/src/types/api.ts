@@ -166,6 +166,10 @@ export interface CursorSearchPostsParams {
   dateRange?: SearchDateRange;
 }
 
+export interface PostSearchHitResponse extends PostResponse {
+  highlights: Record<string, string[]>;
+}
+
 // ── Error ──
 export interface ErrorResponse {
   code: string;
