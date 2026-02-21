@@ -60,8 +60,8 @@ export function FeedList({ initialData }: FeedListProps) {
   return (
     <div className="space-y-4">
       <div className="sticky top-14 z-40 -mx-4 bg-background px-4 pb-3 pt-1">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex items-center justify-between lg:justify-end">
+          <div className="flex lg:hidden gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
             {CATEGORY_TABS.map((tab) => (
               <button
                 key={tab.value ?? "ALL"}
